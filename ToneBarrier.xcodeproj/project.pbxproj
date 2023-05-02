@@ -52,8 +52,8 @@
 		B96AD36C29FD763700A61F7B = {
 			isa = PBXGroup;
 			children = (
-				B96AD37629FD763700A61F7B /* Products */,
 				B96AD37729FD763700A61F7B /* ToneBarrier */,
+				B96AD37629FD763700A61F7B /* Products */,
 				B979461029FDEE8D00CE3139 /* Frameworks */,
 			);
 			sourceTree = "<group>";

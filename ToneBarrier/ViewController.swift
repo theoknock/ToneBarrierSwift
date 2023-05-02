@@ -15,6 +15,8 @@ import IntentsUI
 
 class ViewController: UIViewController, AVRoutePickerViewDelegate {
     
+    @IBOutlet weak var waveformSymbol: UIImageView!
+    
     @IBOutlet weak var togglePlaybackControl: UIImageView!
     var userInteractionObserver: NSKeyValueObservation?
     
@@ -24,9 +26,31 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
     var audio_session = AVAudioSession.sharedInstance()
     var audio_signal: AudioSignal = AudioSignal()
     
+    lazy var gradient:  CAGradientLayer  = {
+        let gradient = CAGradientLayer()
+        gradient.type = .axial
+        let toneBarrierBlue: UIColor = UIColor.init(white: 0.0, alpha: 0.0) //UIColor.init(_colorLiteralRed: 0.0, green: 0.0, blue: 0.0, alpha: 0.0) // UIColor(red: 0.f, green: 0.f, blue: 0.f, alpha: 0.f)
+        gradient.colors = [
+            UIColor.clear.cgColor,
+            UIColor.black.cgColor,
+            UIColor.clear.cgColor
+        ]
+        gradient.locations = [0, 0.5, 1.0]
+        return gradient
+    }()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        togglePlaybackControl.layer.shadowColor = UIColor.systemBlue.cgColor
+        togglePlaybackControl.layer.shadowRadius = 5.0
+        togglePlaybackControl.layer.shadowOpacity = 1.0
+        togglePlaybackControl.layer.shadowOffset = CGSize(width: 0, height: 0)
+        togglePlaybackControl.layer.masksToBounds = false
+        
+        gradient.frame = waveformSymbol.bounds
+        waveformSymbol.layer.mask = gradient
         
         do {
             setUpNowPlaying()
@@ -60,6 +84,11 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
                 self.audio_signal.audio_engine.stop()
             }
         }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        gradient.frame = waveformSymbol.bounds
     }
     
     @IBAction func togglePlaybackControlHandler(_ sender: UITapGestureRecognizer) {

@@ -94,6 +94,7 @@
                     <connections>
                         <outlet property="routePicker" destination="Ryi-yd-PoM" id="Ew8-WW-a9g"/>
                         <outlet property="togglePlaybackControl" destination="dOm-P1-ib0" id="RCO-LU-F9T"/>
+                        <outlet property="waveformSymbol" destination="JxM-Sh-sV2" id="zhA-CV-ItY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

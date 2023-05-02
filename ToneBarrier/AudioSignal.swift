@@ -14,14 +14,6 @@ import ObjectiveC
 import Dispatch
 import Accelerate
 
-struct OptionNames {
-    static let signal = "signal"
-    static let frequency = "freq"
-    static let duration = "duration"
-    static let output = "output"
-    static let amplitude = "amplitude"
-}
-
 let frequency = 440.0
 let amplitude = 1.0
 let duration = 5.0
@@ -33,19 +25,12 @@ let sine = { (phase: Float) -> Float in
 }
 
 @objc class AudioSignal: NSObject {
-    let audio_engine: AudioEngine = AudioEngine()
+    let audio_engine: AVAudioEngine = AVAudioEngine()
     let audio_source_node: AVAudioSourceNode
     let audio_source_node_renderer: AVAudioSourceNodeRenderBlock
     
     override init() {
-        //        var outCount: UnsafeMutablePointer<UInt32>?
-        //        var methodList: UnsafeMutablePointer<Method>? = class_copyMethodList(object_getClass(audio_engine), outCount)
-        //        for i in 0..<(outCount?.pointee ?? 0) {
-        //            var currentMethod: Method = methodList![Int(i)]
-        //            var methodSelector: Selector = method_getName(currentMethod)
-        //            debugPrint("\(currentMethod) \(methodSelector)")
-        //        }
-        //
+        
         let signal: (Float) -> Float = sine
         let main_mixer_node = audio_engine.mainMixerNode
         let output_node = audio_engine.outputNode
@@ -55,7 +40,6 @@ let sine = { (phase: Float) -> Float in
         let phaseIncrement = (Float(twoPi) / Float(frame_count)) * Float(frequency)
         
         self.audio_source_node_renderer = { _, _, frameCount, audioBufferList in
-            //            debugPrint("audio_source_node_renderer")
             let ablPointer = UnsafeMutableAudioBufferListPointer(audioBufferList)
             for frame in 0..<Int(frameCount) {
                 let value = signal(Float(currentPhase)) * Float(amplitude)
@@ -82,21 +66,21 @@ let sine = { (phase: Float) -> Float in
     
 }
 
-@objc class AudioEngine: AVAudioEngine {
-    override func start() throws {
-        do {
-            try super.start()
-        } catch {
-            debugPrint("Could not start audio engine: \(error)")
-        }
-    }
-    
-    override init() {
-        super.init()
-    }
-    
-    
-}
+//@objc class AudioEngine: AVAudioEngine {
+//    override func start() throws {
+//        do {
+//            try super.start()
+//        } catch {
+//            debugPrint("Could not start audio engine: \(error)")
+//        }
+//    }
+//
+//    override init() {
+//        super.init()
+//    }
+//
+//
+//}
 
 //extension AVAudioEngine {
 //    struct StaticVars {
@@ -104,6 +88,13 @@ let sine = { (phase: Float) -> Float in
 //    }
 //
 //    public override class func init() {
+////        var outCount: UnsafeMutablePointer<UInt32>?
+//        var methodList: UnsafeMutablePointer<Method>? = class_copyMethodList(object_getClass(audio_engine), outCount)
+//        for i in 0..<(outCount?.pointee ?? 0) {
+//            var currentMethod: Method = methodList![Int(i)]
+//            var methodSelector: Selector = method_getName(currentMethod)
+//            debugPrint("\(currentMethod) \(methodSelector)")
+//        }
 //
 //    }
 //
