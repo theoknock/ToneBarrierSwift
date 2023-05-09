@@ -46,7 +46,7 @@ let trill_interval = { (frequency: Float) -> Float in
         var phaseIncrement = (Float(twoPi) / Float(frame_count)) * Float(frequency)
         
         var currentPhase_trill: Float = 0
-        var phaseIncrement_trill = (Float(twoPi) / Float(frame_count)) * Float(trill)
+        var phaseIncrement_trill = (Float(twoPi) / Float(frame_count)) * Float(trill_interval(Float(frequency)))
         
         
         var frame_position: Int = 0;
