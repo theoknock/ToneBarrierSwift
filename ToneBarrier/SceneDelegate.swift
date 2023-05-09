@@ -6,11 +6,103 @@
 //
 
 import UIKit
+import AVFoundation
+
+//class AudioSignal: AVAudioSignal {
+//    static let sharedAudioSignalGenerator: AudioSignal = {
+//        let sharedAudioSignalGenerator = AVAudioSignal() as! AudioSignal
+//        return sharedAudioSignalGenerator
+//    }()
+//}
+//
+//class AudioSession: AVAudioSession {
+//    static let sharedAudioSession: AudioSession = {
+//        let sharedAudioSession = AVAudioSession.sharedInstance() as! AudioSession
+//        return sharedAudioSession
+//    }()
+//
+//    private override init() {
+//        do {
+//            audioSessionInterruptionNotificationSetup()
+//            try self.setActive(true)
+//        } catch {
+//            debugPrint("Could not activate audio session: \(error)")
+//        }
+//    }
+//
+//    func audioSessionInterruptionNotificationSetup() {
+//        do {
+//            try self.setCategory(.playback, mode: .default, policy: .longFormAudio)
+//            NotificationCenter.default.addObserver(self,
+//                                                   selector: #selector(handleInterruption),
+//                                                   name: AVAudioSession.interruptionNotification,
+//                                                   object: self)
+//            NotificationCenter.default.addObserver(self,
+//                                                   selector: #selector(restartEngineAfterConfigurationChange(_:)),
+//                                                   name: .AVAudioEngineConfigurationChange,
+//                                                   object: nil)
+//        } catch {
+//            print("Failed to set audio session category.")
+//        }
+//    }
+//
+//    @objc func handleInterruption(notification: Notification) {
+//        guard let userInfo = notification.userInfo,
+//              let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
+//              let type = AVAudioSession.InterruptionType(rawValue: typeValue) else {
+//            return
+//        }
+//
+//        // Switch over the interruption type.
+//        switch type {
+//
+//        case .began:
+//            // An interruption began. Update the UI as necessary.
+//            debugPrint("Audio session interruption \(type) began")
+//
+//        case .ended:
+//            // An interruption ended. Resume playback, if appropriate.
+//            debugPrint("Audio session interruption \(type) ended")
+//
+//            guard let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt else { return }
+//            let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
+//            if options.contains(.shouldResume) {
+//                // An interruption ended. Resume playback.
+//                do {
+//                    try audio_session.audio_engine.start()
+//                } catch {
+//                    debugPrint("Could not start audio engine: \(error)")
+//                }
+//                debugPrint("Resume playback.")
+//            } else {
+//                // An interruption ended. Don't resume playback.
+//                debugPrint("Don't resume playback.")
+//            }
+//
+//        default: ()
+//            self.togglePlaybackControl.isHighlighted = self.audio_signal.audio_engine.isRunning
+//        }
+//    }
+//
+//    @objc func restartEngineAfterConfigurationChange(_ notification: Notification) {
+//        debugPrint("restartEngineAfterConfigurationChange")
+//        do {
+//            try self.audio_signal.audio_engine.start()
+//        } catch {
+//            debugPrint("Could not start audio engine: \(error)")
+//        }
+//    }
+//}
+
+
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
     var viewController: ViewController?
+    
+//    let audio_signal:  AudioSignal  = AVAudioSignal() as! AudioSignal
+//    let audio_session: AudioSession = AVAudioSession.sharedInstance() as! AudioSession
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.

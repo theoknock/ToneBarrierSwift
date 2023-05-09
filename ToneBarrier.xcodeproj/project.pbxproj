@@ -17,7 +17,7 @@
 		B96AD39129FD7C3F00A61F7B /* ToggleToneBarrierPlaybackIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96AD39029FD7C3F00A61F7B /* ToggleToneBarrierPlaybackIntentHandler.swift */; };
 		B979461229FDEE8D00CE3139 /* AVRouting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B979461129FDEE8D00CE3139 /* AVRouting.framework */; };
 		B979461429FDEECC00CE3139 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B979461329FDEECC00CE3139 /* AVKit.framework */; };
-		B9D7B5D629FDEB5E00954817 /* AudioSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D7B5D529FDEB5E00954817 /* AudioSignal.swift */; };
+		B9D7B5D629FDEB5E00954817 /* AVAudioSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D7B5D529FDEB5E00954817 /* AVAudioSignal.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,7 +33,7 @@
 		B96AD39029FD7C3F00A61F7B /* ToggleToneBarrierPlaybackIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleToneBarrierPlaybackIntentHandler.swift; sourceTree = "<group>"; };
 		B979461129FDEE8D00CE3139 /* AVRouting.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVRouting.framework; path = System/Library/Frameworks/AVRouting.framework; sourceTree = SDKROOT; };
 		B979461329FDEECC00CE3139 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
-		B9D7B5D529FDEB5E00954817 /* AudioSignal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSignal.swift; sourceTree = "<group>"; };
+		B9D7B5D529FDEB5E00954817 /* AVAudioSignal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVAudioSignal.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,7 +73,7 @@
 				B96AD37829FD763700A61F7B /* AppDelegate.swift */,
 				B96AD37A29FD763700A61F7B /* SceneDelegate.swift */,
 				B96AD37C29FD763700A61F7B /* ViewController.swift */,
-				B9D7B5D529FDEB5E00954817 /* AudioSignal.swift */,
+				B9D7B5D529FDEB5E00954817 /* AVAudioSignal.swift */,
 				B96AD38129FD763800A61F7B /* Assets.xcassets */,
 				B96AD38329FD763800A61F7B /* LaunchScreen.storyboard */,
 				B96AD37E29FD763700A61F7B /* Main.storyboard */,
@@ -168,7 +168,7 @@
 				B96AD39129FD7C3F00A61F7B /* ToggleToneBarrierPlaybackIntentHandler.swift in Sources */,
 				B96AD37929FD763700A61F7B /* AppDelegate.swift in Sources */,
 				B96AD37B29FD763700A61F7B /* SceneDelegate.swift in Sources */,
-				B9D7B5D629FDEB5E00954817 /* AudioSignal.swift in Sources */,
+				B9D7B5D629FDEB5E00954817 /* AVAudioSignal.swift in Sources */,
 				B96AD38F29FD799B00A61F7B /* ToneBarrierIntentDefinition.intentdefinition in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

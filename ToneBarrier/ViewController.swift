@@ -23,30 +23,31 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
     
     @IBOutlet weak var routePicker: AVRoutePickerView!
     
-    var audio_session = AVAudioSession.sharedInstance()
-    var audio_signal: AudioSignal = AudioSignal()
+    var audio_session: AVAudioSession = AVAudioSession.sharedInstance()
+    var audio_signal: AVAudioSignal = AVAudioSignal()
     
-    lazy var gradient:  CAGradientLayer  = {
+    lazy var gradient: CAGradientLayer  = {
         let gradient = CAGradientLayer()
         gradient.type = .axial
-        let toneBarrierBlue: UIColor = UIColor.init(white: 0.0, alpha: 0.0) //UIColor.init(_colorLiteralRed: 0.0, green: 0.0, blue: 0.0, alpha: 0.0) // UIColor(red: 0.f, green: 0.f, blue: 0.f, alpha: 0.f)
+        let toneBarrierBlue: UIColor = UIColor.init(white: 0.0, alpha: 0.0)
         gradient.colors = [
             UIColor.clear.cgColor,
             UIColor.black.cgColor,
             UIColor.clear.cgColor
         ]
-        gradient.locations = [0, 0.5, 1.0]
+        gradient.locations = [0.0, 0.5, 1.0]
         return gradient
     }()
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        togglePlaybackControl.layer.shadowColor = UIColor.systemBlue.cgColor
+        let toneBarrierShadow: UIColor = UIColor.init(_colorLiteralRed: 0.1, green: 0.1, blue: 0.1, alpha: 1.0)
+        
+        togglePlaybackControl.layer.shadowColor = toneBarrierShadow.cgColor
         togglePlaybackControl.layer.shadowRadius = 5.0
         togglePlaybackControl.layer.shadowOpacity = 1.0
-        togglePlaybackControl.layer.shadowOffset = CGSize(width: 0, height: 0)
+        togglePlaybackControl.layer.shadowOffset = CGSize(width: 5.0, height: 5.0)
         togglePlaybackControl.layer.masksToBounds = false
         
         gradient.frame = waveformSymbol.bounds
@@ -113,15 +114,6 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
         view.safeAreaLayoutGuide.topAnchor.constraint(equalTo: button.topAnchor).isActive = true
     }
     
-    @objc func restartEngineAfterConfigurationChange(_ notification: Notification) {
-        debugPrint("restartEngineAfterConfigurationChange")
-        do {
-            try self.audio_signal.audio_engine.start()
-        } catch {
-            debugPrint("Could not start audio engine: \(error)")
-        }
-    }
-    
     func setupRemoteTransportControls() {
         // Get the shared MPRemoteCommandCenter
         let commandCenter = MPRemoteCommandCenter.shared()
@@ -177,7 +169,7 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
         nowPlayingInfo[MPMediaItemPropertyAlbumTitle] = "The Life of a Demoniac"
         
         let image = UIImage(named: "LockScreenIcon")
-        var artwork: MPMediaItemArtwork = MPMediaItemArtwork(boundsSize: image?.size ?? CGSizeZero) { _ in image ?? UIImage(named: "LockScreenIcon")! }
+        let artwork: MPMediaItemArtwork = MPMediaItemArtwork(boundsSize: image?.size ?? CGSizeZero) { _ in image ?? UIImage(named: "LockScreenIcon")! }
         nowPlayingInfo[MPMediaItemPropertyArtwork] = artwork
         
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
@@ -191,6 +183,9 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
         if keyPath == "isRunning",
            let running_state = change?[.newKey] {
             print("running_state is: \(running_state)")
+        } else {
+            print("keypath: \(String(describing: keyPath))")
+            print("change.newKey: \(String(describing: change?[.newKey]))")
         }
     }
     
@@ -253,6 +248,15 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
             self.togglePlaybackControl.isHighlighted = self.audio_signal.audio_engine.isRunning
         }
     }
+    
+    @objc func restartEngineAfterConfigurationChange(_ notification: Notification) {
+        debugPrint("restartEngineAfterConfigurationChange")
+        do {
+            try self.audio_signal.audio_engine.start()
+        } catch {
+            debugPrint("Could not start audio engine: \(error)")
+        }
+    }
 }
 
 extension ViewController: INUIAddVoiceShortcutButtonDelegate, INUIAddVoiceShortcutViewControllerDelegate, INUIEditVoiceShortcutViewControllerDelegate {
@@ -286,5 +290,28 @@ extension ViewController: INUIAddVoiceShortcutButtonDelegate, INUIAddVoiceShortc
     
     func addVoiceShortcutViewControllerDidCancel(_ controller: INUIAddVoiceShortcutViewController) {
         dismiss(animated: true, completion: nil)
+    }
+}
+
+extension CAGradientLayer {
+    func setColors(_ newColors: [CGColor],
+                   animated: Bool = true,
+                   withDuration duration: TimeInterval = 0,
+                   timingFunctionName name: CAMediaTimingFunctionName? = nil) {
+        
+        if !animated {
+            self.colors = newColors
+            return
+        }
+        
+        let colorAnimation = CABasicAnimation(keyPath: "colors")
+        colorAnimation.fromValue = colors
+        colorAnimation.toValue = newColors
+        colorAnimation.duration = duration
+        colorAnimation.isRemovedOnCompletion = false
+        colorAnimation.fillMode = CAMediaTimingFillMode.forwards
+        colorAnimation.timingFunction = CAMediaTimingFunction(name: name ?? .linear)
+        
+        add(colorAnimation, forKey: "colorsChangeAnimation")
     }
 }

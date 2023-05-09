@@ -14,17 +14,23 @@ import ObjectiveC
 import Dispatch
 import Accelerate
 
-let frequency = 440.0
+var frequency = 440.0
+var trill     = 6.0
 let amplitude = 1.0
-let duration = 5.0
-
-let twoPi = 2 * Float.pi
+let duration  = 5.0
+let twoPi     = 2.0 * Float.pi
 
 let sine = { (phase: Float) -> Float in
     return sin(phase)
 }
 
-@objc class AudioSignal: NSObject {
+let trill_interval = { (frequency: Float) -> Float in
+    return ((frequency / (3000.00 - 200.00) * (18.00 - 2.00)) + 2.00)
+}
+
+@objc class AVAudioSignal: NSObject {
+    private static let shared = AVAudioSignal()
+    
     let audio_engine: AVAudioEngine = AVAudioEngine()
     let audio_source_node: AVAudioSourceNode
     let audio_source_node_renderer: AVAudioSourceNodeRenderBlock
@@ -35,14 +41,25 @@ let sine = { (phase: Float) -> Float in
         let main_mixer_node = audio_engine.mainMixerNode
         let output_node = audio_engine.outputNode
         let audio_format = output_node.outputFormat(forBus: 0)
-        let frame_count = Float(audio_format.sampleRate) * Float(audio_format.channelCount)
+        let frame_count = Int(Float(audio_format.sampleRate) * Float(audio_format.channelCount))
         var currentPhase: Float = 0
-        let phaseIncrement = (Float(twoPi) / Float(frame_count)) * Float(frequency)
+        var phaseIncrement = (Float(twoPi) / Float(frame_count)) * Float(frequency)
+        
+        var currentPhase_trill: Float = 0
+        var phaseIncrement_trill = (Float(twoPi) / Float(frame_count)) * Float(trill)
+        
+        
+        var frame_position: Int = 0;
         
         self.audio_source_node_renderer = { _, _, frameCount, audioBufferList in
             let ablPointer = UnsafeMutableAudioBufferListPointer(audioBufferList)
             for frame in 0..<Int(frameCount) {
-                let value = signal(Float(currentPhase)) * Float(amplitude)
+                frame_position += (frame_position == frame_count) ? {
+                    frequency = frequency + 100
+                    phaseIncrement = (Float(twoPi) / Float(frame_count)) * Float(frequency)
+                    phaseIncrement_trill = (Float(twoPi) / Float(frame_count)) * Float(trill_interval(Float(frequency)))
+                    return -frame_count }() : 1
+                let value = (signal(Float(currentPhase)) * signal(Float(currentPhase_trill))) * Float(amplitude)
                 currentPhase += phaseIncrement
                 if currentPhase >= twoPi {
                     currentPhase -= twoPi
@@ -50,6 +67,14 @@ let sine = { (phase: Float) -> Float in
                 if currentPhase < 0.0 {
                     currentPhase += twoPi
                 }
+                currentPhase_trill += phaseIncrement_trill
+                if currentPhase_trill >= twoPi {
+                    currentPhase_trill -= twoPi
+                }
+                if currentPhase_trill < 0.0 {
+                    currentPhase_trill += twoPi
+                }
+                
                 for buffer in ablPointer {
                     let buf: UnsafeMutableBufferPointer<Float> = UnsafeMutableBufferPointer(buffer)
                     buf[frame] = value
@@ -57,6 +82,26 @@ let sine = { (phase: Float) -> Float in
             }
             return noErr
         }
+        
+        //    self.audio_source_node_renderer = { _, _, frameCount, audioBufferList in
+        //        let ablPointer = UnsafeMutableAudioBufferListPointer(audioBufferList)
+        //        for frame in 0..<Int(frameCount) {
+        //            let value = signal(Float(currentPhase)) * Float(amplitude)
+        //            currentPhase += phaseIncrement
+        //            if currentPhase >= twoPi {
+        //                currentPhase -= twoPi
+        //            }
+        //            if currentPhase < 0.0 {
+        //                currentPhase += twoPi
+        //            }
+        //            for buffer in ablPointer {
+        //                let buf: UnsafeMutableBufferPointer<Float> = UnsafeMutableBufferPointer(buffer)
+        //                buf[frame] = value
+        //            }
+        //        }
+        //        return noErr
+        //    }
+        
         self.audio_source_node = AVAudioSourceNode(format: audio_format, renderBlock: audio_source_node_renderer)
         
         audio_engine.attach(self.audio_source_node)
@@ -65,6 +110,71 @@ let sine = { (phase: Float) -> Float in
     }
     
 }
+
+//typedef NS_ENUM(NSUInteger, Trill) {
+//    TonalTrillUnsigned,
+//    TonalTrillInverse
+//};
+
+//+ (double(^)(double, double))Frequency
+//{
+//    return ^double(double time, double frequency)
+//    {
+//        return pow(sinf(M_PI * time * frequency), 2.0);
+//    };
+//}
+
+//+ (double(^)(double))TrillInterval
+//{
+//    return ^double(double frequency)
+//    {
+//        return ((frequency / (max_frequency - min_frequency) * (max_trill_interval - min_trill_interval)) + min_trill_interval);
+//    };
+//}
+
+//+ (double(^)(double, double))Trill
+//{
+//    return ^double(double time, double trill)
+//    {
+//        return pow(2.0 * pow(sinf(M_PI * time * trill), 2.0) * 0.5, 4.0);
+//    };
+//}
+
+//+ (double(^)(double, double))TrillInverse
+//{
+//    return ^double(double time, double trill)
+//    {
+//        return pow(-(2.0 * pow(sinf(M_PI * time * trill), 2.0) * 0.5) + 1.0, 4.0);
+//    };
+//}
+
+//typedef double (^Normalize)(double, double, double);
+//Normalize normalize = ^double(double min, double max, double value)
+//{
+//    double result = (value - min) / (max - min);
+//    
+//    return result;
+//};
+//
+//typedef double (^FrequencySample)(double, double, double);
+//FrequencySample sample_frequency = ^(double time, double frequency, double trill)
+//{
+//    double result = sinf(M_PI * time * frequency) * ^double
+//                                        (double time, double trill) {
+//        return (sinf(M_PI_PI * time * trill) / 2); //((frequency / (2000.0 - 400.0) * (12.0 - 4.0)) + 4.0);
+//    } (time, trill);
+//    
+//    return result;
+//};
+//
+//typedef double (^AmplitudeSample)(double, double, double);
+//AmplitudeSample sample_amplitude = ^(double time, double gain, double tremolo)
+//{
+//    double result =  sinf((M_PI_PI * time * tremolo) / 2) * (time * gain);
+//    
+//    return result;
+//};
+
 
 //@objc class AudioEngine: AVAudioEngine {
 //    override func start() throws {
