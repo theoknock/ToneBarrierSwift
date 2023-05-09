@@ -15,7 +15,6 @@ import Dispatch
 import Accelerate
 
 var frequency = 440.0
-var trill     = 6.0
 let amplitude = 1.0
 let duration  = 5.0
 let twoPi     = 2.0 * Float.pi
@@ -24,7 +23,7 @@ let sine = { (phase: Float) -> Float in
     return sin(phase)
 }
 
-let trill_interval = { (frequency: Float) -> Float in
+let tremolo = { (frequency: Float) -> Float in
     return ((frequency / (3000.00 - 200.00) * (18.00 - 2.00)) + 2.00)
 }
 
@@ -42,24 +41,28 @@ let trill_interval = { (frequency: Float) -> Float in
         let output_node = audio_engine.outputNode
         let audio_format = output_node.outputFormat(forBus: 0)
         let frame_count = Int(Float(audio_format.sampleRate) * Float(audio_format.channelCount))
+        let angular_velocity = { () -> Float in
+            return (Float(twoPi) / Float(frame_count))
+        }
         var currentPhase: Float = 0
-        var phaseIncrement = (Float(twoPi) / Float(frame_count)) * Float(frequency)
+        var phaseIncrement = angular_velocity() * Float(frequency)
         
-        var currentPhase_trill: Float = 0
-        var phaseIncrement_trill = (Float(twoPi) / Float(frame_count)) * Float(trill_interval(Float(frequency)))
-        
+        var currentTremoloPhase: Float = 0
+        var phaseTremoloIncrement = angular_velocity() * Float(tremolo(Float(frequency)))
         
         var frame_position: Int = 0;
+        var bit: Int = 1
         
         self.audio_source_node_renderer = { _, _, frameCount, audioBufferList in
             let ablPointer = UnsafeMutableAudioBufferListPointer(audioBufferList)
             for frame in 0..<Int(frameCount) {
                 frame_position += (frame_position == frame_count) ? {
                     frequency = frequency + 100
-                    phaseIncrement = (Float(twoPi) / Float(frame_count)) * Float(frequency)
-                    phaseIncrement_trill = (Float(twoPi) / Float(frame_count)) * Float(trill_interval(Float(frequency)))
+                    phaseIncrement = angular_velocity() * Float(frequency)
+                    phaseTremoloIncrement = angular_velocity() * Float(tremolo(Float(frequency)))
+                    bit ^= 1 // Alternates between channels
                     return -frame_count }() : 1
-                let value = (signal(Float(currentPhase)) * signal(Float(currentPhase_trill))) * Float(amplitude)
+                let value = (signal(Float(currentPhase)) * signal(Float(currentTremoloPhase)))
                 currentPhase += phaseIncrement
                 if currentPhase >= twoPi {
                     currentPhase -= twoPi
@@ -67,17 +70,18 @@ let trill_interval = { (frequency: Float) -> Float in
                 if currentPhase < 0.0 {
                     currentPhase += twoPi
                 }
-                currentPhase_trill += phaseIncrement_trill
-                if currentPhase_trill >= twoPi {
-                    currentPhase_trill -= twoPi
+                currentTremoloPhase += phaseTremoloIncrement
+                if currentTremoloPhase >= twoPi {
+                    currentTremoloPhase -= twoPi
                 }
-                if currentPhase_trill < 0.0 {
-                    currentPhase_trill += twoPi
+                if currentTremoloPhase < 0.0 {
+                    currentTremoloPhase += twoPi
                 }
                 
                 for buffer in ablPointer {
                     let buf: UnsafeMutableBufferPointer<Float> = UnsafeMutableBufferPointer(buffer)
-                    buf[frame] = value
+                    buf[frame] = (value * Float(bit))
+                    bit ^= 1 // Isolates to one channel
                 }
             }
             return noErr
