@@ -101,8 +101,8 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
     func addSiriButton(to view: UIView) {
         let button = INUIAddVoiceShortcutButton(style: .blackOutline)
         button.shortcut = INShortcut(intent: {
-            let intent = ToggleToneBarrierPlaybackIntent()
-            intent.suggestedInvocationPhrase = "Activate ToneBarrier"
+            let intent = ToggleToneBarrierIntent()
+            intent.suggestedInvocationPhrase = "Toggle ToneBarrier"
             return intent
         }())
         button.delegate = self

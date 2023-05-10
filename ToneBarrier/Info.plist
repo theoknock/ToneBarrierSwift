@@ -4,11 +4,13 @@
 <dict>
 	<key>INIntentsSupported</key>
 	<array>
-		<string>ToggleToneBarrierPlaybackIntent</string>
+		<string>ToggleToneBarrierIntent</string>
+		<string>PauseToneBarrierIntent</string>
 	</array>
 	<key>NSUserActivityTypes</key>
 	<array>
-		<string>ToggleToneBarrierPlaybackIntent</string>
+		<string>ToggleToneBarrierIntent</string>
+		<string>PauseToneBarrierIntent</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>

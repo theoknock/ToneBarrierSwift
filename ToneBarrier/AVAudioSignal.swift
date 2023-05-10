@@ -23,8 +23,11 @@ let sine = { (phase: Float) -> Float in
     return sin(phase)
 }
 
-let tremolo = { (frequency: Float) -> Float in
-    return ((frequency / (3000.00 - 200.00) * (18.00 - 2.00)) + 2.00)
+let tremolo = { (frequency: Float, time: Float) -> Float in
+    let interval_max: Float = (frequency - 440.0) / (880.0 - 440.0) * 8.0
+//    let interval_min: Float =
+    let dampened: Float = ((((time * interval_max)-4)/(interval_max - 4)) * interval_max)
+    return dampened
 }
 
 @objc class AVAudioSignal: NSObject {
@@ -44,11 +47,14 @@ let tremolo = { (frequency: Float) -> Float in
         let angular_velocity = { () -> Float in
             return (Float(twoPi) / Float(frame_count))
         }
+        let normalized_time = { (index: Float, count: Float) -> Float in
+            return index / count
+        }
         var currentPhase: Float = 0
         var phaseIncrement = angular_velocity() * Float(frequency)
         
         var currentTremoloPhase: Float = 0
-        var phaseTremoloIncrement = angular_velocity() * Float(tremolo(Float(frequency)))
+        var phaseTremoloIncrement = angular_velocity() * Float(tremolo(Float(frequency), 0.0))
         
         var frame_position: Int = 0;
         var bit: Int = 1
@@ -59,9 +65,10 @@ let tremolo = { (frequency: Float) -> Float in
                 frame_position += (frame_position == frame_count) ? {
                     frequency = frequency + 100
                     phaseIncrement = angular_velocity() * Float(frequency)
-                    phaseTremoloIncrement = angular_velocity() * Float(tremolo(Float(frequency)))
-                    bit ^= 1 // Alternates between channels
+                    phaseTremoloIncrement = angular_velocity() * Float(tremolo(Float(frequency), 0.0))
+//                    bit ^= 1 // Alternates between channels
                     return -frame_count }() : 1
+                phaseTremoloIncrement = angular_velocity() * Float(tremolo(Float(frequency), normalized_time(Float(frame_position), Float(frame_count))))
                 let value = (signal(Float(currentPhase)) * signal(Float(currentTremoloPhase)))
                 currentPhase += phaseIncrement
                 if currentPhase >= twoPi {
@@ -81,7 +88,8 @@ let tremolo = { (frequency: Float) -> Float in
                 for buffer in ablPointer {
                     let buf: UnsafeMutableBufferPointer<Float> = UnsafeMutableBufferPointer(buffer)
                     buf[frame] = (value * Float(bit))
-                    bit ^= 1 // Isolates to one channel
+//                    debugPrint("index: \(buf.indices)")
+//                    bit ^= 1 // Isolates to one channel (or just add 1 to frame)
                 }
             }
             return noErr
@@ -114,6 +122,79 @@ let tremolo = { (frequency: Float) -> Float in
     }
     
 }
+
+//extension AVAudioSignal {
+//    typeof(simd_double1(^)(simd_double1)) rescale_random_frequency;
+//    typeof(simd_double1(^(* restrict))(simd_double1)) _Nullable rescale_random_frequency_t = &rescale_random_frequency;
+//    typeof(simd_double1(^)(simd_double1)) rescale_random_duration;
+//    typeof(simd_double1(^(* restrict))(simd_double1)) _Nullable rescale_random_duration_t  = &rescale_random_duration;
+//    static inline typeof(simd_double1(^)(simd_double1)) random_rescaler (simd_double1 old_min, simd_double1 old_max, simd_double1 new_min, simd_double1 new_max) {
+//        return ^ simd_double1 (simd_double1 value) {
+//            return (simd_double1)(value = (new_max - new_min) * (value - old_min) / (old_max - old_min) + new_min);
+//        };
+//    }
+//    typeof(random_rescaler) * random_rescaler_t = &random_rescaler;
+//
+//    typeof(simd_double1(^)(simd_double1)) distribute_random_frequency;
+//    typeof(simd_double1(^(* restrict))(simd_double1)) _Nullable distribute_random_frequency_t = &distribute_random_frequency;
+//    typeof(simd_double1(^)(simd_double1)) distribute_random_duration;
+//    typeof(simd_double1(^(* restrict))(simd_double1)) _Nullable distribute_random_duration_t  = &distribute_random_duration;
+//    typeof(simd_double1 (^(^)(simd_double1))(simd_double1)) gaussian_distributor = ^ (simd_double1 mean) {
+//        return ^ simd_double1 (simd_double1 time) {
+//            return (time = (simd_double1)(exp(-(pow(((time * M_PI) - mean), 2.0)))));
+//        };
+//    };
+//    typeof(gaussian_distributor) * gaussian_distributor_t = &gaussian_distributor;
+//
+//    static inline typeof(simd_double1(^)(simd_double1)) triangle_wave_distributor (const simd_double1 periods) {
+//        return ^ simd_double1 (simd_double1 time) {
+//            return (time = (2.f * (1.f / M_PI)) * (asin(sin(M_PI * time))));
+//        };
+//    }
+//    typeof(triangle_wave_distributor) * triangle_wave_distributor_t = &triangle_wave_distributor;
+//
+//    typeof(simd_double1 (^(^)(void))(simd_double1)) gabor_function = ^{
+//        return ^ simd_double1 (simd_double1 time) {
+//            return (time = exp((-2.f * M_PI) * (pow(M_PI * (time + 0.5f), 2.f))));;
+//        };
+//    };
+//    typeof(gabor_function) * gabor_function_t = &gabor_function;
+//
+//    typeof(simd_double1(^)(void)) generate_randomd48;
+//    typeof(simd_double1(^(* restrict))(void)) _Nullable generate_randomd48_t = &generate_randomd48;
+//    static inline typeof(simd_double1(^)(void)) randomizerd48_generator (void) {
+//        srand48((unsigned long)time(0));
+//        static simd_double1 random;
+//        return ^ (simd_double1 * random_t) {
+//            return ^ simd_double1 {
+//                return (simd_double1)(*random_t = (drand48()));
+//            };
+//        }(&random);
+//    }
+//
+//    typedef typeof(simd_double1(^)(void)) random_generator;
+//    static simd_double1 (^(^(^(^randomizer_generator)(simd_double1(^)(void)))(simd_double1(^)(simd_double1)))(simd_double1(^)(simd_double1)))(void) = ^ (simd_double1(^randomize)(void)) {
+//        return ^ (simd_double1(^distribute)(simd_double1)) {
+//            return ^ (simd_double1(^rescale)(simd_double1)) {
+//                static simd_double1 result;
+//                return ^ (simd_double1 * result_t) {
+//                    return ^ simd_double1 {
+//                        return (simd_double1)(*result_t = rescale(distribute(randomize())));
+//                    };
+//                }(&result);
+//            };
+//        };
+//    };
+//
+//    static simd_double2 (^frequency_harmonizer)(typeof(random_generator)) = ^ (typeof(random_generator) randomizer) {
+//        static simd_double1 result;
+//        return ^ (simd_double1 * result_t) {
+//            return simd_make_double2((*result_t = randomizer()), (*result_t *= (5.f / 4.f)));
+//        }(&result);
+//    };
+//}
+
+
 
 //typedef NS_ENUM(NSUInteger, Trill) {
 //    TonalTrillUnsigned,

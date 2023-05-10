@@ -14,7 +14,9 @@
 		B96AD38229FD763800A61F7B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B96AD38129FD763800A61F7B /* Assets.xcassets */; };
 		B96AD38529FD763800A61F7B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B96AD38329FD763800A61F7B /* LaunchScreen.storyboard */; };
 		B96AD38F29FD799B00A61F7B /* ToneBarrierIntentDefinition.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = B96AD38E29FD799B00A61F7B /* ToneBarrierIntentDefinition.intentdefinition */; };
-		B96AD39129FD7C3F00A61F7B /* ToggleToneBarrierPlaybackIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96AD39029FD7C3F00A61F7B /* ToggleToneBarrierPlaybackIntentHandler.swift */; };
+		B96AD39129FD7C3F00A61F7B /* ToggleToneBarrierIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96AD39029FD7C3F00A61F7B /* ToggleToneBarrierIntentHandler.swift */; };
+		B97713D12A0B0942003C1389 /* RandomSource.c in Sources */ = {isa = PBXBuildFile; fileRef = B97713CF2A0B0942003C1389 /* RandomSource.c */; };
+		B97713D32A0B1D1A003C1389 /* PauseToneBarrierIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97713D22A0B1D1A003C1389 /* PauseToneBarrierIntentHandler.swift */; };
 		B979461229FDEE8D00CE3139 /* AVRouting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B979461129FDEE8D00CE3139 /* AVRouting.framework */; };
 		B979461429FDEECC00CE3139 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B979461329FDEECC00CE3139 /* AVKit.framework */; };
 		B9D7B5D629FDEB5E00954817 /* AVAudioSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D7B5D529FDEB5E00954817 /* AVAudioSignal.swift */; };
@@ -30,7 +32,11 @@
 		B96AD38429FD763800A61F7B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B96AD38629FD763800A61F7B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B96AD38E29FD799B00A61F7B /* ToneBarrierIntentDefinition.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = ToneBarrierIntentDefinition.intentdefinition; sourceTree = "<group>"; };
-		B96AD39029FD7C3F00A61F7B /* ToggleToneBarrierPlaybackIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleToneBarrierPlaybackIntentHandler.swift; sourceTree = "<group>"; };
+		B96AD39029FD7C3F00A61F7B /* ToggleToneBarrierIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleToneBarrierIntentHandler.swift; sourceTree = "<group>"; };
+		B97713CE2A0B0942003C1389 /* ToneBarrier-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ToneBarrier-Bridging-Header.h"; sourceTree = "<group>"; };
+		B97713CF2A0B0942003C1389 /* RandomSource.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = RandomSource.c; path = Randomizer/RandomSource.c; sourceTree = "<group>"; };
+		B97713D02A0B0942003C1389 /* RandomSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RandomSource.h; path = Randomizer/RandomSource.h; sourceTree = "<group>"; };
+		B97713D22A0B1D1A003C1389 /* PauseToneBarrierIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PauseToneBarrierIntentHandler.swift; sourceTree = "<group>"; };
 		B979461129FDEE8D00CE3139 /* AVRouting.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVRouting.framework; path = System/Library/Frameworks/AVRouting.framework; sourceTree = SDKROOT; };
 		B979461329FDEECC00CE3139 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		B9D7B5D529FDEB5E00954817 /* AVAudioSignal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVAudioSignal.swift; sourceTree = "<group>"; };
@@ -71,6 +77,8 @@
 			children = (
 				B96AD38629FD763800A61F7B /* Info.plist */,
 				B96AD37829FD763700A61F7B /* AppDelegate.swift */,
+				B97713CF2A0B0942003C1389 /* RandomSource.c */,
+				B97713D02A0B0942003C1389 /* RandomSource.h */,
 				B96AD37A29FD763700A61F7B /* SceneDelegate.swift */,
 				B96AD37C29FD763700A61F7B /* ViewController.swift */,
 				B9D7B5D529FDEB5E00954817 /* AVAudioSignal.swift */,
@@ -78,7 +86,9 @@
 				B96AD38329FD763800A61F7B /* LaunchScreen.storyboard */,
 				B96AD37E29FD763700A61F7B /* Main.storyboard */,
 				B96AD38E29FD799B00A61F7B /* ToneBarrierIntentDefinition.intentdefinition */,
-				B96AD39029FD7C3F00A61F7B /* ToggleToneBarrierPlaybackIntentHandler.swift */,
+				B96AD39029FD7C3F00A61F7B /* ToggleToneBarrierIntentHandler.swift */,
+				B97713D22A0B1D1A003C1389 /* PauseToneBarrierIntentHandler.swift */,
+				B97713CE2A0B0942003C1389 /* ToneBarrier-Bridging-Header.h */,
 			);
 			path = ToneBarrier;
 			sourceTree = "<group>";
@@ -164,8 +174,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B97713D12A0B0942003C1389 /* RandomSource.c in Sources */,
+				B97713D32A0B1D1A003C1389 /* PauseToneBarrierIntentHandler.swift in Sources */,
 				B96AD37D29FD763700A61F7B /* ViewController.swift in Sources */,
-				B96AD39129FD7C3F00A61F7B /* ToggleToneBarrierPlaybackIntentHandler.swift in Sources */,
+				B96AD39129FD7C3F00A61F7B /* ToggleToneBarrierIntentHandler.swift in Sources */,
 				B96AD37929FD763700A61F7B /* AppDelegate.swift in Sources */,
 				B96AD37B29FD763700A61F7B /* SceneDelegate.swift in Sources */,
 				B9D7B5D629FDEB5E00954817 /* AVAudioSignal.swift in Sources */,
@@ -335,7 +347,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.blogspot.demonicactivity.bush.alan.james.ToneBarrier;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "ToneBarrier/ToneBarrier-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -368,7 +380,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.blogspot.demonicactivity.bush.alan.james.ToneBarrier;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "ToneBarrier/ToneBarrier-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

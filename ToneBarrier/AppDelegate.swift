@@ -14,7 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, handlerFor intent: INIntent) -> Any? {
-        return ToggleToneBarrierPlaybackIntentHandler()
+        return ToggleToneBarrierIntentHandler()
     }
 
 

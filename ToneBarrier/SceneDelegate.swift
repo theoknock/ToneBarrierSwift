@@ -154,7 +154,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 extension SceneDelegate {
     func handleUserActivity(_ userActivity: NSUserActivity) {
         let interaction = userActivity.interaction
-        if ((interaction?.intent.isEqual(ToggleToneBarrierPlaybackIntent())) != nil) {
+        if ((interaction?.intent.isEqual(ToggleToneBarrierIntent())) != nil) {
             viewController?.togglePlaybackControl.isHighlighted = !(viewController?.togglePlaybackControl.isHighlighted)!
         }
     }

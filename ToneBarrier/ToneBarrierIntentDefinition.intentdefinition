@@ -9,7 +9,7 @@
 	<key>INIntentDefinitionNamespace</key>
 	<string>gEx3G4</string>
 	<key>INIntentDefinitionSystemVersion</key>
-	<string>22F5049e</string>
+	<string>22F5059b</string>
 	<key>INIntentDefinitionToolsBuildVersion</key>
 	<string>14E222b</string>
 	<key>INIntentDefinitionToolsVersion</key>
@@ -24,7 +24,7 @@
 			<key>INIntentDefaultImageName</key>
 			<string>AppIcon</string>
 			<key>INIntentDescription</key>
-			<string>Starts (or stops) ToneBarrier</string>
+			<string>Toggles ToneBarrier playback</string>
 			<key>INIntentDescriptionID</key>
 			<string>EnsLEN</string>
 			<key>INIntentEligibleForWidgets</key>
@@ -38,25 +38,25 @@
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Toggles the playback state of ToneBarrier</string>
+					<string>Toggle ToneBarrier</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>LxRaMr</string>
 				</dict>
 			</dict>
 			<key>INIntentName</key>
-			<string>ToggleToneBarrierPlayback</string>
+			<string>ToggleToneBarrier</string>
 			<key>INIntentParameterCombinations</key>
 			<dict>
 				<key></key>
 				<dict>
 					<key>INIntentParameterCombinationSubtitle</key>
-					<string>Starts (or stops) ToneBarrier</string>
+					<string>Toggles ToneBarrier playback</string>
 					<key>INIntentParameterCombinationSubtitleID</key>
 					<string>jxQ1Uv</string>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Toggles the playback state of ToneBarrier</string>
+					<string>Toggle ToneBarrier</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>DaEkLD</string>
 				</dict>
@@ -66,28 +66,12 @@
 				<key>INIntentResponseCodes</key>
 				<array>
 					<dict>
-						<key>INIntentResponseCodeConciseFormatString</key>
-						<string>ToneBarrier activated</string>
-						<key>INIntentResponseCodeConciseFormatStringID</key>
-						<string>t2X0SJ</string>
-						<key>INIntentResponseCodeFormatString</key>
-						<string>ToneBarrier activated</string>
-						<key>INIntentResponseCodeFormatStringID</key>
-						<string>lX25Ko</string>
 						<key>INIntentResponseCodeName</key>
 						<string>success</string>
 						<key>INIntentResponseCodeSuccess</key>
 						<true/>
 					</dict>
 					<dict>
-						<key>INIntentResponseCodeConciseFormatString</key>
-						<string>ToneBarrier activation failed</string>
-						<key>INIntentResponseCodeConciseFormatStringID</key>
-						<string>mWLnEX</string>
-						<key>INIntentResponseCodeFormatString</key>
-						<string>ToneBarrier activation failed</string>
-						<key>INIntentResponseCodeFormatStringID</key>
-						<string>sA9dfp</string>
 						<key>INIntentResponseCodeName</key>
 						<string>failure</string>
 					</dict>
@@ -96,9 +80,95 @@
 				<integer>4</integer>
 			</dict>
 			<key>INIntentTitle</key>
-			<string>Toggle Tone Barrier Playback</string>
+			<string>Toggle ToneBarrier</string>
 			<key>INIntentTitleID</key>
 			<string>eaRisU</string>
+			<key>INIntentType</key>
+			<string>Custom</string>
+			<key>INIntentVerb</key>
+			<string>Do</string>
+		</dict>
+		<dict>
+			<key>INIntentCategory</key>
+			<string>generic</string>
+			<key>INIntentConfigurable</key>
+			<true/>
+			<key>INIntentDescription</key>
+			<string>Pauses ToneBarrier</string>
+			<key>INIntentDescriptionID</key>
+			<string>IOEURx</string>
+			<key>INIntentEligibleForWidgets</key>
+			<true/>
+			<key>INIntentManagedParameterCombinations</key>
+			<dict>
+				<key></key>
+				<dict>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Pauses ToneBarrier</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>m3FiOt</string>
+					<key>INIntentParameterCombinationUpdatesLinked</key>
+					<true/>
+				</dict>
+			</dict>
+			<key>INIntentName</key>
+			<string>PauseToneBarrier</string>
+			<key>INIntentParameterCombinations</key>
+			<dict>
+				<key></key>
+				<dict>
+					<key>INIntentParameterCombinationIsPrimary</key>
+					<true/>
+					<key>INIntentParameterCombinationSubtitle</key>
+					<string>Pauses ToneBarrier</string>
+					<key>INIntentParameterCombinationSubtitleID</key>
+					<string>y6fdBJ</string>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Pause ToneBarrier</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>alJih3</string>
+				</dict>
+			</dict>
+			<key>INIntentResponse</key>
+			<dict>
+				<key>INIntentResponseCodes</key>
+				<array>
+					<dict>
+						<key>INIntentResponseCodeConciseFormatString</key>
+						<string>ToneBarrier paused</string>
+						<key>INIntentResponseCodeConciseFormatStringID</key>
+						<string>THU4LT</string>
+						<key>INIntentResponseCodeFormatString</key>
+						<string>ToneBarrier paused</string>
+						<key>INIntentResponseCodeFormatStringID</key>
+						<string>oEuysy</string>
+						<key>INIntentResponseCodeName</key>
+						<string>success</string>
+						<key>INIntentResponseCodeSuccess</key>
+						<true/>
+					</dict>
+					<dict>
+						<key>INIntentResponseCodeConciseFormatString</key>
+						<string>Failed to pause ToneBarrier</string>
+						<key>INIntentResponseCodeConciseFormatStringID</key>
+						<string>9eVNCj</string>
+						<key>INIntentResponseCodeFormatString</key>
+						<string>Failed to pause ToneBarrier</string>
+						<key>INIntentResponseCodeFormatStringID</key>
+						<string>wDauvs</string>
+						<key>INIntentResponseCodeName</key>
+						<string>failure</string>
+					</dict>
+				</array>
+			</dict>
+			<key>INIntentTitle</key>
+			<string>Pause ToneBarrier</string>
+			<key>INIntentTitleID</key>
+			<string>sfvjgt</string>
 			<key>INIntentType</key>
 			<string>Custom</string>
 			<key>INIntentVerb</key>

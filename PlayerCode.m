@@ -131,7 +131,7 @@ __block AVAudioPlayerNodeChannelIndex player_node_channel_index;
                 char * _Nullable state_1 = malloc(sizeof(char) * buffer_length);
                 initstate(seed, state_1, buffer_length);
                 dispatch_async(player_nodes_concurrent_queue, ^{
-                    srand((unsigned int)time(0));
+                    srand((unsigned int)time(0)); // shouldn't this be "seed"
                     struct Randomizer * duration_randomizer = (i == 0)
                     ? new_randomizer(random_generator_drand48, 1.25, 1.75, 1.0, random_distribution_gamma, 0.25, 1.75, 1.0)
                     : new_randomizer(random_generator_drand48, 0.25, 0.75, 1.0, random_distribution_gamma, 0.25, 1.75, 1.0);
