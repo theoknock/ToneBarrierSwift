@@ -16,10 +16,7 @@ import Accelerate
 
 var frequency = 220.0
 var harmonic  = frequency * (5.0/4.0)
-let amplitude = 1.0
-let duration  = 5.0
-let tau       = 2.0 * Float.pi
-
+let sampleRate = 44100.0
 
 @objc class AVAudioSignal: NSObject {
     private static let shared = AVAudioSignal()
@@ -32,17 +29,19 @@ let tau       = 2.0 * Float.pi
         let main_mixer_node = audio_engine.mainMixerNode
         let output_node = audio_engine.outputNode
         let audio_format = output_node.outputFormat(forBus: 0)
-        let frame_count = Int(Float(audio_format.sampleRate))// * Float(audio_format.channelCount))
         
         self.audio_source_node_renderer = { _, _, frameCount, audioBufferList in
-            var inputSignal = (0 ..< Int(frameCount)).map {
+            var framePosition: AVAudioFramePosition = ~(1 << (frameCount + 1))
+            let inputSignal = (0 ..< Int(frameCount)).map {
+                framePosition >>= 1
+                ((framePosition & 1) != 0) ? ((framePosition | 1) != 0) ? 1 /* Generate signal sample from first frequency and first half of duration */ : 1 /* Generate signal sample from second frequency and second half of duration */ : 0 /* Generate new frequencies and duration */;
                 let x = Float($0)
                 return sin((Float(frequency) / Float(frameCount)) * x)
             }
             
             let ablPointer = UnsafeMutableAudioBufferListPointer(audioBufferList)
             for buffer in ablPointer {
-                var buf: UnsafeMutableBufferPointer<Float> = UnsafeMutableBufferPointer(buffer)
+                let buf: UnsafeMutableBufferPointer<Float> = UnsafeMutableBufferPointer(buffer)
                 inputSignal.withUnsafeBufferPointer { sourceBuffer in
                     buf.baseAddress!.initialize(from: sourceBuffer.baseAddress!, count: inputSignal.count)
                 }

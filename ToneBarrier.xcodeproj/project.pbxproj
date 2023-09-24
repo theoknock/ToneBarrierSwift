@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B90AC3422ABF454E0085D2BF /* SignalSampleGeneratorPseudoCode.md in Resources */ = {isa = PBXBuildFile; fileRef = B90AC3412ABF454E0085D2BF /* SignalSampleGeneratorPseudoCode.md */; };
 		B96AD37929FD763700A61F7B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96AD37829FD763700A61F7B /* AppDelegate.swift */; };
 		B96AD37B29FD763700A61F7B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96AD37A29FD763700A61F7B /* SceneDelegate.swift */; };
 		B96AD37D29FD763700A61F7B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96AD37C29FD763700A61F7B /* ViewController.swift */; };
@@ -19,12 +18,10 @@
 		B97713D32A0B1D1A003C1389 /* PauseToneBarrierIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97713D22A0B1D1A003C1389 /* PauseToneBarrierIntentHandler.swift */; };
 		B979461229FDEE8D00CE3139 /* AVRouting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B979461129FDEE8D00CE3139 /* AVRouting.framework */; };
 		B979461429FDEECC00CE3139 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B979461329FDEECC00CE3139 /* AVKit.framework */; };
-		B98C632C2ABF15DB006E833F /* ClicklessTonesScoreObjC.m in Sources */ = {isa = PBXBuildFile; fileRef = B98C632B2ABF15DB006E833F /* ClicklessTonesScoreObjC.m */; };
 		B9D7B5D629FDEB5E00954817 /* AVAudioSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D7B5D529FDEB5E00954817 /* AVAudioSignal.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		B90AC3412ABF454E0085D2BF /* SignalSampleGeneratorPseudoCode.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SignalSampleGeneratorPseudoCode.md; sourceTree = "<group>"; };
 		B96AD37529FD763700A61F7B /* ToneBarrier.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToneBarrier.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B96AD37829FD763700A61F7B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B96AD37A29FD763700A61F7B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -39,8 +36,6 @@
 		B97713D22A0B1D1A003C1389 /* PauseToneBarrierIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PauseToneBarrierIntentHandler.swift; sourceTree = "<group>"; };
 		B979461129FDEE8D00CE3139 /* AVRouting.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVRouting.framework; path = System/Library/Frameworks/AVRouting.framework; sourceTree = SDKROOT; };
 		B979461329FDEECC00CE3139 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
-		B98C632B2ABF15DB006E833F /* ClicklessTonesScoreObjC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ClicklessTonesScoreObjC.m; path = ToneBarrier/ClicklessTonesScoreObjC.m; sourceTree = "<group>"; };
-		B98C632D2ABF169F006E833F /* ClicklessTonesScoreObjC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ClicklessTonesScoreObjC.h; sourceTree = "<group>"; };
 		B9D7B5D529FDEB5E00954817 /* AVAudioSignal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVAudioSignal.swift; sourceTree = "<group>"; wrapsLines = 0; };
 /* End PBXFileReference section */
 
@@ -60,8 +55,6 @@
 		B96AD36C29FD763700A61F7B = {
 			isa = PBXGroup;
 			children = (
-				B98C632D2ABF169F006E833F /* ClicklessTonesScoreObjC.h */,
-				B98C632B2ABF15DB006E833F /* ClicklessTonesScoreObjC.m */,
 				B96AD37729FD763700A61F7B /* ToneBarrier */,
 				B96AD37629FD763700A61F7B /* Products */,
 				B979461029FDEE8D00CE3139 /* Frameworks */,
@@ -84,7 +77,6 @@
 				B96AD37A29FD763700A61F7B /* SceneDelegate.swift */,
 				B96AD37C29FD763700A61F7B /* ViewController.swift */,
 				B9D7B5D529FDEB5E00954817 /* AVAudioSignal.swift */,
-				B90AC3412ABF454E0085D2BF /* SignalSampleGeneratorPseudoCode.md */,
 				B96AD38129FD763800A61F7B /* Assets.xcassets */,
 				B96AD38329FD763800A61F7B /* LaunchScreen.storyboard */,
 				B96AD37E29FD763700A61F7B /* Main.storyboard */,
@@ -167,7 +159,6 @@
 				B96AD38529FD763800A61F7B /* LaunchScreen.storyboard in Resources */,
 				B96AD38229FD763800A61F7B /* Assets.xcassets in Resources */,
 				B96AD38029FD763700A61F7B /* Main.storyboard in Resources */,
-				B90AC3422ABF454E0085D2BF /* SignalSampleGeneratorPseudoCode.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -182,7 +173,6 @@
 				B96AD37D29FD763700A61F7B /* ViewController.swift in Sources */,
 				B96AD39129FD7C3F00A61F7B /* ToggleToneBarrierIntentHandler.swift in Sources */,
 				B96AD37929FD763700A61F7B /* AppDelegate.swift in Sources */,
-				B98C632C2ABF15DB006E833F /* ClicklessTonesScoreObjC.m in Sources */,
 				B96AD37B29FD763700A61F7B /* SceneDelegate.swift in Sources */,
 				B9D7B5D629FDEB5E00954817 /* AVAudioSignal.swift in Sources */,
 				B96AD38F29FD799B00A61F7B /* ToneBarrierIntentDefinition.intentdefinition in Sources */,
@@ -336,7 +326,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = N9987K9442;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ToneBarrier/Info.plist;
@@ -369,7 +359,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = N9987K9442;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ToneBarrier/Info.plist;
