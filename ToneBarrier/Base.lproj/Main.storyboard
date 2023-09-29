@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
-    <device id="retina6_72" orientation="portrait" appearance="dark"/>
+    <device id="ipad12_9rounded" orientation="landscape" layout="fullscreen" appearance="dark"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
         <capability name="Image references" minToolsVersion="12.0"/>
@@ -14,18 +14,18 @@
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="ToneBarrier" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleAspectFit" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1366" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="Ryi-yd-PoM" customClass="AVRoutePickerView">
-                                <rect key="frame" x="177.33333333333334" y="822.66666666666663" width="75.333333333333343" height="75.333333333333371"/>
+                                <rect key="frame" x="628.5" y="894.5" width="109" height="109.5"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="Ryi-yd-PoM" secondAttribute="height" multiplier="1:1" id="Iij-ef-atE"/>
                                 </constraints>
                             </view>
                             <imageView opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.14999999999999999" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="waveform.path" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="JxM-Sh-sV2">
-                                <rect key="frame" x="0.0" y="251" width="430" height="431"/>
+                                <rect key="frame" x="171" y="-0.5" width="1024" height="1025.5"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" systemColor="systemBlueColor"/>
                                 <constraints>
@@ -34,7 +34,7 @@
                                 <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="regular"/>
                             </imageView>
                             <imageView opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dOm-P1-ib0">
-                                <rect key="frame" x="161.33333333333334" y="414.33333333333331" width="107.33333333333334" height="103.66666666666669"/>
+                                <rect key="frame" x="546.5" y="377" width="273" height="270"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" systemColor="systemBlueColor"/>
                                 <constraints>
@@ -54,27 +54,27 @@
                             <constraint firstItem="JxM-Sh-sV2" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" priority="750" id="1zy-8E-laj"/>
                             <constraint firstItem="JxM-Sh-sV2" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" priority="750" id="3s2-N6-aA3"/>
                             <constraint firstItem="Ryi-yd-PoM" firstAttribute="width" secondItem="dOm-P1-ib0" secondAttribute="width" multiplier="0.7" priority="750" id="4RQ-NR-15h"/>
-                            <constraint firstItem="dOm-P1-ib0" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.25" id="5Si-Ba-xzv"/>
+                            <constraint firstItem="dOm-P1-ib0" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.2" id="5Si-Ba-xzv"/>
                             <constraint firstItem="Ryi-yd-PoM" firstAttribute="height" secondItem="dOm-P1-ib0" secondAttribute="height" multiplier="0.4" priority="750" id="9f3-XJ-wQH"/>
                             <constraint firstItem="Ryi-yd-PoM" firstAttribute="width" secondItem="dOm-P1-ib0" secondAttribute="width" multiplier="0.4" priority="750" id="9jB-qW-pPW" userLabel="Route Picker.width = 0.4 × Toggle Playback Control.width @750 (iPad)"/>
                             <constraint firstItem="Ryi-yd-PoM" firstAttribute="height" relation="lessThanOrEqual" secondItem="dOm-P1-ib0" secondAttribute="height" multiplier="0.5" id="AXs-3s-KnY" userLabel="Route Picker.height ≤ 0.4 × Toggle Playback Control.height (iPad)"/>
                             <constraint firstItem="JxM-Sh-sV2" firstAttribute="width" relation="lessThanOrEqual" secondItem="8bC-Xf-vdC" secondAttribute="width" id="HUx-Fl-Dtb"/>
                             <constraint firstItem="JxM-Sh-sV2" firstAttribute="height" relation="lessThanOrEqual" secondItem="8bC-Xf-vdC" secondAttribute="height" id="Jmk-ea-oOP"/>
                             <constraint firstItem="JxM-Sh-sV2" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="L1q-ex-Ta9"/>
-                            <constraint firstItem="dOm-P1-ib0" firstAttribute="width" relation="lessThanOrEqual" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.3" id="LJF-UU-IbP"/>
+                            <constraint firstItem="dOm-P1-ib0" firstAttribute="width" relation="lessThanOrEqual" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.2" id="LJF-UU-IbP"/>
                             <constraint firstItem="Ryi-yd-PoM" firstAttribute="width" relation="lessThanOrEqual" secondItem="dOm-P1-ib0" secondAttribute="width" multiplier="0.7" id="Lc1-gh-9I6"/>
                             <constraint firstItem="dOm-P1-ib0" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="QwL-AY-tEJ"/>
                             <constraint firstItem="Ryi-yd-PoM" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="RsB-rT-1Nm"/>
                             <constraint firstItem="Ryi-yd-PoM" firstAttribute="height" relation="lessThanOrEqual" secondItem="dOm-P1-ib0" secondAttribute="height" multiplier="0.7" identifier="r" id="UT0-Q2-bkS"/>
                             <constraint firstItem="Ryi-yd-PoM" firstAttribute="height" secondItem="dOm-P1-ib0" secondAttribute="height" multiplier="0.7" priority="750" identifier="r" id="aqE-lR-iRY"/>
-                            <constraint firstItem="dOm-P1-ib0" firstAttribute="height" relation="lessThanOrEqual" secondItem="JxM-Sh-sV2" secondAttribute="height" multiplier="0.3" id="egB-r7-H2A"/>
+                            <constraint firstItem="dOm-P1-ib0" firstAttribute="height" relation="lessThanOrEqual" secondItem="JxM-Sh-sV2" secondAttribute="height" multiplier="0.2" id="egB-r7-H2A"/>
                             <constraint firstItem="dOm-P1-ib0" firstAttribute="width" relation="greaterThanOrEqual" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.15" id="fZa-vB-y1U"/>
                             <constraint firstItem="dOm-P1-ib0" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="ier-hg-nAi"/>
                             <constraint firstItem="Ryi-yd-PoM" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="ktt-mp-Ad3"/>
                             <constraint firstItem="Ryi-yd-PoM" firstAttribute="width" relation="lessThanOrEqual" secondItem="dOm-P1-ib0" secondAttribute="width" multiplier="0.4" id="oew-so-EW1" userLabel="Route Picker.width ≤ 0.6 × Toggle Playback Control.width (iPad)"/>
                             <constraint firstItem="JxM-Sh-sV2" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="qOw-Ux-6He"/>
-                            <constraint firstItem="dOm-P1-ib0" firstAttribute="height" secondItem="JxM-Sh-sV2" secondAttribute="height" multiplier="0.3" priority="750" id="vm5-2a-VLv"/>
-                            <constraint firstItem="dOm-P1-ib0" firstAttribute="width" relation="lessThanOrEqual" secondItem="JxM-Sh-sV2" secondAttribute="width" multiplier="0.3" id="ynV-c1-NJI"/>
+                            <constraint firstItem="dOm-P1-ib0" firstAttribute="height" secondItem="JxM-Sh-sV2" secondAttribute="height" multiplier="0.2" priority="750" id="vm5-2a-VLv"/>
+                            <constraint firstItem="dOm-P1-ib0" firstAttribute="width" relation="lessThanOrEqual" secondItem="JxM-Sh-sV2" secondAttribute="width" multiplier="0.2" id="ynV-c1-NJI"/>
                             <constraint firstItem="dOm-P1-ib0" firstAttribute="width" relation="greaterThanOrEqual" secondItem="JxM-Sh-sV2" secondAttribute="width" multiplier="0.15" priority="750" id="zWG-a6-SSy"/>
                         </constraints>
                         <variation key="default">
@@ -123,7 +123,7 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
