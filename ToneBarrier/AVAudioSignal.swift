@@ -15,7 +15,7 @@ import Dispatch
 import Accelerate
 
 var frequency = 440.0
-var harmonic  = frequency * (5.0/4.0)
+var harmonic  = frequency + (frequency * (5.0/4.0))
 let tau = 2.0 * .pi
 
 @objc class AVAudioSignal: NSObject {
@@ -33,14 +33,9 @@ let tau = 2.0 * .pi
         
         func createSignal(frameCount: Int, frequency: Float) -> [Float] {
             let inputSignal = (0 ..< frameCount).map {
-//                let x = 0.0 + (((Float($0) - 0.0) * (1.0 - 0.0))) / (Float(~frameCount) - 0.0)
-                var x = Float($0) / Float(frameCount)
-//                var x: Float = 0.0
-//                x = 0.0 + (((x - 0.0) * (1.0 - 0.0))) / (Float(~frameCount) - 0.0)
-//                debugPrint("x == \(Float($0))")
-                // print x t see if it is counting from 0 to the number of frames or...
-                // ...
-                return 2.0 * sin(Float(tau) * x * frequency) // sin((Float(frequency) / Float(frameCount)) * x)
+                let x = Float($0)
+//                debugPrint("x == \(x)")
+                return sin(Float(tau) * (x / Float(frameCount)) * frequency) // sin((Float(frequency) / Float(frameCount)) * x)
             }
             return inputSignal
         }
@@ -51,12 +46,12 @@ let tau = 2.0 * .pi
         }
         
         func performCalculation(frameCount: Int, array1: [Float], array2: [Float]) -> [Float] {
-            guard array1.count == array2.count else {
-                return []
-            }
+//            guard array1.count == array2.count else {
+//                return []
+//            }
             var result: [Float] = []
             for i in 0..<frameCount {
-                result.append(array1[i] * array2[i]) // Change this line to perform your desired operation
+                result.append(array1[i] + (0.5 * (array2[i] - array1[i]))) // Change this line to perform your desired operation
             }
             return result
         }
