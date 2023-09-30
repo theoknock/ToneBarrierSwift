@@ -14,9 +14,9 @@ import ObjectiveC
 import Dispatch
 import Accelerate
 
-var root     = 440.0
-var harmonic = root * (5.0/4.0)
-let tau      = 2.0 * .pi
+let root     = Float(440.0)
+let harmonic = Float(root * (5.0/4.0))
+let tau      = Float(2.0 * Float.pi)
 
 @objc class AVAudioSignal: NSObject {
     private static let shared = AVAudioSignal()
@@ -46,11 +46,9 @@ let tau      = 2.0 * .pi
             return inputSignal
         }
         
-        func mixSignals(frameCount: Int, array1: [Float], array2: [Float]) -> [Float] {
-            let result = (0 ..< frameCount).map {
-                let x = $0
-                return 0.5 * (array1[x] + array2[x])
-            }
+        func multiplySignals(frameCount: Int, array1: [Float], array2: [Float]) -> [Float] {
+            var result = [Float](repeating: 0.0, count: frameCount)
+            vDSP.multiply(array1, array2, result: &result)
             return result
         }
         
@@ -58,25 +56,30 @@ let tau      = 2.0 * .pi
          ----------------------------------------------
          */
         
-        func generateFrequencies(rootFrequency: Float, harmonicFactor: Float, length: Int) -> ([Float], [Float]) {
+        func generateFrequencies(rootFrequency: Float, harmonicFactor: Float, length: Int) -> ([Float], [Float], [Float]) {
             var rootFreqSamples = [Float](repeating: 0.0, count: length)
             var harmonicFreqSamples = [Float](repeating: 0.0, count: length)
-            for i in 0..<length {
+            let combinedSamples = (0 ..< length).map {
+                let i = $0
                 let time = Float(i) / Float(length)
-                rootFreqSamples[i] = sin(2 * .pi * rootFrequency * time)
-                harmonicFreqSamples[i] = sin(2 * .pi * (rootFrequency * harmonicFactor) * time)
-            }
-            return (rootFreqSamples, harmonicFreqSamples)
-        }
-        func combineFrequencies(rootFreqSamples: [Float], harmonicFreqSamples: [Float]) -> [Float] {
-            assert(rootFreqSamples.count == harmonicFreqSamples.count, "Input arrays must have equal length")
-            var combinedSamples = [Float](repeating: 0.0, count: rootFreqSamples.count)
-            for i in 0..<rootFreqSamples.count {
-                combinedSamples[i] = (rootFreqSamples[i] + harmonicFreqSamples[i]) / 2.0
+                
+                rootFreqSamples[i] = sinf((tau / Float(length)) * rootFrequency * time) // sinf(tau * rootFrequency * time)
+                harmonicFreqSamples[i] = cosf((tau / Float(length)) * harmonicFactor * time) // cosf(tau * (rootFrequency * harmonicFactor) * time)
+                return rootFreqSamples[i]; //((2.f * (sinf(rootFreqSamples[i] + harmonicFreqSamples[i]) * cosf(rootFreqSamples[i] - harmonicFreqSamples[i]))) / 2.f * (1.0 - 0.5)); // (rootFreqSamples[i] + harmonicFreqSamples[i])
             }
             
-            return combinedSamples
+            return (rootFreqSamples, harmonicFreqSamples, combinedSamples)
         }
+        
+//        func combineFrequencies(rootFreqSamples: [Float], harmonicFreqSamples: [Float], length: Int) -> [Float] {
+////            assert(rootFreqSamples.count == harmonicFreqSamples.count, "Input arrays must have equal length")
+//            var combinedSamples = [Float](repeating: 0.0, count: length)
+//            for i in 0..<rootFreqSamples.count {
+//                combinedSamples[i] = (rootFreqSamples[i] + harmonicFreqSamples[i]) / 2.0
+//            }
+//            
+//            return combinedSamples
+//        }
 
         /*
          ----------------------------------------------
@@ -84,15 +87,15 @@ let tau      = 2.0 * .pi
         
         self.audio_source_node_renderer = { _, _, frameCount, audioBufferList in
             // To-do: Replace with: amplitude • cos((tau •  x) / period)
-            let rootFrequency     = createSignalSine(frameCount: Int(frameCount), frequency: Float(root))
-            let harmonicFrequency = createSignalCosine(frameCount: Int(frameCount), frequency: Float(harmonic))
-            let signalSamples     = mixSignals(frameCount: Int(frameCount), array1: rootFrequency, array2: harmonicFrequency)
+//            let rootFrequency     = createSignalSine(frameCount: Int(frameCount), frequency: Float(root))
+//            let harmonicFrequency = createSignalCosine(frameCount: Int(frameCount), frequency: Float(harmonic))
+//            let signalSamples     = mixSignals(frameCount: Int(frameCount), array1: rootFrequency, array2: harmonicFrequency)
             
             /*
              ----------------------------------------------
              */
-            let (rootFreqSamples, harmonicFreqSamples) = generateFrequencies(rootFrequency: 440.0, harmonicFactor: 5.0/4.0, length: Int(frameCount))
-            let combinedSamples = combineFrequencies(rootFreqSamples: rootFreqSamples, harmonicFreqSamples: harmonicFreqSamples)
+            let (_, _, combinedSamples) = generateFrequencies(rootFrequency: 440.0, harmonicFactor: 5.0/4.0, length: Int(frameCount))
+//            let combinedSamples = combineFrequencies(rootFreqSamples: rootFreqSamples, harmonicFreqSamples: harmonicFreqSamples, length: Int(frameCount))
             /*
              ----------------------------------------------
              */
