@@ -36,3 +36,15 @@
             let b = sin((Float(harmonic)  / Float(frameCount)) * x)
             return (2.0 * (sin(a + b) * cos(a - b))) / 2.0
             
+# Using the sample rate and duration to compute signal samples
+
+import Foundation
+
+func generateSignalSamples(frequency: Float, sampleRate: Float, duration: Float) -> [Float] {
+    let count = Int(sampleRate * duration)
+    
+    return (0..<count).map { i in
+        return sinf(2 * Float.pi * frequency * Float(i) / sampleRate)
+    }
+}
+
