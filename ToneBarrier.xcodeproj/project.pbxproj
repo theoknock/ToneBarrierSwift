@@ -11,13 +11,13 @@
 		B96AD37B29FD763700A61F7B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96AD37A29FD763700A61F7B /* SceneDelegate.swift */; };
 		B96AD37D29FD763700A61F7B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96AD37C29FD763700A61F7B /* ViewController.swift */; };
 		B96AD38029FD763700A61F7B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B96AD37E29FD763700A61F7B /* Main.storyboard */; };
-		B96AD38229FD763800A61F7B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B96AD38129FD763800A61F7B /* Assets.xcassets */; };
 		B96AD38529FD763800A61F7B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B96AD38329FD763800A61F7B /* LaunchScreen.storyboard */; };
 		B96AD38F29FD799B00A61F7B /* ToneBarrierIntentDefinition.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = B96AD38E29FD799B00A61F7B /* ToneBarrierIntentDefinition.intentdefinition */; };
 		B96AD39129FD7C3F00A61F7B /* ToggleToneBarrierIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96AD39029FD7C3F00A61F7B /* ToggleToneBarrierIntentHandler.swift */; };
 		B97713D32A0B1D1A003C1389 /* PauseToneBarrierIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97713D22A0B1D1A003C1389 /* PauseToneBarrierIntentHandler.swift */; };
 		B979461229FDEE8D00CE3139 /* AVRouting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B979461129FDEE8D00CE3139 /* AVRouting.framework */; };
 		B979461429FDEECC00CE3139 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B979461329FDEECC00CE3139 /* AVKit.framework */; };
+		B9A2E7152AC78B970051AB01 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9A2E7142AC78B970051AB01 /* Media.xcassets */; };
 		B9D7B5D629FDEB5E00954817 /* AVAudioSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D7B5D529FDEB5E00954817 /* AVAudioSignal.swift */; };
 /* End PBXBuildFile section */
 
@@ -28,7 +28,6 @@
 		B96AD37A29FD763700A61F7B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		B96AD37C29FD763700A61F7B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; wrapsLines = 0; };
 		B96AD37F29FD763700A61F7B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		B96AD38129FD763800A61F7B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B96AD38429FD763800A61F7B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B96AD38629FD763800A61F7B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B96AD38E29FD799B00A61F7B /* ToneBarrierIntentDefinition.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = ToneBarrierIntentDefinition.intentdefinition; sourceTree = "<group>"; };
@@ -37,6 +36,7 @@
 		B97713D22A0B1D1A003C1389 /* PauseToneBarrierIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PauseToneBarrierIntentHandler.swift; sourceTree = "<group>"; };
 		B979461129FDEE8D00CE3139 /* AVRouting.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVRouting.framework; path = System/Library/Frameworks/AVRouting.framework; sourceTree = SDKROOT; };
 		B979461329FDEECC00CE3139 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
+		B9A2E7142AC78B970051AB01 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		B9D7B5D529FDEB5E00954817 /* AVAudioSignal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVAudioSignal.swift; sourceTree = "<group>"; wrapsLines = 0; };
 /* End PBXFileReference section */
 
@@ -77,9 +77,9 @@
 				B96AD37829FD763700A61F7B /* AppDelegate.swift */,
 				B96AD37A29FD763700A61F7B /* SceneDelegate.swift */,
 				B96AD37C29FD763700A61F7B /* ViewController.swift */,
+				B9A2E7142AC78B970051AB01 /* Media.xcassets */,
 				B9D7B5D529FDEB5E00954817 /* AVAudioSignal.swift */,
 				B960CD352AC6F11300DD56C3 /* CodeSnippetsStandby.md */,
-				B96AD38129FD763800A61F7B /* Assets.xcassets */,
 				B96AD38329FD763800A61F7B /* LaunchScreen.storyboard */,
 				B96AD37E29FD763700A61F7B /* Main.storyboard */,
 				B96AD38E29FD799B00A61F7B /* ToneBarrierIntentDefinition.intentdefinition */,
@@ -159,7 +159,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B96AD38529FD763800A61F7B /* LaunchScreen.storyboard in Resources */,
-				B96AD38229FD763800A61F7B /* Assets.xcassets in Resources */,
+				B9A2E7152AC78B970051AB01 /* Media.xcassets in Resources */,
 				B96AD38029FD763700A61F7B /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -326,6 +326,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
@@ -359,6 +360,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;

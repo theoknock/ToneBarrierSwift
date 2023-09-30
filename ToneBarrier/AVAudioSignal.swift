@@ -14,8 +14,8 @@ import ObjectiveC
 import Dispatch
 import Accelerate
 
-var frequency = 440.0
-var harmonic  = frequency + (frequency * (5.0/4.0))
+var root = 440.0
+var harmonic  = 550.0 //frequency * (5.0/4.0)
 let tau = 2.0 * .pi
 
 @objc class AVAudioSignal: NSObject {
@@ -29,9 +29,9 @@ let tau = 2.0 * .pi
         let main_mixer_node = audio_engine.mainMixerNode
         let output_node     = audio_engine.outputNode
         let audio_format    = output_node.outputFormat(forBus: 0)
-        let frame_count     = Float(audio_format.sampleRate) * Float(audio_format.channelCount)
+//        let frame_count     = Float(audio_format.sampleRate) * Float(audio_format.channelCount)
         
-        func createSignal(frameCount: Int, frequency: Float) -> [Float] {
+        func createSignalSine(frameCount: Int, frequency: Float) -> [Float] {
             let inputSignal = (0 ..< frameCount).map {
                 let x = Float($0)
 //                debugPrint("x == \(x)")
@@ -40,28 +40,28 @@ let tau = 2.0 * .pi
             return inputSignal
         }
         
-        func multiplySignals(array1: [Float], array2: [Float]) -> [Float] {
-            let result = zip(array1, array2).map(*)
-            return result
+        func createSignalCosine(frameCount: Int, frequency: Float) -> [Float] {
+            let inputSignal = (0 ..< frameCount).map {
+                let x = Float($0)
+//                debugPrint("x == \(x)")
+                return cos(Float(tau) * (x / Float(frameCount)) * frequency)
+            }
+            return inputSignal
         }
         
-        func performCalculation(frameCount: Int, array1: [Float], array2: [Float]) -> [Float] {
-//            guard array1.count == array2.count else {
-//                return []
-//            }
-            var result: [Float] = []
-            for i in 0..<frameCount {
-                result.append(array1[i] + (0.5 * (array2[i] - array1[i]))) // Change this line to perform your desired operation
+        func mixSignals(frameCount: Int, array1: [Float], array2: [Float]) -> [Float] {
+            let result = (0 ..< frameCount).map {
+                let x = $0
+                return 0.5 * (array1[x] + array2[x])
             }
             return result
         }
 
-        
         self.audio_source_node_renderer = { _, _, frameCount, audioBufferList in
             // To-do: Replace with: amplitude • cos((tau •  x) / period)
-            let frequencySignal = createSignal(frameCount: Int(frameCount), frequency: Float(frequency))
-            let amplitudeSignal = createSignal(frameCount: Int(frameCount), frequency: Float(harmonic))
-            let signalSamples   = performCalculation(frameCount: Int(frameCount), array1: frequencySignal, array2: amplitudeSignal)
+            let rootFrequency     = createSignalSine(frameCount: Int(frameCount), frequency: Float(root))
+            let harmonicFrequency = createSignalCosine(frameCount: Int(frameCount), frequency: Float(harmonic))
+            let signalSamples     = mixSignals(frameCount: Int(frameCount), array1: rootFrequency, array2: harmonicFrequency)
             
             let ablPointer = UnsafeMutableAudioBufferListPointer(audioBufferList)
             for buffer in ablPointer {
