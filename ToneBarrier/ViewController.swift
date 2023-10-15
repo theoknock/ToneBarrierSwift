@@ -55,7 +55,7 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
             try audioSession.setCategory(.playback,
                                          mode: .default,
                                          policy: .longFormAudio)
-            try self.audioSession.setActive(true)
+            try audioSession.setActive(true)
         } catch {
             print("Failed to set audio session category.")
         }
@@ -74,12 +74,12 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
         routePicker.backgroundColor = UIColor(named: "clearColor")
         routePicker.tintColor = UIColor.systemBlue
         
-//        userInteractionObserver = togglePlaybackControl.observe(\.isHighlighted, options: [.new]) { [self] (object, change) in
-//            print("Observer: imageView isHighlighted == \(self.togglePlaybackControl.isHighlighted)")
-//            if change.newValue! {
-//                audio()
-//            }
-//        }
+        //        userInteractionObserver = togglePlaybackControl.observe(\.isHighlighted, options: [.new]) { [self] (object, change) in
+        //            print("Observer: imageView isHighlighted == \(self.togglePlaybackControl.isHighlighted)")
+        //            if change.newValue! {
+        //                audio()
+        //            }
+        //        }
     }
     
     func audio() -> Bool {
@@ -123,49 +123,10 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
     }
     
     func setupRemoteCommandCenter() {
-        
-        
-        // To-Do: Swifter the following:
-        //        playingInfoCenter.playbackState =
-        //        audio_session.setActive(!self.audio_signal.audio_engine.isRunning)) // && {
-        //        do {
-        //            try self.audio_signal.audio_engine.start()
-        //            playingInfoCenter.playbackState = (self.audio_signal.audio_engine.isRunning) ? .playing : .stopped
-        //        } catch {
-        //            debugPrint("Could not start audio engine: \(error)")
-        //        }
-        //}) || ^ BOOL { [_engine stop]; return ([_engine isRunning]); }()) error:&error] & [_engine isRunning]) ? MPNowPlayingPlaybackStatePlaying : MPNowPlayingPlaybackStateStopped];
-        
-        // Add handler for Play Command
-//        remoteCommandCenter.playCommand.addTarget { [self] event in
-//            do {
-//                try audioSignal.audio_engine.start()
-//            } catch {
-//                debugPrint("Could not start audio engine: \(error)")
-//            }
-//            //            nowPlayingInfoCenter.playbackState = .playing//(audioSignal.audio_engine.isRunning) ? .playing : .stopped
-//            return (audioSignal.audio_engine.isRunning) ? .success : .commandFailed
-//        }
-        
-        // Add handler for TogglePlayPause Command
         remoteCommandCenter.togglePlayPauseCommand.addTarget { [self] event in
             togglePlaybackControlHandler(togglePlaybackControlTapHandler)
             return .success
         }
-        
-        // Add handler for Stop Command
-//        remoteCommandCenter.stopCommand.addTarget { [self] event in
-//            audioSignal.audio_engine.stop()
-//            //            nowPlayingInfoCenter.playbackState = .stopped//(audioSignal.audio_engine.isRunning) ? .playing : .stopped
-//            return (!audioSignal.audio_engine.isRunning) ? .success : .commandFailed
-//        }
-        
-        // Add handler for stop Command
-//        remoteCommandCenter.pauseCommand.addTarget { [self] event in
-//            audioSignal.audio_engine.stop()
-//            //            nowPlayingInfoCenter.playbackState = .paused//(audioSignal.audio_engine.isRunning) ? .playing : .paused
-//            return (!audioSignal.audio_engine.isRunning) ? .success : .commandFailed
-//        }
     }
     
     func setUpNowPlayingInfoCenter() {
@@ -179,7 +140,7 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
             let artwork: MPMediaItemArtwork = MPMediaItemArtwork(boundsSize: lockScreenImageView.image?.size ?? CGSizeZero, requestHandler: { [self] _ in lockScreenImageView.image! })
             now_playinfo_info[MPMediaItemPropertyArtwork] = artwork
         }
-    
+        
         nowPlayingInfoCenter.nowPlayingInfo = now_playinfo_info
     }
     
@@ -198,56 +159,54 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
     }
     
     func setupAudioSessionInterruptionNotification() {
-        let nc = NotificationCenter.default
-        nc.addObserver(self,
-                       selector: #selector(handleInterruption),
-                       name: AVAudioSession.interruptionNotification,
-                       object: AVAudioSession.sharedInstance())
-        
-        
-        //        AVAudioEngineConfigurationChange
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(handleInterruptionNotification),
+                                               name: AVAudioSession.interruptionNotification,
+                                               object: nil
+        )
     }
     
-    @objc func handleInterruption(notification: Notification) {
-        guard let userInfo = notification.userInfo,
-              let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
+    @objc func handleInterruptionNotification(notification: NSNotification) {
+        guard let info = notification.userInfo,
+              let typeValue = info[AVAudioSessionInterruptionTypeKey] as? UInt,
               let type = AVAudioSession.InterruptionType(rawValue: typeValue) else {
             return
         }
+    
+        var p = audioSignal.audio_engine.isRunning
         
-        debugPrint("Audio session interruption \(type)")
-        
-        
-        // Switch over the interruption type.
-        switch type {
+       switch type {
             
-        case .began:
-            // An interruption began. Update the UI as necessary.
-            debugPrint("Audio session interruption \(type) began")
             
-        case .ended:
-            // An interruption ended. Resume playback, if appropriate.
-            debugPrint("Audio session interruption \(type) ended")
-            
-            guard let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt else { return }
-            let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
-            //        if options.contains(.shouldResume) {
-            //            // An interruption ended. Resume playback.
-            //            do {
-            //                try self.audio_signal.audio_engine.start()
-            //            } catch {
-            //                debugPrint("Could not start audio engine: \(error)")
-            //            }
-            //            debugPrint("Resume playback.")
-            //        } else {
-            //            // An interruption ended. Don't resume playback.
-            //            debugPrint("Don't resume playback.")
-            //        }
-            
-        default: ()
-            debugPrint("Audio session interruption \(type)")
-            //        self.togglePlaybackControl.isHighlighted = self.audio_signal.audio_engine.isRunning
-        }
+            /*
+             
+             After interruption starts
+                Save state and context
+                Update user interface
+             
+             After interruption ends
+                Restore state and context
+                Update user interface
+             Reactivate audio session, if appropriate for the app
+             
+             */
+           
+       case .began:
+           debugPrint("Audio session interruption \(type) began")
+           if (p) { togglePlaybackControl.isHighlighted = !togglePlaybackControl.isHighlighted }
+       case .ended:
+           debugPrint("Audio session interruption \(type) ended")
+           do {
+               try audioSession.setActive(true)
+           } catch {
+               print("Failed to set audio session category.")
+           }
+           if (!p) {
+               togglePlaybackControlHandler(togglePlaybackControlTapHandler)
+           }
+       @unknown default:
+           break
+       }
     }
     
     @objc func restartEngineAfterConfigurationChange(_ notification: Notification) {
