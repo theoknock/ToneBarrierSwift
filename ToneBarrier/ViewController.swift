@@ -20,11 +20,16 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
     @IBOutlet weak var togglePlaybackControl: UIImageView!
     var userInteractionObserver: NSKeyValueObservation?
     
+    let remoteCommandCenter     = MPRemoteCommandCenter.shared()
+    let nowPlayingInfoCenter = MPNowPlayingInfoCenter.default()
+    
+    let lockScreenImage = UIImage(systemName: "waveform.path") // UIImage(named: "Waveform Symbol Lockscreen")
+    var lockScreenImageView: UIImageView = UIImageView()
     
     @IBOutlet weak var routePicker: AVRoutePickerView!
     
-    var audio_session: AVAudioSession = AVAudioSession.sharedInstance()
-    var audio_signal: AVAudioSignal = AVAudioSignal()
+    var audioSession: AVAudioSession = AVAudioSession.sharedInstance()
+    var audioSignal: AVAudioSignal = AVAudioSignal()
     
     lazy var gradient: CAGradientLayer  = {
         let gradient = CAGradientLayer()
@@ -42,29 +47,25 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let toneBarrierShadow: UIColor = UIColor.init(_colorLiteralRed: 0.1, green: 0.1, blue: 0.1, alpha: 1.0)
-        
-        togglePlaybackControl.layer.shadowColor = toneBarrierShadow.cgColor
-        togglePlaybackControl.layer.shadowRadius = 5.0
-        togglePlaybackControl.layer.shadowOpacity = 1.0
-        togglePlaybackControl.layer.shadowOffset = CGSize(width: 5.0, height: 5.0)
-        togglePlaybackControl.layer.masksToBounds = false
-        
         gradient.frame = waveformSymbol.bounds
         waveformSymbol.layer.mask = gradient
         
         do {
-            setUpNowPlaying()
-            setupRemoteTransportControls()
-            audioSessionInterruptionNotificationSetup()
-            NotificationCenter.default.addObserver(self, selector: #selector(self.restartEngineAfterConfigurationChange(_:)),
-                                                   name: .AVAudioEngineConfigurationChange,
-                                                   object: nil)
-            
-            UIApplication.shared.beginReceivingRemoteControlEvents()
+            try audioSession.setCategory(.playback,
+                                          mode: .default,
+                                          policy: .longFormAudio)
+            try self.audioSession.setActive(true)
         } catch {
-            debugPrint("Could not activate audio session: \(error)")
+            print("Failed to set audio session category.")
         }
+        
+        setUpNowPlayingInfoCenter()
+        setupRemoteCommandCenter()
+        setupAudioSessionInterruptionNotification()
+        //        NotificationCenter.default.addObserver(self, selector: #selector(self.restartEngineAfterConfigurationChange(_:)),
+        //                                               name: .AVAudioEngineConfigurationChange,
+        //                                               object: nil)
+        
         
         addSiriButton(to: self.view)
         
@@ -72,17 +73,18 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
         routePicker.backgroundColor = UIColor(named: "clearColor")
         routePicker.tintColor = UIColor.systemBlue
         
-        userInteractionObserver = togglePlaybackControl.observe(\.isHighlighted, options: [.new]) { (object, change) in
-//            debugPrint("Observer: imageView isHighlighted == \(self.togglePlaybackControl.isHighlighted)")
+        userInteractionObserver = togglePlaybackControl.observe(\.isHighlighted, options: [.new]) { [self] (object, change) in
+            //            debugPrint("Observer: imageView isHighlighted == \(self.togglePlaybackControl.isHighlighted)")
             if change.newValue! {
                 do {
-                    try self.audio_signal.audio_engine.start()
+                    try audioSignal.audio_engine.start()
                 } catch {
                     debugPrint("Could not start audio engine: \(error)")
                 }
             } else {
-                self.audio_signal.audio_engine.stop()
+                audioSignal.audio_engine.stop()
             }
+            nowPlayingInfoCenter.playbackState = (audioSignal.audio_engine.isRunning) ? .playing : .stopped
         }
     }
     
@@ -113,65 +115,76 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
         view.safeAreaLayoutGuide.topAnchor.constraint(equalTo: button.topAnchor).isActive = true
     }
     
-    func setupRemoteTransportControls() {
-        // Get the shared MPRemoteCommandCenter
-        let commandCenter = MPRemoteCommandCenter.shared()
+    func setupRemoteCommandCenter() {
+        
         
         // To-Do: Swifter the following:
-        // [_nowPlayingInfoCenter setPlaybackState:([_session setActive:(((![_engine isRunning]) && ^ BOOL { return ([_engine startAndReturnError:&error]); }()) || ^ BOOL { [_engine stop]; return ([_engine isRunning]); }()) error:&error] & [_engine isRunning]) ? MPNowPlayingPlaybackStatePlaying : MPNowPlayingPlaybackStateStopped];
+        //        playingInfoCenter.playbackState =
+        //        audio_session.setActive(!self.audio_signal.audio_engine.isRunning)) // && {
+//        do {
+//            try self.audio_signal.audio_engine.start()
+//            playingInfoCenter.playbackState = (self.audio_signal.audio_engine.isRunning) ? .playing : .stopped
+//        } catch {
+//            debugPrint("Could not start audio engine: \(error)")
+//        }
+        //}) || ^ BOOL { [_engine stop]; return ([_engine isRunning]); }()) error:&error] & [_engine isRunning]) ? MPNowPlayingPlaybackStatePlaying : MPNowPlayingPlaybackStateStopped];
         
         // Add handler for Play Command
-        commandCenter.playCommand.addTarget { [unowned self] event in
+        remoteCommandCenter.playCommand.addTarget { [unowned self] event in
             do {
-                try self.audio_signal.audio_engine.start()
-                MPNowPlayingInfoCenter.default().playbackState = (self.audio_signal.audio_engine.isRunning) ? .playing : .stopped
+                try audioSignal.audio_engine.start()
             } catch {
                 debugPrint("Could not start audio engine: \(error)")
             }
-            return (self.audio_signal.audio_engine.isRunning) ? .success : .commandFailed
+            nowPlayingInfoCenter.playbackState = (audioSignal.audio_engine.isRunning) ? .playing : .stopped
+            return (audioSignal.audio_engine.isRunning) ? .success : .commandFailed
         }
         
         // Add handler for TogglePlayPause Command
-        commandCenter.togglePlayPauseCommand.addTarget { [unowned self] event in
-            if (!self.audio_signal.audio_engine.isRunning) {
+        remoteCommandCenter.togglePlayPauseCommand.addTarget { [unowned self] event in
+            if (!audioSignal.audio_engine.isRunning) {
                 do {
-                    try self.audio_signal.audio_engine.start()
+                    try audioSignal.audio_engine.start()
                 } catch {
                     debugPrint("Could not start audio engine: \(error)")
                 }
             } else {
-                self.audio_signal.audio_engine.pause()
+                audioSignal.audio_engine.pause()
             }
-            MPNowPlayingInfoCenter.default().playbackState = (self.audio_signal.audio_engine.isRunning) ? .playing : .paused
-            return (!self.audio_signal.audio_engine.isRunning) ? .success : .commandFailed
+            nowPlayingInfoCenter.playbackState = (audioSignal.audio_engine.isRunning) ? .playing : .paused
+            return (!audioSignal.audio_engine.isRunning) ? .success : .commandFailed
         }
         
         // Add handler for Stop Command
-        commandCenter.stopCommand.addTarget { [unowned self] event in
-            self.audio_signal.audio_engine.stop()
-            MPNowPlayingInfoCenter.default().playbackState = (self.audio_signal.audio_engine.isRunning) ? .playing : .stopped
-            return (!self.audio_signal.audio_engine.isRunning) ? .success : .commandFailed
+        remoteCommandCenter.stopCommand.addTarget { [unowned self] event in
+            audioSignal.audio_engine.stop()
+            nowPlayingInfoCenter.playbackState = (audioSignal.audio_engine.isRunning) ? .playing : .stopped
+            return (!audioSignal.audio_engine.isRunning) ? .success : .commandFailed
         }
         
         // Add handler for Pause Command
-        commandCenter.pauseCommand.addTarget { [unowned self] event in
-            self.audio_signal.audio_engine.pause()
-            MPNowPlayingInfoCenter.default().playbackState = (self.audio_signal.audio_engine.isRunning) ? .playing : .paused
-            return (!self.audio_signal.audio_engine.isRunning) ? .success : .commandFailed
+        remoteCommandCenter.pauseCommand.addTarget { [unowned self] event in
+            audioSignal.audio_engine.pause()
+            nowPlayingInfoCenter.playbackState = (audioSignal.audio_engine.isRunning) ? .playing : .paused
+            return (!audioSignal.audio_engine.isRunning) ? .success : .commandFailed
         }
     }
     
-    func setUpNowPlaying() {
-        var nowPlayingInfo = [String : Any]()
-        nowPlayingInfo[MPMediaItemPropertyTitle] = "ToneBarrier"
-        nowPlayingInfo[MPMediaItemPropertyArtist] = "James Alan Bush"
-        nowPlayingInfo[MPMediaItemPropertyAlbumTitle] = "The Life of a Demoniac"
+    func setUpNowPlayingInfoCenter() {
+        var now_playinfo_info = [String : Any]()
+        now_playinfo_info[MPMediaItemPropertyTitle] = "ToneBarrier"
+        now_playinfo_info[MPMediaItemPropertyArtist] = "James Alan Bush"
+        now_playinfo_info[MPMediaItemPropertyAlbumTitle] = "The Life of a Demoniac"
         
-        let image = UIImage(named: "Waveform Symbol Lockscreen")
-        let artwork: MPMediaItemArtwork = MPMediaItemArtwork(boundsSize: image?.size ?? CGSizeZero, requestHandler: { _ in image! })
-        nowPlayingInfo[MPMediaItemPropertyArtwork] = artwork
+        DispatchQueue.main.async { [self] in
+            lockScreenImageView = UIImageView(image: lockScreenImage)
+            let artwork: MPMediaItemArtwork = MPMediaItemArtwork(boundsSize: lockScreenImageView.image?.size ?? CGSizeZero, requestHandler: { [self] _ in lockScreenImageView.image! })
+            now_playinfo_info[MPMediaItemPropertyArtwork] = artwork
+        }
         
-        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+        
+        
+        nowPlayingInfoCenter.nowPlayingInfo = now_playinfo_info
     }
     
     override func observeValue(forKeyPath keyPath: String?,
@@ -188,17 +201,7 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
         }
     }
     
-    func audioSessionInterruptionNotificationSetup() {
-        do {
-           try audio_session.setCategory(.playback,
-                                          mode: .default,
-                                          policy: .longFormAudio)
-            try self.audio_session.setActive(true)
-        } catch {
-            print("Failed to set audio session category.")
-        }
-        
-        // Get the default notification center instance.
+    func setupAudioSessionInterruptionNotification() {
         let nc = NotificationCenter.default
         nc.addObserver(self,
                        selector: #selector(handleInterruption),
@@ -216,6 +219,9 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
             return
         }
         
+        debugPrint("Audio session interruption \(type)")
+        
+        
         // Switch over the interruption type.
         switch type {
             
@@ -229,31 +235,32 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
             
             guard let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt else { return }
             let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
-            if options.contains(.shouldResume) {
-                // An interruption ended. Resume playback.
-                do {
-                    try self.audio_signal.audio_engine.start()
-                } catch {
-                    debugPrint("Could not start audio engine: \(error)")
-                }
-                debugPrint("Resume playback.")
-            } else {
-                // An interruption ended. Don't resume playback.
-                debugPrint("Don't resume playback.")
-            }
+            //        if options.contains(.shouldResume) {
+            //            // An interruption ended. Resume playback.
+            //            do {
+            //                try self.audio_signal.audio_engine.start()
+            //            } catch {
+            //                debugPrint("Could not start audio engine: \(error)")
+            //            }
+            //            debugPrint("Resume playback.")
+            //        } else {
+            //            // An interruption ended. Don't resume playback.
+            //            debugPrint("Don't resume playback.")
+            //        }
             
         default: ()
-            self.togglePlaybackControl.isHighlighted = self.audio_signal.audio_engine.isRunning
+            debugPrint("Audio session interruption \(type)")
+            //        self.togglePlaybackControl.isHighlighted = self.audio_signal.audio_engine.isRunning
         }
     }
     
     @objc func restartEngineAfterConfigurationChange(_ notification: Notification) {
         debugPrint("restartEngineAfterConfigurationChange")
-        do {
-            try self.audio_signal.audio_engine.start()
-        } catch {
-            debugPrint("Could not start audio engine: \(error)")
-        }
+        //    do {
+        //        try self.audio_signal.audio_engine.start()
+        //    } catch {
+        //        debugPrint("Could not start audio engine: \(error)")
+        //    }
     }
 }
 

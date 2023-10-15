@@ -42,7 +42,7 @@ var normalized_times_ref: UnsafeMutablePointer<Float>? = nil;
             var root_frequency_samples: [Float]  = [Float](repeating: Float.zero, count: frame_count)
             var harmonic_factor_samples: [Float] = [Float](repeating: Float.zero, count: frame_count)
             let combinedSamples                  = (Int.zero ..< frame_count).map { i in
-                let time: Float                  = scale(min_new: Float.zero, max_new: 1.0, val_old: Float(i), min_old: Float.zero, max_old: Float(~(-frame_count))) // Float(Float(i) / Float(frame_count))
+                let time: Float                  = Float(scale(min_new: Float.zero, max_new: 1.0, val_old: Float(i), min_old: Float.zero, max_old: Float(~(-frame_count))))
                 root_frequency_samples[i]        = 0.5 * sinf(tau * time * root_frequency) // sinf(tau * rootFrequency * time)
                 harmonic_factor_samples[i]       = 0.5 * cosf(tau * time * harmonic_factor) //sinf(tau * time * harmonicFactor) // cosf(tau * (rootFrequency * harmonicFactor) * time)
                 return root_frequency_samples[i] + harmonic_factor_samples[i]; //((2.f * (sinf(rootFreqSamples[i] + harmonicFreqSamples[i]) * cosf(rootFreqSamples[i] - harmonicFreqSamples[i]))) / 2.f * (1.0 - 0.5)); // (rootFreqSamples[i] + harmonicFreqSamples[i])
