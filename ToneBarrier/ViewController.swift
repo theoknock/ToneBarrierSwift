@@ -61,7 +61,6 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
                                                    name: .AVAudioEngineConfigurationChange,
                                                    object: nil)
             
-            try self.audio_session.setActive(true)
             UIApplication.shared.beginReceivingRemoteControlEvents()
         } catch {
             debugPrint("Could not activate audio session: \(error)")
@@ -74,7 +73,7 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
         routePicker.tintColor = UIColor.systemBlue
         
         userInteractionObserver = togglePlaybackControl.observe(\.isHighlighted, options: [.new]) { (object, change) in
-            debugPrint("Observer: imageView isHighlighted == \(self.togglePlaybackControl.isHighlighted)")
+//            debugPrint("Observer: imageView isHighlighted == \(self.togglePlaybackControl.isHighlighted)")
             if change.newValue! {
                 do {
                     try self.audio_signal.audio_engine.start()
@@ -169,7 +168,7 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
         nowPlayingInfo[MPMediaItemPropertyAlbumTitle] = "The Life of a Demoniac"
         
         let image = UIImage(named: "Waveform Symbol Lockscreen")
-        let artwork: MPMediaItemArtwork = MPMediaItemArtwork(boundsSize: image?.size ?? CGSizeZero) { _ in image ?? UIImage(named: "Waveform Symbol Lockscreen")! }
+        let artwork: MPMediaItemArtwork = MPMediaItemArtwork(boundsSize: image?.size ?? CGSizeZero, requestHandler: { _ in image! })
         nowPlayingInfo[MPMediaItemPropertyArtwork] = artwork
         
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
@@ -191,11 +190,10 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
     
     func audioSessionInterruptionNotificationSetup() {
         do {
-            // Set the audio session category, mode, and options.
-            //try audio_session.setCategory(.playback, mode: .moviePlayback, options: [])
-            try audio_session.setCategory(.playback,
+           try audio_session.setCategory(.playback,
                                           mode: .default,
                                           policy: .longFormAudio)
+            try self.audio_session.setActive(true)
         } catch {
             print("Failed to set audio session category.")
         }

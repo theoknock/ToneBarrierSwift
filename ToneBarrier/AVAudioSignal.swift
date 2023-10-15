@@ -14,107 +14,59 @@ import ObjectiveC
 import Dispatch
 import Accelerate
 
-let root     = Float(440.0)
-let harmonic = Float(root * (5.0/4.0))
-let tau      = Float(2.0 * Float.pi)
+let root: Float     = Float(440.0)
+let harmonic: Float = Float(880.0) //root * (5.0/4.0))
+let tau: Float      = Float(2.0 * Float.pi)
+var frame: AVAudioFramePosition = Int64.zero
+var frame_t: UnsafeMutablePointer<AVAudioFramePosition> = UnsafeMutablePointer(&frame)
+var n_time: Float = Float.zero
+var n_time_t: UnsafeMutablePointer<Float> = UnsafeMutablePointer(&n_time)
+var normalized_times_ref: UnsafeMutablePointer<Float>? = nil;
+
 
 @objc class AVAudioSignal: NSObject {
     private static let shared = AVAudioSignal()
     
     let audio_engine: AVAudioEngine = AVAudioEngine()
-    let audio_source_node: AVAudioSourceNode
-    let audio_source_node_renderer: AVAudioSourceNodeRenderBlock
     
     override init() {
-        let main_mixer_node = audio_engine.mainMixerNode
-        let output_node     = audio_engine.outputNode
-        let audio_format    = output_node.outputFormat(forBus: 0)
+        let main_mixer_node: AVAudioMixerNode = audio_engine.mainMixerNode
+        let audio_format: AVAudioFormat = AVAudioFormat(standardFormatWithSampleRate: audio_engine.mainMixerNode.outputFormat(forBus: 0).sampleRate, channels: audio_engine.mainMixerNode.outputFormat(forBus: 0).channelCount )!
         
-        func createSignalSine(frameCount: Int, frequency: Float) -> [Float] {
-            let inputSignal = (0 ..< frameCount).map {
-                let x = Float($0)
-                return sin(Float(tau) * (x / Float(frameCount)) * frequency)
-            }
-            return inputSignal
+        func scale(min_new: Float, max_new: Float, val_old: Float, min_old: Float, max_old: Float) -> Float {
+            let val_new = min_new + ((((val_old - min_old) * (max_new - min_new))) / (max_old - min_old));
+            return val_new;
         }
         
-        func createSignalCosine(frameCount: Int, frequency: Float) -> [Float] {
-            let inputSignal = (0 ..< frameCount).map {
-                let x = Float($0)
-                return cos(Float(tau) * (x / Float(frameCount)) * frequency)
-            }
-            return inputSignal
-        }
-        
-        func multiplySignals(frameCount: Int, array1: [Float], array2: [Float]) -> [Float] {
-            var result = [Float](repeating: 0.0, count: frameCount)
-            vDSP.multiply(array1, array2, result: &result)
-            return result
-        }
-        
-        /*
-         ----------------------------------------------
-         */
-        
-        func generateFrequencies(rootFrequency: Float, harmonicFactor: Float, length: Int) -> ([Float], [Float], [Float]) {
-            var rootFreqSamples = [Float](repeating: 0.0, count: length)
-            var harmonicFreqSamples = [Float](repeating: 0.0, count: length)
-            let combinedSamples = (0 ..< length).map {
-                let i = $0
-                let time = Float(i) / Float(length)
-                
-                rootFreqSamples[i] = sinf((tau / Float(length)) * rootFrequency * time) // sinf(tau * rootFrequency * time)
-                harmonicFreqSamples[i] = cosf((tau / Float(length)) * harmonicFactor * time) // cosf(tau * (rootFrequency * harmonicFactor) * time)
-                return rootFreqSamples[i]; //((2.f * (sinf(rootFreqSamples[i] + harmonicFreqSamples[i]) * cosf(rootFreqSamples[i] - harmonicFreqSamples[i]))) / 2.f * (1.0 - 0.5)); // (rootFreqSamples[i] + harmonicFreqSamples[i])
+        func generateFrequencies(root_frequency: Float, harmonic_factor: Float, frame_count: Int) -> [Float] {
+            var root_frequency_samples: [Float]  = [Float](repeating: Float.zero, count: frame_count)
+            var harmonic_factor_samples: [Float] = [Float](repeating: Float.zero, count: frame_count)
+            let combinedSamples                  = (Int.zero ..< frame_count).map { i in
+                let time: Float                  = scale(min_new: Float.zero, max_new: 1.0, val_old: Float(i), min_old: Float.zero, max_old: Float(~(-frame_count))) // Float(Float(i) / Float(frame_count))
+                root_frequency_samples[i]        = 0.5 * sinf(tau * time * root_frequency) // sinf(tau * rootFrequency * time)
+                harmonic_factor_samples[i]       = 0.5 * cosf(tau * time * harmonic_factor) //sinf(tau * time * harmonicFactor) // cosf(tau * (rootFrequency * harmonicFactor) * time)
+                return root_frequency_samples[i] + harmonic_factor_samples[i]; //((2.f * (sinf(rootFreqSamples[i] + harmonicFreqSamples[i]) * cosf(rootFreqSamples[i] - harmonicFreqSamples[i]))) / 2.f * (1.0 - 0.5)); // (rootFreqSamples[i] + harmonicFreqSamples[i])
             }
             
-            return (rootFreqSamples, harmonicFreqSamples, combinedSamples)
+            return combinedSamples
         }
         
-//        func combineFrequencies(rootFreqSamples: [Float], harmonicFreqSamples: [Float], length: Int) -> [Float] {
-////            assert(rootFreqSamples.count == harmonicFreqSamples.count, "Input arrays must have equal length")
-//            var combinedSamples = [Float](repeating: 0.0, count: length)
-//            for i in 0..<rootFreqSamples.count {
-//                combinedSamples[i] = (rootFreqSamples[i] + harmonicFreqSamples[i]) / 2.0
-//            }
-//            
-//            return combinedSamples
-//        }
-
-        /*
-         ----------------------------------------------
-         */
-        
-        self.audio_source_node_renderer = { _, _, frameCount, audioBufferList in
-            // To-do: Replace with: amplitude • cos((tau •  x) / period)
-//            let rootFrequency     = createSignalSine(frameCount: Int(frameCount), frequency: Float(root))
-//            let harmonicFrequency = createSignalCosine(frameCount: Int(frameCount), frequency: Float(harmonic))
-//            let signalSamples     = mixSignals(frameCount: Int(frameCount), array1: rootFrequency, array2: harmonicFrequency)
-            
-            /*
-             ----------------------------------------------
-             */
-            let (_, _, combinedSamples) = generateFrequencies(rootFrequency: 440.0, harmonicFactor: 5.0/4.0, length: Int(frameCount))
-//            let combinedSamples = combineFrequencies(rootFreqSamples: rootFreqSamples, harmonicFreqSamples: harmonicFreqSamples, length: Int(frameCount))
-            /*
-             ----------------------------------------------
-             */
-            
-            let ablPointer = UnsafeMutableAudioBufferListPointer(audioBufferList)
-            for buffer in ablPointer {
-                let buf: UnsafeMutableBufferPointer<Float> = UnsafeMutableBufferPointer(buffer)
-                combinedSamples.withUnsafeBufferPointer { sourceBuffer in
-                    buf.baseAddress!.initialize(from: sourceBuffer.baseAddress!, count: Int(frameCount))
-                }
+        let audio_source_node: AVAudioSourceNode = AVAudioSourceNode(format: audio_format, renderBlock: { _, _, frameCount, audioBufferList in
+            let signalSamples    = generateFrequencies(root_frequency: root, harmonic_factor: harmonic, frame_count: Int(frameCount)) //mixSignals(frameCount: Int(frameCount), array1: rootFrequency, array2: harmonicFrequency)
+            let ablPointer       = UnsafeMutableAudioBufferListPointer(audioBufferList)
+            let leftChannelData  = ablPointer[0]
+            let rightChannelData = ablPointer[1]
+            let leftBuffer: UnsafeMutableBufferPointer<Float> = UnsafeMutableBufferPointer(leftChannelData)
+            let rightBuffer: UnsafeMutableBufferPointer<Float> = UnsafeMutableBufferPointer(rightChannelData)
+            signalSamples.withUnsafeBufferPointer { sourceBuffer in
+                leftBuffer.baseAddress!.initialize(from: sourceBuffer.baseAddress!, count: Int(frameCount))
+                rightBuffer.baseAddress!.initialize(from: sourceBuffer.baseAddress!, count: Int(frameCount))
             }
             return noErr
-        }
+        })
         
-        self.audio_source_node = AVAudioSourceNode(format: audio_format, renderBlock: audio_source_node_renderer)
-        
-        audio_engine.attach(self.audio_source_node)
-        audio_engine.connect(self.audio_source_node, to: main_mixer_node, format: audio_format)
-        audio_engine.connect(main_mixer_node, to: output_node, format: audio_format)
+        audio_engine.attach(audio_source_node)
+        audio_engine.connect(audio_source_node, to: main_mixer_node, format: audio_format)
     }
 }
 

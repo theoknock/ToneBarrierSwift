@@ -48,3 +48,41 @@ func generateSignalSamples(frequency: Float, sampleRate: Float, duration: Float)
     }
 }
 
+# Misc audio sample generator functions
+
+        let audio_format    = output_node.outputFormat(forBus: 0)
+        let sample_rate     = Float(audio_format.sampleRate) * Float(audio_format.channelCount)
+        
+                func createSignalCosine(frameCount: Int, frequency: Float) -> [Float] {
+            let inputSignal = (0 ..< frameCount).map {
+                let x = Float($0)
+                return cos(Float(tau) * (x / Float(frameCount)) * frequency)
+            }
+            return inputSignal
+        }
+        
+        var normalized_times: (AVAudioFrameCount) -> UnsafeMutablePointer<Float>? = { (frame_count) in
+            var normalized_time = [Float](repeating: .zero, count: Int(frame_count))
+            normalized_times_ref = UnsafeMutablePointer(mutating: normalized_time)
+            
+            for frame in stride(from: frame_t.pointee, to: frame_count, by: 1) {
+                n_time_t.pointee = 0.0 + (((frame - 0.0) * (1.0 - 0.0))) / (Float(~frame_count) - 0.0)
+                normalized_times_ref?.advanced(by: Int(frame)).pointee = n_time_t.pointee
+            }
+            
+            return normalized_times_ref
+        }
+        
+        func createSignalSine(frameCount: Int, frequency: Float) -> [Float] {
+            let inputSignal = (0 ..< frameCount).map {
+                return sin(Float(tau) * (x / Float(frameCount)) * frequency)
+            }
+            return inputSignal
+        }
+        
+        
+        func multiplySignals(frameCount: Int, array1: [Float], array2: [Float]) -> [Float] {
+            var result = [Float](repeating: .zero, count: frameCount)
+            vDSP.multiply(array1, array2, result: &result)
+            return result
+        }
