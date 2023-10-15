@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22503" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="ipad12_9rounded" orientation="landscape" layout="fullscreen" appearance="dark"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22503"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -101,6 +101,7 @@
                     <connections>
                         <outlet property="routePicker" destination="Ryi-yd-PoM" id="Ew8-WW-a9g"/>
                         <outlet property="togglePlaybackControl" destination="dOm-P1-ib0" id="RCO-LU-F9T"/>
+                        <outlet property="togglePlaybackControlTapHandler" destination="TLV-2P-9ZB" id="xuq-Rm-b9L"/>
                         <outlet property="waveformSymbol" destination="JxM-Sh-sV2" id="zhA-CV-ItY"/>
                     </connections>
                 </viewController>

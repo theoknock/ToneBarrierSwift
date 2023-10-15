@@ -20,10 +20,11 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
     @IBOutlet weak var togglePlaybackControl: UIImageView!
     var userInteractionObserver: NSKeyValueObservation?
     
-    let remoteCommandCenter     = MPRemoteCommandCenter.shared()
+    @IBOutlet var togglePlaybackControlTapHandler: UITapGestureRecognizer!
+    let remoteCommandCenter  = MPRemoteCommandCenter.shared()
     let nowPlayingInfoCenter = MPNowPlayingInfoCenter.default()
     
-    let lockScreenImage = UIImage(systemName: "waveform.path") // UIImage(named: "Waveform Symbol Lockscreen")
+    let lockScreenImage = UIImage(named: "Waveform Symbol Lockscreen")
     var lockScreenImageView: UIImageView = UIImageView()
     
     @IBOutlet weak var routePicker: AVRoutePickerView!
@@ -52,8 +53,8 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
         
         do {
             try audioSession.setCategory(.playback,
-                                          mode: .default,
-                                          policy: .longFormAudio)
+                                         mode: .default,
+                                         policy: .longFormAudio)
             try self.audioSession.setActive(true)
         } catch {
             print("Failed to set audio session category.")
@@ -73,19 +74,25 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
         routePicker.backgroundColor = UIColor(named: "clearColor")
         routePicker.tintColor = UIColor.systemBlue
         
-        userInteractionObserver = togglePlaybackControl.observe(\.isHighlighted, options: [.new]) { [self] (object, change) in
-            //            debugPrint("Observer: imageView isHighlighted == \(self.togglePlaybackControl.isHighlighted)")
-            if change.newValue! {
-                do {
-                    try audioSignal.audio_engine.start()
-                } catch {
-                    debugPrint("Could not start audio engine: \(error)")
-                }
+//        userInteractionObserver = togglePlaybackControl.observe(\.isHighlighted, options: [.new]) { [self] (object, change) in
+//            print("Observer: imageView isHighlighted == \(self.togglePlaybackControl.isHighlighted)")
+//            if change.newValue! {
+//                audio()
+//            }
+//        }
+    }
+    
+    func audio() -> Bool {
+        do {
+            if !(audioSignal.audio_engine.isRunning) {
+                try audioSignal.audio_engine.start()
             } else {
-                audioSignal.audio_engine.stop()
+                audioSignal.audio_engine.pause()
             }
-            nowPlayingInfoCenter.playbackState = (audioSignal.audio_engine.isRunning) ? .playing : .stopped
+        } catch {
+            debugPrint("Could not start audio engine: \(error)")
         }
+        return audioSignal.audio_engine.isRunning
     }
     
     override func viewDidLayoutSubviews() {
@@ -95,7 +102,7 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
     
     @IBAction func togglePlaybackControlHandler(_ sender: UITapGestureRecognizer) {
         if let imageView = sender.view as? UIImageView {
-            imageView.isHighlighted = !imageView.isHighlighted;
+            imageView.isHighlighted = audio()
         }
     }
     
@@ -121,53 +128,44 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
         // To-Do: Swifter the following:
         //        playingInfoCenter.playbackState =
         //        audio_session.setActive(!self.audio_signal.audio_engine.isRunning)) // && {
-//        do {
-//            try self.audio_signal.audio_engine.start()
-//            playingInfoCenter.playbackState = (self.audio_signal.audio_engine.isRunning) ? .playing : .stopped
-//        } catch {
-//            debugPrint("Could not start audio engine: \(error)")
-//        }
+        //        do {
+        //            try self.audio_signal.audio_engine.start()
+        //            playingInfoCenter.playbackState = (self.audio_signal.audio_engine.isRunning) ? .playing : .stopped
+        //        } catch {
+        //            debugPrint("Could not start audio engine: \(error)")
+        //        }
         //}) || ^ BOOL { [_engine stop]; return ([_engine isRunning]); }()) error:&error] & [_engine isRunning]) ? MPNowPlayingPlaybackStatePlaying : MPNowPlayingPlaybackStateStopped];
         
         // Add handler for Play Command
-        remoteCommandCenter.playCommand.addTarget { [unowned self] event in
-            do {
-                try audioSignal.audio_engine.start()
-            } catch {
-                debugPrint("Could not start audio engine: \(error)")
-            }
-            nowPlayingInfoCenter.playbackState = (audioSignal.audio_engine.isRunning) ? .playing : .stopped
-            return (audioSignal.audio_engine.isRunning) ? .success : .commandFailed
-        }
+//        remoteCommandCenter.playCommand.addTarget { [self] event in
+//            do {
+//                try audioSignal.audio_engine.start()
+//            } catch {
+//                debugPrint("Could not start audio engine: \(error)")
+//            }
+//            //            nowPlayingInfoCenter.playbackState = .playing//(audioSignal.audio_engine.isRunning) ? .playing : .stopped
+//            return (audioSignal.audio_engine.isRunning) ? .success : .commandFailed
+//        }
         
         // Add handler for TogglePlayPause Command
-        remoteCommandCenter.togglePlayPauseCommand.addTarget { [unowned self] event in
-            if (!audioSignal.audio_engine.isRunning) {
-                do {
-                    try audioSignal.audio_engine.start()
-                } catch {
-                    debugPrint("Could not start audio engine: \(error)")
-                }
-            } else {
-                audioSignal.audio_engine.pause()
-            }
-            nowPlayingInfoCenter.playbackState = (audioSignal.audio_engine.isRunning) ? .playing : .paused
-            return (!audioSignal.audio_engine.isRunning) ? .success : .commandFailed
+        remoteCommandCenter.togglePlayPauseCommand.addTarget { [self] event in
+            togglePlaybackControlHandler(togglePlaybackControlTapHandler)
+            return .success
         }
         
         // Add handler for Stop Command
-        remoteCommandCenter.stopCommand.addTarget { [unowned self] event in
-            audioSignal.audio_engine.stop()
-            nowPlayingInfoCenter.playbackState = (audioSignal.audio_engine.isRunning) ? .playing : .stopped
-            return (!audioSignal.audio_engine.isRunning) ? .success : .commandFailed
-        }
+//        remoteCommandCenter.stopCommand.addTarget { [self] event in
+//            audioSignal.audio_engine.stop()
+//            //            nowPlayingInfoCenter.playbackState = .stopped//(audioSignal.audio_engine.isRunning) ? .playing : .stopped
+//            return (!audioSignal.audio_engine.isRunning) ? .success : .commandFailed
+//        }
         
-        // Add handler for Pause Command
-        remoteCommandCenter.pauseCommand.addTarget { [unowned self] event in
-            audioSignal.audio_engine.pause()
-            nowPlayingInfoCenter.playbackState = (audioSignal.audio_engine.isRunning) ? .playing : .paused
-            return (!audioSignal.audio_engine.isRunning) ? .success : .commandFailed
-        }
+        // Add handler for stop Command
+//        remoteCommandCenter.pauseCommand.addTarget { [self] event in
+//            audioSignal.audio_engine.stop()
+//            //            nowPlayingInfoCenter.playbackState = .paused//(audioSignal.audio_engine.isRunning) ? .playing : .paused
+//            return (!audioSignal.audio_engine.isRunning) ? .success : .commandFailed
+//        }
     }
     
     func setUpNowPlayingInfoCenter() {
@@ -181,9 +179,7 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
             let artwork: MPMediaItemArtwork = MPMediaItemArtwork(boundsSize: lockScreenImageView.image?.size ?? CGSizeZero, requestHandler: { [self] _ in lockScreenImageView.image! })
             now_playinfo_info[MPMediaItemPropertyArtwork] = artwork
         }
-        
-        
-        
+    
         nowPlayingInfoCenter.nowPlayingInfo = now_playinfo_info
     }
     
