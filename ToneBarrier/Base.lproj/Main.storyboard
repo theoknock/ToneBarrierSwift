@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="Ryi-yd-PoM" customClass="AVRoutePickerView">
-                                <rect key="frame" x="372.66666666666669" y="323" width="186.66666666666669" height="86"/>
+                                <rect key="frame" x="341.66666666666669" y="344" width="248.66666666666669" height="86"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" systemColor="systemRedColor"/>
                             </view>
@@ -45,7 +45,7 @@
                         <constraints>
                             <constraint firstItem="dOm-P1-ib0" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.4" id="4l0-sU-QtY"/>
                             <constraint firstItem="Ryi-yd-PoM" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.2" id="93r-3q-OOp"/>
-                            <constraint firstItem="Ryi-yd-PoM" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.2" id="9KG-OH-LM3"/>
+                            <constraint firstItem="Ryi-yd-PoM" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.266667" id="9KG-OH-LM3"/>
                             <constraint firstItem="JxM-Sh-sV2" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="L1q-ex-Ta9"/>
                             <constraint firstItem="JxM-Sh-sV2" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" id="PD5-lH-OwK"/>
                             <constraint firstItem="JxM-Sh-sV2" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="PWw-03-G9g"/>
@@ -53,7 +53,7 @@
                             <constraint firstItem="Ryi-yd-PoM" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="RsB-rT-1Nm"/>
                             <constraint firstItem="dOm-P1-ib0" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.4" id="WV4-IY-Bgu"/>
                             <constraint firstItem="dOm-P1-ib0" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="ier-hg-nAi"/>
-                            <constraint firstItem="Ryi-yd-PoM" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottomMargin" id="ktt-mp-Ad3"/>
+                            <constraint firstItem="Ryi-yd-PoM" firstAttribute="bottomMargin" secondItem="8bC-Xf-vdC" secondAttribute="bottom" constant="-29" id="ktt-mp-Ad3"/>
                             <constraint firstItem="JxM-Sh-sV2" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="qOw-Ux-6He"/>
                         </constraints>
                     </view>
