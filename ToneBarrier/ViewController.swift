@@ -32,6 +32,8 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
     var audioSession: AVAudioSession = AVAudioSession.sharedInstance()
     var audioSignal: AVAudioSignal = AVAudioSignal()
     
+    var was_running: Bool!
+    
     lazy var gradient: CAGradientLayer  = {
         let gradient = CAGradientLayer()
         gradient.type = .axial
@@ -52,9 +54,7 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
         waveformSymbol.layer.mask = gradient
         
         do {
-            try audioSession.setCategory(.playback,
-                                         mode: .default,
-                                         policy: .longFormAudio)
+            try audioSession.setCategory(.playback, mode: .default, policy: .longFormAudio)
             try audioSession.setActive(true)
         } catch {
             print("Failed to set audio session category.")
@@ -89,8 +89,8 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
             } else {
                 audioSignal.audio_engine.pause()
             }
-        } catch {
-            debugPrint("Could not start audio engine: \(error)")
+        } catch let error as NSError {
+            debugPrint("\(error.localizedDescription)")
         }
         return audioSignal.audio_engine.isRunning
     }
@@ -159,55 +159,52 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
     }
     
     func setupAudioSessionInterruptionNotification() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(handleInterruptionNotification),
-                                               name: AVAudioSession.interruptionNotification,
-                                               object: nil
-        )
-    }
-    
-    @objc func handleInterruptionNotification(notification: NSNotification) {
-        guard let info = notification.userInfo,
-              let typeValue = info[AVAudioSessionInterruptionTypeKey] as? UInt,
-              let type = AVAudioSession.InterruptionType(rawValue: typeValue) else {
-            return
+        let center = NotificationCenter.default
+        center.addObserver(forName: AVAudioSession.interruptionNotification, object: nil, queue: nil) { [self] notification in
+            print("\(notification.name): \(notification.userInfo ?? [:])")
+            guard let info = notification.userInfo,
+                  let typeValue = info[AVAudioSessionInterruptionTypeKey] as? UInt,
+                  let type = AVAudioSession.InterruptionType(rawValue: typeValue) else {
+                return
+            }
+                
+           switch type {
+                
+                
+                /*
+                 
+                 After interruption starts
+                    Save state and context
+                    Update user interface
+                 
+                 After interruption ends
+                    Restore state and context
+                    Update user interface
+                 Reactivate audio session, if appropriate for the app
+                 
+                 */
+               
+           case .began:
+               debugPrint("Audio session interruption \(type) began")
+               was_running = audioSignal.audio_engine.isRunning
+               if (was_running) {
+                   togglePlaybackControl.isHighlighted = false
+                   
+               }
+               print("was_running == \(was_running)")
+           case .ended:
+               debugPrint("Audio session interruption \(type) ended")
+               if (was_running) {
+                   togglePlaybackControl.isHighlighted = audio()
+                   print("was_running == \(was_running)")
+               }
+               print("was_running == \(was_running)")
+           @unknown default:
+               break
+           }
         }
-    
-        var p = audioSignal.audio_engine.isRunning
-        
-       switch type {
-            
-            
-            /*
-             
-             After interruption starts
-                Save state and context
-                Update user interface
-             
-             After interruption ends
-                Restore state and context
-                Update user interface
-             Reactivate audio session, if appropriate for the app
-             
-             */
-           
-       case .began:
-           debugPrint("Audio session interruption \(type) began")
-           if (p) { togglePlaybackControl.isHighlighted = !togglePlaybackControl.isHighlighted }
-       case .ended:
-           debugPrint("Audio session interruption \(type) ended")
-           do {
-               try audioSession.setActive(true)
-           } catch {
-               print("Failed to set audio session category.")
-           }
-           if (!p) {
-               togglePlaybackControlHandler(togglePlaybackControlTapHandler)
-           }
-       @unknown default:
-           break
-       }
     }
+    
     
     @objc func restartEngineAfterConfigurationChange(_ notification: Notification) {
         debugPrint("restartEngineAfterConfigurationChange")
