@@ -37,11 +37,11 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
     lazy var gradient: CAGradientLayer  = {
         let gradient = CAGradientLayer()
         gradient.type = .axial
-        let toneBarrierBlue: UIColor = UIColor.init(white: 0.0, alpha: 0.0)
+        let clearer: UIColor = UIColor.init(white: 0.0, alpha: 0.1)
         gradient.colors = [
-            UIColor.clear.cgColor,
+            clearer.cgColor,
             UIColor.black.cgColor,
-            UIColor.clear.cgColor
+            clearer.cgColor
         ]
         gradient.locations = [0.0, 0.5, 1.0]
         return gradient
@@ -72,7 +72,7 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
         
         routePicker.delegate = self
         routePicker.backgroundColor = UIColor(named: "clearColor")
-        routePicker.tintColor = UIColor.systemBlue
+        routePicker.tintColor = UIColor(named: "systemBlueColor")
         
         //        userInteractionObserver = togglePlaybackControl.observe(\.isHighlighted, options: [.new]) { [self] (object, change) in
         //            print("Observer: imageView isHighlighted == \(self.togglePlaybackControl.isHighlighted)")

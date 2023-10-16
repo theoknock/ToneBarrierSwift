@@ -20,6 +20,7 @@
                             <view opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="Ryi-yd-PoM" customClass="AVRoutePickerView">
                                 <rect key="frame" x="628.5" y="894.5" width="109" height="109.5"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="tintColor" systemColor="systemRedColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="Ryi-yd-PoM" secondAttribute="height" multiplier="1:1" id="Iij-ef-atE"/>
                                 </constraints>
@@ -42,7 +43,7 @@
                                 </constraints>
                                 <imageReference key="image" image="play" catalog="system" symbolScale="default" renderingMode="template"/>
                                 <imageReference key="highlightedImage" image="stop" catalog="system" symbolScale="default" renderingMode="template"/>
-                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="ultraLight"/>
+                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="thin"/>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="TLV-2P-9ZB" appends="YES" id="Z3s-ip-mSE"/>
                                 </connections>
@@ -125,6 +126,9 @@
         </systemColor>
         <systemColor name="systemBlueColor">
             <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemRedColor">
+            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
