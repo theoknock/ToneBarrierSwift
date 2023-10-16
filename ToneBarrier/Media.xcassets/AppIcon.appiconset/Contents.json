@@ -2,14 +2,14 @@
   "images" : [
     {
       "display-gamut" : "sRGB",
-      "filename" : "Waveform Symbol Lockscreen 1.png",
+      "filename" : "Waveform Symbol Opaque.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
     },
     {
       "display-gamut" : "display-P3",
-      "filename" : "Waveform Symbol Lockscreen 2.png",
+      "filename" : "Waveform Symbol Opaque 1.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"

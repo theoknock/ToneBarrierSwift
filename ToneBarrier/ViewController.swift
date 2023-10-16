@@ -167,41 +167,21 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
                   let type = AVAudioSession.InterruptionType(rawValue: typeValue) else {
                 return
             }
-                
-           switch type {
-                
-                
-                /*
-                 
-                 After interruption starts
-                    Save state and context
-                    Update user interface
-                 
-                 After interruption ends
-                    Restore state and context
-                    Update user interface
-                 Reactivate audio session, if appropriate for the app
-                 
-                 */
-               
-           case .began:
-               debugPrint("Audio session interruption \(type) began")
-               was_running = audioSignal.audio_engine.isRunning
-               if (was_running) {
-                   togglePlaybackControl.isHighlighted = false
-                   
-               }
-               print("was_running == \(was_running)")
-           case .ended:
-               debugPrint("Audio session interruption \(type) ended")
-               if (was_running) {
-                   togglePlaybackControl.isHighlighted = audio()
-                   print("was_running == \(was_running)")
-               }
-               print("was_running == \(was_running)")
-           @unknown default:
-               break
-           }
+            
+            switch type {
+            case .began:
+                was_running = audioSignal.audio_engine.isRunning
+                if (was_running) {
+                    togglePlaybackControl.isHighlighted = false
+                    
+                }
+            case .ended:
+                if (was_running) {
+                    togglePlaybackControl.isHighlighted = audio()
+                }
+            @unknown default:
+                break
+            }
         }
     }
     
