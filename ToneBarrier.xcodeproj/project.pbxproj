@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B91199EE2ADCD2FE0059E608 /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91199ED2ADCD2FE0059E608 /* SwiftUIView.swift */; };
 		B96AD37929FD763700A61F7B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96AD37829FD763700A61F7B /* AppDelegate.swift */; };
 		B96AD37B29FD763700A61F7B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96AD37A29FD763700A61F7B /* SceneDelegate.swift */; };
 		B96AD37D29FD763700A61F7B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96AD37C29FD763700A61F7B /* ViewController.swift */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B91199ED2ADCD2FE0059E608 /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
 		B960CD352AC6F11300DD56C3 /* CodeSnippetsStandby.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CodeSnippetsStandby.md; sourceTree = "<group>"; };
 		B96AD37529FD763700A61F7B /* ToneBarrier.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToneBarrier.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B96AD37829FD763700A61F7B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -82,6 +84,7 @@
 				B960CD352AC6F11300DD56C3 /* CodeSnippetsStandby.md */,
 				B96AD38329FD763800A61F7B /* LaunchScreen.storyboard */,
 				B96AD37E29FD763700A61F7B /* Main.storyboard */,
+				B91199ED2ADCD2FE0059E608 /* SwiftUIView.swift */,
 				B96AD38E29FD799B00A61F7B /* ToneBarrierIntentDefinition.intentdefinition */,
 				B96AD39029FD7C3F00A61F7B /* ToggleToneBarrierIntentHandler.swift */,
 				B97713D22A0B1D1A003C1389 /* PauseToneBarrierIntentHandler.swift */,
@@ -173,6 +176,7 @@
 			files = (
 				B97713D32A0B1D1A003C1389 /* PauseToneBarrierIntentHandler.swift in Sources */,
 				B96AD37D29FD763700A61F7B /* ViewController.swift in Sources */,
+				B91199EE2ADCD2FE0059E608 /* SwiftUIView.swift in Sources */,
 				B96AD39129FD7C3F00A61F7B /* ToggleToneBarrierIntentHandler.swift in Sources */,
 				B96AD37929FD763700A61F7B /* AppDelegate.swift in Sources */,
 				B96AD37B29FD763700A61F7B /* SceneDelegate.swift in Sources */,
