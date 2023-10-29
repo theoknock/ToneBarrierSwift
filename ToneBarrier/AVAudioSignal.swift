@@ -14,8 +14,39 @@ import ObjectiveC
 import Dispatch
 import Accelerate
 
-let root: Float     = Float(440.0)
-let harmonic: Float = Float(880.0) //root * (5.0/4.0))
+class Counter {
+    // Counter variable that retains its value between calls
+    private var count: Int
+    private var limit: Int
+    
+    init(start_index: Int, end_index: Int) {
+        self.count = start_index
+        self.limit = end_index
+    }
+    
+    func increment(by value: Int) {
+        // Calculate how much space is left before reaching the limit
+        let spaceRemaining = limit - count
+        
+        // Check if the increment value will exceed the limit
+        if value >= spaceRemaining {
+            // Calculate the remainder by finding the excess
+            let remainder = value - spaceRemaining
+            
+            // Set the counter to the remainder
+            count = remainder
+        } else {
+            // If the limit is not exceeded, just add the value to the count
+            count += value
+        }
+        
+        // Print the current count
+        print("Current count is: \(count)")
+    }
+}
+
+var root: Float     = Float(440.0)
+let harmonic: Float = Float(880.0)
 let tau: Float      = Float(2.0 * Float.pi)
 var frame: AVAudioFramePosition = Int64.zero
 var frame_t: UnsafeMutablePointer<AVAudioFramePosition> = UnsafeMutablePointer(&frame)
@@ -31,7 +62,7 @@ var normalized_times_ref: UnsafeMutablePointer<Float>? = nil;
     
     override init() {
         let main_mixer_node: AVAudioMixerNode = audio_engine.mainMixerNode
-        let audio_format: AVAudioFormat = AVAudioFormat(standardFormatWithSampleRate: audio_engine.mainMixerNode.outputFormat(forBus: 0).sampleRate, channels: audio_engine.mainMixerNode.outputFormat(forBus: 0).channelCount )!
+        let audio_format: AVAudioFormat       = AVAudioFormat(standardFormatWithSampleRate: audio_engine.mainMixerNode.outputFormat(forBus: 0).sampleRate, channels: audio_engine.mainMixerNode.outputFormat(forBus: 0).channelCount )!
         
         func scale(min_new: Float, max_new: Float, val_old: Float, min_old: Float, max_old: Float) -> Float {
             let val_new = min_new + ((((val_old - min_old) * (max_new - min_new))) / (max_old - min_old));
@@ -42,17 +73,45 @@ var normalized_times_ref: UnsafeMutablePointer<Float>? = nil;
             var root_frequency_samples: [Float]  = [Float](repeating: Float.zero, count: frame_count)
             var harmonic_factor_samples: [Float] = [Float](repeating: Float.zero, count: frame_count)
             let combinedSamples                  = (Int.zero ..< frame_count).map { i in
-                let time: Float                  = Float(scale(min_new: Float.zero, max_new: 1.0, val_old: Float(i), min_old: Float.zero, max_old: Float(~(-frame_count))))
-                root_frequency_samples[i]        = 0.5 * sinf(tau * time * root_frequency) // sinf(tau * rootFrequency * time)
-                harmonic_factor_samples[i]       = 0.5 * cosf(tau * time * harmonic_factor) //sinf(tau * time * harmonicFactor) // cosf(tau * (rootFrequency * harmonicFactor) * time)
-                return root_frequency_samples[i] + harmonic_factor_samples[i]; //((2.f * (sinf(rootFreqSamples[i] + harmonicFreqSamples[i]) * cosf(rootFreqSamples[i] - harmonicFreqSamples[i]))) / 2.f * (1.0 - 0.5)); // (rootFreqSamples[i] + harmonicFreqSamples[i])
+                let time: Float                  = Float(scale(min_new: -1.0, max_new: 1.0, val_old: Float(i), min_old: -1.0, max_old: Float(frame_count - 1))) //Float(~(-frame_count))))
+                root_frequency_samples[i]        = cosf(tau * time * root_frequency)
+                harmonic_factor_samples[i]       = cosf(tau * time * harmonic_factor)
+                return root_frequency_samples[i] + harmonic_factor_samples[i];
             }
             
             return combinedSamples
         }
         
+        var currentPhase: Float   = Float.zero
+        let phaseIncrement: Float = (tau / Float(audio_format.sampleRate)) * root
+        var currentPhase_h: Float   = Float.zero
+        let phaseIncrement_h: Float = (tau / Float(audio_format.sampleRate)) * harmonic
+        func generateFrequency(frame_count: Int) -> [Float] {
+            var frequency_samples: [Float] = [Float](repeating: Float.zero, count: frame_count)
+            var frequency_samples_h: [Float] = [Float](repeating: Float.zero, count: frame_count)
+            let signal_samples = (Int.zero ..< frame_count).map { i in
+                frequency_samples[i] = sine(currentPhase) * amplitude
+                frequency_samples_h[i] = sine(currentPhase_h) * amplitude
+                
+                defer {
+                    currentPhase += phaseIncrement
+                    currentPhase = currentPhase.truncatingRemainder(dividingBy: tau)
+                    currentPhase += (currentPhase < 0) ? tau : 0
+                    currentPhase_h += phaseIncrement_h
+                    currentPhase_h = currentPhase_h.truncatingRemainder(dividingBy: tau)
+                    currentPhase_h += (currentPhase_h < 0) ? tau : 0
+                 }
+                
+                return frequency_samples[i] * frequency_samples_h[i];
+            }
+            return signal_samples
+        }
+        
+        let myCounter = Counter(start_index: Int.zero, end_index: Int((audio_engine.mainMixerNode.outputFormat(forBus: 0).sampleRate)))
+        
         let audio_source_node: AVAudioSourceNode = AVAudioSourceNode(format: audio_format, renderBlock: { _, _, frameCount, audioBufferList in
-            let signalSamples    = generateFrequencies(root_frequency: root, harmonic_factor: harmonic, frame_count: Int(frameCount)) //mixSignals(frameCount: Int(frameCount), array1: rootFrequency, array2: harmonicFrequency)
+            //            myCounter.increment(by: Int(frameCount))
+            let signalSamples    = generateFrequency(frame_count: Int(frameCount)) //generateFrequencies(root_frequency: root, harmonic_factor: harmonic, frame_count: Int(frameCount))
             let ablPointer       = UnsafeMutableAudioBufferListPointer(audioBufferList)
             let leftChannelData  = ablPointer[0]
             let rightChannelData = ablPointer[1]

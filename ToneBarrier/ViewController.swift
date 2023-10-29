@@ -13,8 +13,9 @@ import MediaPlayer
 import Intents
 import IntentsUI
 
+
 class ViewController: UIViewController, AVRoutePickerViewDelegate {
-    
+
     @IBOutlet weak var waveformSymbol: UIImageView!
     
     @IBOutlet weak var togglePlaybackControl: UIImageView!
@@ -63,23 +64,12 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
         setUpNowPlayingInfoCenter()
         setupRemoteCommandCenter()
         setupAudioSessionInterruptionNotification()
-        //        NotificationCenter.default.addObserver(self, selector: #selector(self.restartEngineAfterConfigurationChange(_:)),
-        //                                               name: .AVAudioEngineConfigurationChange,
-        //                                               object: nil)
-        
         
         addSiriButton(to: self.view)
         
         routePicker.delegate = self
         routePicker.backgroundColor = UIColor(named: "clearColor")
         routePicker.tintColor = UIColor(named: "systemBlueColor")
-        
-        //        userInteractionObserver = togglePlaybackControl.observe(\.isHighlighted, options: [.new]) { [self] (object, change) in
-        //            print("Observer: imageView isHighlighted == \(self.togglePlaybackControl.isHighlighted)")
-        //            if change.newValue! {
-        //                audio()
-        //            }
-        //        }
     }
     
     func audio() -> Bool {
@@ -144,24 +134,9 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
         nowPlayingInfoCenter.nowPlayingInfo = now_playinfo_info
     }
     
-    override func observeValue(forKeyPath keyPath: String?,
-                               of object: Any?,
-                               change: [NSKeyValueChangeKey : Any]?,
-                               context: UnsafeMutableRawPointer?) {
-        debugPrint("observeValue")
-        if keyPath == "isRunning",
-           let running_state = change?[.newKey] {
-            print("running_state is: \(running_state)")
-        } else {
-            print("keypath: \(String(describing: keyPath))")
-            print("change.newKey: \(String(describing: change?[.newKey]))")
-        }
-    }
-    
     func setupAudioSessionInterruptionNotification() {
         let center = NotificationCenter.default
         center.addObserver(forName: AVAudioSession.interruptionNotification, object: nil, queue: nil) { [self] notification in
-            print("\(notification.name): \(notification.userInfo ?? [:])")
             guard let info = notification.userInfo,
                   let typeValue = info[AVAudioSessionInterruptionTypeKey] as? UInt,
                   let type = AVAudioSession.InterruptionType(rawValue: typeValue) else {
@@ -183,16 +158,6 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
                 break
             }
         }
-    }
-    
-    
-    @objc func restartEngineAfterConfigurationChange(_ notification: Notification) {
-        debugPrint("restartEngineAfterConfigurationChange")
-        //    do {
-        //        try self.audio_signal.audio_engine.start()
-        //    } catch {
-        //        debugPrint("Could not start audio engine: \(error)")
-        //    }
     }
 }
 

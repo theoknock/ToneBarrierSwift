@@ -86,3 +86,19 @@ func generateSignalSamples(frequency: Float, sampleRate: Float, duration: Float)
             vDSP.multiply(array1, array2, result: &result)
             return result
         }
+
+# Observing KVO changes
+
+    override func observeValue(forKeyPath keyPath: String?,
+                               of object: Any?,
+                               change: [NSKeyValueChangeKey : Any]?,
+                               context: UnsafeMutableRawPointer?) {
+        debugPrint("observeValue")
+        if keyPath == "isRunning",
+           let running_state = change?[.newKey] {
+            print("running_state is: \(running_state)")
+        } else {
+            print("keypath: \(String(describing: keyPath))")
+            print("change.newKey: \(String(describing: change?[.newKey]))")
+        }
+    }
