@@ -95,7 +95,7 @@ var normalized_times_ref: UnsafeMutablePointer<Float32>? = nil;
             for index in (0..<count) {
               numbersArray[index] = counter
               counter += 1
-              if counter > counter_max {
+              if counter == counter_max {
                 counter = 0
               }
             }
