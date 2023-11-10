@@ -20,7 +20,6 @@
 		B979461429FDEECC00CE3139 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B979461329FDEECC00CE3139 /* AVKit.framework */; };
 		B9A2E7152AC78B970051AB01 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9A2E7142AC78B970051AB01 /* Media.xcassets */; };
 		B9D7B5D629FDEB5E00954817 /* AVAudioSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D7B5D529FDEB5E00954817 /* AVAudioSignal.swift */; };
-		B9F9A3892AEDAA5C00E12C4B /* TBAudioSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F9A3882AEDAA5C00E12C4B /* TBAudioSignal.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,7 +40,6 @@
 		B979461329FDEECC00CE3139 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		B9A2E7142AC78B970051AB01 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		B9D7B5D529FDEB5E00954817 /* AVAudioSignal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVAudioSignal.swift; sourceTree = "<group>"; wrapsLines = 0; };
-		B9F9A3882AEDAA5C00E12C4B /* TBAudioSignal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAudioSignal.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,7 +81,6 @@
 				B96AD37C29FD763700A61F7B /* ViewController.swift */,
 				B9A2E7142AC78B970051AB01 /* Media.xcassets */,
 				B9D7B5D529FDEB5E00954817 /* AVAudioSignal.swift */,
-				B9F9A3882AEDAA5C00E12C4B /* TBAudioSignal.swift */,
 				B960CD352AC6F11300DD56C3 /* CodeSnippetsStandby.md */,
 				B96AD38329FD763800A61F7B /* LaunchScreen.storyboard */,
 				B96AD37E29FD763700A61F7B /* Main.storyboard */,
@@ -181,7 +178,6 @@
 				B96AD37D29FD763700A61F7B /* ViewController.swift in Sources */,
 				B91199EE2ADCD2FE0059E608 /* SwiftUIView.swift in Sources */,
 				B96AD39129FD7C3F00A61F7B /* ToggleToneBarrierIntentHandler.swift in Sources */,
-				B9F9A3892AEDAA5C00E12C4B /* TBAudioSignal.swift in Sources */,
 				B96AD37929FD763700A61F7B /* AppDelegate.swift in Sources */,
 				B96AD37B29FD763700A61F7B /* SceneDelegate.swift in Sources */,
 				B9D7B5D629FDEB5E00954817 /* AVAudioSignal.swift in Sources */,
