@@ -14,37 +14,6 @@ import ObjectiveC
 import Dispatch
 import Accelerate
 
-class Counter {
-    // Counter variable that retains its value between calls
-    private var count: Int
-    private var limit: Int
-    
-    init(start_index: Int, end_index: Int) {
-        self.count = start_index
-        self.limit = end_index
-    }
-    
-    func increment(by value: Int) {
-        // Calculate how much space is left before reaching the limit
-        let spaceRemaining = limit - count
-        
-        // Check if the increment value will exceed the limit
-        if value >= spaceRemaining {
-            // Calculate the remainder by finding the excess
-            let remainder = value - spaceRemaining
-            
-            // Set the counter to the remainder
-            count = remainder
-        } else {
-            // If the limit is not exceeded, just add the value to the count
-            count += value
-        }
-        
-        // Print the current count
-        print("Current count is: \(count)")
-    }
-}
-
 var root: Float32     = Float32(440.0)
 let harmonic: Float32 = Float32(440.0 * (5.0/4.0))
 let amplitude: Float32 = Float32(0.5)
@@ -112,7 +81,7 @@ var normalized_times_ref: UnsafeMutablePointer<Float32>? = nil;
         var currentPhase: Float32   = Float32.zero
         var phaseIncrement: Float32 = (tau / Float32(audio_format.sampleRate)) * root
         var currentPhase_h: Float32   = Float32.zero
-        let phaseIncrement_h: Float32 = phaseIncrement //(tau / Float32(audio_format.sampleRate)) * root + (Float32.pi / Float32(2.0))
+        var phaseIncrement_h: Float32 = phaseIncrement //(tau / Float32(audio_format.sampleRate)) * root + (Float32.pi / Float32(2.0))
         
         func generateFrequency(frame_count: Int) -> [Float32] {
             var frequency_samples: [Float32] = [Float32](repeating: Float32.zero, count: frame_count)
@@ -121,9 +90,10 @@ var normalized_times_ref: UnsafeMutablePointer<Float32>? = nil;
             let signal_samples = (Int.zero ..< frame_count).map { i in
                 // get value at i in frame_indicies and set phaseIncrement to a new value if frame_indicies[i] == 0
                 if frame_indicies[i] == 0 {
-                    print(frame_indicies[i])
+//                    print(frame_indicies[i])
                     root = Float32(root * (5.0/4.0))
                     phaseIncrement = (tau / Float32(audio_format.sampleRate)) * root
+                    phaseIncrement_h = phaseIncrement
                 }
                 frequency_samples[i] = sin(currentPhase) * amplitude
                 frequency_samples_h[i] = sin(currentPhase_h) * amplitude
@@ -137,9 +107,7 @@ var normalized_times_ref: UnsafeMutablePointer<Float32>? = nil;
             }
             return signal_samples
         }
-        
-//        let myCounter = Counter(start_index: Int.zero, end_index: Int((audio_engine.mainMixqerNode.outputFormat(forBus: 0).sampleRate)))
-        
+                
         let audio_source_node: AVAudioSourceNode = AVAudioSourceNode(format: audio_format, renderBlock: { _, _, frameCount, audioBufferList in
 
             let signalSamples    = generateFrequency(frame_count: Int(frameCount)) //generateFrequencies(root_frequency: root, harmonic_factor: harmonic, frame_count: Int(frameCount))
