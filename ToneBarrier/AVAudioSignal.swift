@@ -65,7 +65,7 @@ var normalized_times_ref: UnsafeMutablePointer<Float32>? = nil;
     override init() {
         let main_mixer_node: AVAudioMixerNode = audio_engine.mainMixerNode
         let audio_format: AVAudioFormat       = AVAudioFormat(standardFormatWithSampleRate: audio_engine.mainMixerNode.outputFormat(forBus: 0).sampleRate, channels: audio_engine.mainMixerNode.outputFormat(forBus: 0).channelCount )!
-        let buffer_length: Int              = Int(audio_format.sampleRate) * Int(audio_format.channelCount) * Int(2)
+        let buffer_length: Int = Int(audio_format.sampleRate) // * Int(audio_format.channelCount) * Int(2)
 
         
         func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float32, max_old: Float32) -> Float32 {
@@ -87,43 +87,43 @@ var normalized_times_ref: UnsafeMutablePointer<Float32>? = nil;
         }
         
         func makeIncrementerWithReset(maximumValue: Int) -> ((Int) -> [Int]) {
-          var counter = 0
-          let counter_max = maximumValue
-          
-          func incrementCounter(count: Int) -> [Int] {
-            var numbersArray = [Int](repeating: 0, count: count)
-            for index in (0..<count) {
-              numbersArray[index] = counter
-              counter += 1
-              if counter == counter_max {
-                counter = 0
-              }
-            }
-            return numbersArray
-          }
+            var counter = 0
+            let counter_max = maximumValue
 
-          return incrementCounter
+            func incrementCounter(count: Int) -> [Int] {
+                var numbersArray = [Int](repeating: 0, count: count)
+                for index in (0 ..< count) {
+                    let value = ((counter_max ^ 0) ^ (counter ^ counter_max))
+                    numbersArray[index] = value
+                    counter = (-(~(value)))
+                    if counter == counter_max {
+                        counter = 0
+                    }
+                    print("\(index)\t\(value)")
+                }
+                return numbersArray
+            }
+
+            return incrementCounter
         }
 
         let incrementer = makeIncrementerWithReset(maximumValue: buffer_length)
-        
 
         var currentPhase: Float32   = Float32.zero
         var phaseIncrement: Float32 = (tau / Float32(audio_format.sampleRate)) * root
         var currentPhase_h: Float32   = Float32.zero
-        let phaseIncrement_h: Float32 = (tau / Float32(audio_format.sampleRate)) * root + (Float32.pi / Float32(2.0))
+        let phaseIncrement_h: Float32 = phaseIncrement //(tau / Float32(audio_format.sampleRate)) * root + (Float32.pi / Float32(2.0))
         
         func generateFrequency(frame_count: Int) -> [Float32] {
             var frequency_samples: [Float32] = [Float32](repeating: Float32.zero, count: frame_count)
             var frequency_samples_h: [Float32] = [Float32](repeating: Float32.zero, count: frame_count)
-            let frame_indicies: [Int] = incrementer(frame_count).map { index in
-                return index
-            }
+            let frame_indicies = incrementer(frame_count)
             let signal_samples = (Int.zero ..< frame_count).map { i in
                 // get value at i in frame_indicies and set phaseIncrement to a new value if frame_indicies[i] == 0
                 if frame_indicies[i] == 0 {
-                    print(i)
-                    phaseIncrement = (tau / Float32(audio_format.sampleRate)) * Float32(root * (5.0/4.0))
+                    print(frame_indicies[i])
+                    root = Float32(root * (5.0/4.0))
+                    phaseIncrement = (tau / Float32(audio_format.sampleRate)) * root
                 }
                 frequency_samples[i] = sin(currentPhase) * amplitude
                 frequency_samples_h[i] = sin(currentPhase_h) * amplitude

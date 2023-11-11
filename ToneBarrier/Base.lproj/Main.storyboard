@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22503" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
-    <device id="retina6_72" orientation="portrait" appearance="dark"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina6_72" orientation="landscape" appearance="dark"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22503"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -14,11 +14,11 @@
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="ToneBarrier" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleAspectFit" insetsLayoutMarginsFromSafeArea="NO" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
+                        <rect key="frame" x="0.0" y="0.0" width="932" height="430"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.14999999999999999" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="waveform.path" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="JxM-Sh-sV2">
-                                <rect key="frame" x="0.0" y="0.0" width="430" height="933"/>
+                                <rect key="frame" x="0.0" y="0.0" width="932" height="431"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" systemColor="systemBlueColor"/>
                                 <constraints>
@@ -27,18 +27,18 @@
                                 <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="regular"/>
                             </imageView>
                             <imageView opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dOm-P1-ib0">
-                                <rect key="frame" x="28.666666666666657" y="382" width="372.66666666666674" height="168.33333333333337"/>
+                                <rect key="frame" x="401.66666666666669" y="77.333333333333314" width="129.00000000000006" height="275.66666666666663"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" systemColor="systemBlueColor"/>
-                                <imageReference key="image" image="play" catalog="system" symbolScale="default" renderingMode="template"/>
-                                <imageReference key="highlightedImage" image="stop" catalog="system" symbolScale="default" renderingMode="template"/>
-                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="thin"/>
+                                <imageReference key="image" image="play" catalog="system" renderingMode="template"/>
+                                <imageReference key="highlightedImage" image="stop" catalog="system" renderingMode="template"/>
+                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="ultraLight"/>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="TLV-2P-9ZB" appends="YES" id="Z3s-ip-mSE"/>
                                 </connections>
                             </imageView>
                             <view opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="Ryi-yd-PoM" customClass="AVRoutePickerView">
-                                <rect key="frame" x="140.33333333333331" y="863.33333333333337" width="149.33333333333331" height="68.666666666666629"/>
+                                <rect key="frame" x="433.66666666666669" y="290.33333333333331" width="64.666666666666686" height="139.66666666666669"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" systemColor="systemRedColor"/>
                             </view>
@@ -46,17 +46,17 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="dOm-P1-ib0" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.4" id="4l0-sU-QtY"/>
-                            <constraint firstItem="Ryi-yd-PoM" firstAttribute="height" secondItem="dOm-P1-ib0" secondAttribute="height" multiplier="0.4" id="93r-3q-OOp"/>
-                            <constraint firstItem="Ryi-yd-PoM" firstAttribute="width" secondItem="dOm-P1-ib0" secondAttribute="width" multiplier="0.4" id="9KG-OH-LM3"/>
+                            <constraint firstItem="dOm-P1-ib0" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.3" id="4l0-sU-QtY"/>
+                            <constraint firstItem="Ryi-yd-PoM" firstAttribute="height" secondItem="dOm-P1-ib0" secondAttribute="height" multiplier="0.5" id="93r-3q-OOp"/>
+                            <constraint firstItem="Ryi-yd-PoM" firstAttribute="width" secondItem="dOm-P1-ib0" secondAttribute="width" multiplier="0.5" id="9KG-OH-LM3"/>
                             <constraint firstItem="JxM-Sh-sV2" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="L1q-ex-Ta9"/>
                             <constraint firstItem="JxM-Sh-sV2" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" id="PD5-lH-OwK"/>
                             <constraint firstItem="JxM-Sh-sV2" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="PWw-03-G9g"/>
                             <constraint firstItem="dOm-P1-ib0" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="QwL-AY-tEJ"/>
                             <constraint firstItem="Ryi-yd-PoM" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="RsB-rT-1Nm"/>
-                            <constraint firstItem="dOm-P1-ib0" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.4" id="WV4-IY-Bgu"/>
+                            <constraint firstItem="dOm-P1-ib0" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.3" id="WV4-IY-Bgu"/>
                             <constraint firstItem="dOm-P1-ib0" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="ier-hg-nAi"/>
-                            <constraint firstItem="Ryi-yd-PoM" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="ktt-mp-Ad3"/>
+                            <constraint firstItem="Ryi-yd-PoM" firstAttribute="baseline" secondItem="8bC-Xf-vdC" secondAttribute="baseline" id="ktt-mp-Ad3"/>
                             <constraint firstItem="JxM-Sh-sV2" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="qOw-Ux-6He"/>
                         </constraints>
                     </view>
@@ -86,10 +86,10 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
