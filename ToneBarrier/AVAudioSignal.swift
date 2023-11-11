@@ -68,7 +68,7 @@ var normalized_times_ref: UnsafeMutablePointer<Float32>? = nil;
                     if counter == counter_max {
                         counter = 0
                     }
-                    print("\(index)\t\(value)")
+//                    print("\(index)\t\(value)")
                 }
                 return numbersArray
             }
