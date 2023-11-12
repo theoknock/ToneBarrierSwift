@@ -65,9 +65,6 @@ var normalized_times_ref: UnsafeMutablePointer<Float32>? = nil;
         
         func randomPianoNoteFrequency() -> Float32 {
             let r: Float32 = pow(Float32.random(in: 0.0...1.0), 0.875) * 88
-            print(r)
-            print(floor(r))
-            print("--------\n")
             return 440 * pow(2, floor(r) / 12.0)
         }
         
@@ -174,6 +171,8 @@ var normalized_times_ref: UnsafeMutablePointer<Float32>? = nil;
                             root = randomPianoNoteFrequency()
                             harmonic = randomPianoNoteFrequency()
                         }
+//                        print("\(frame_indicies[i])     \(i))")
+                        
                         let time: Float32          = Float32(scale(min_new: 0.0, max_new: 1.0, val_old: Float32(frame_indicies[i]), min_old: 0.0, max_old: Float32(buffer_length))) //Float32(~(-frame_count))))
                         root_frequency_samples[i]  = cos(tau * time * root)
                         harmonic_factor_samples[i] = cos(tau * time * root + phase_offset)
