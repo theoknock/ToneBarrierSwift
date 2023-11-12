@@ -14,10 +14,11 @@ import ObjectiveC
 import Dispatch
 import Accelerate
 
-var root: Float32     = Float32(440.0)
-var harmonic: Float32 = Float32(440.0 * (5.0/4.0))
-let amplitude: Float32 = Float32(0.5)
-let tau: Float32      = Float32(2.0 * Float32.pi)
+var root: Float32         = Float32(440.0)
+var harmonic: Float32     = Float32(440.0 * (5.0/4.0))
+let amplitude: Float32    = Float32(0.5)
+let tau: Float32          = Float32(2.0 * Float32.pi)
+let phase_offset: Float32 = Float32(Float32.pi / 2.0)
 var frame: AVAudioFramePosition = Int64.zero
 var frame_t: UnsafeMutablePointer<AVAudioFramePosition> = UnsafeMutablePointer(&frame)
 var n_time: Float32 = Float32.zero
@@ -59,8 +60,8 @@ var normalized_times_ref: UnsafeMutablePointer<Float32>? = nil;
             case aFlat = 831
         }
         
-        let noteFrequency: (MusicalNoteFrequency) -> Double = { musicalNote in
-            let randomNote = pow(2.0, Double(musicalNote.rawValue) / 12.0) * 440.0
+        let noteFrequency: (MusicalNoteFrequency) -> Float32 = { musicalNote in
+            let randomNote = pow(2.0, Float32(musicalNote.rawValue) / 12.0) * 440.0
             return randomNote
         }
         
@@ -93,6 +94,11 @@ var normalized_times_ref: UnsafeMutablePointer<Float32>? = nil;
                     }
                     //                    print("\(index)\t\(value)")
                 }
+                
+                func maximum_value() -> Int {
+                    return counter_max
+                }
+                
                 return numbersArray
             }
             
@@ -100,6 +106,7 @@ var normalized_times_ref: UnsafeMutablePointer<Float32>? = nil;
         }
         
         let incrementer = makeIncrementerWithReset(maximumValue: buffer_length)
+        let max_increment = incrementer
         var currentPhase:     [Float32] = [Float32.zero, Float32.zero]
         var phaseIncrement:   [Float32] = [tau / Float32(buffer_length), tau / Float32(buffer_length)]
         var signalPhase:      [Float32] = [Float32.zero, Float32.zero]
@@ -173,11 +180,12 @@ var normalized_times_ref: UnsafeMutablePointer<Float32>? = nil;
                             root = randomPianoNoteFrequency()
                             harmonic = randomPianoNoteFrequency()
                         }
-                        let time: Float32                = Float32(scale(min_new: -1.0, max_new: 1.0, val_old: Float32(i), min_old: -1.0, max_old: Float32(frame_count - 1))) //Float32(~(-frame_count))))
-                        root_frequency_samples[i]        = cosf(tau * time * root)
-                        harmonic_factor_samples[i]       = cosf(tau * time * harmonic)
+                        let time: Float32          = Float32(scale(min_new: 0.0, max_new: 1.0, val_old: Float32(frame_indicies[i]), min_old: 0.0, max_old: Float32(buffer_length))) //Float32(~(-frame_count))))
+                        root_frequency_samples[i]  = cos(tau * time * root)
+                        harmonic_factor_samples[i] = cos(tau * time * root + phase_offset)
+                        let scaledSamples          = Float32(scale(min_new: 0.0, max_new: 1.0, val_old: Float32(root_frequency_samples[i] + harmonic_factor_samples[i]), min_old: 0.0, max_old: 2.0)) //Float32(~(-frame_count))))
                         
-                        return root_frequency_samples[i] + harmonic_factor_samples[i];
+                        return scaledSamples
                     }
                     
                     return combinedSamples
