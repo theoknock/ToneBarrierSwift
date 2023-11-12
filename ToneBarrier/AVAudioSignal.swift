@@ -168,10 +168,10 @@ var normalized_times_ref: UnsafeMutablePointer<Float32>? = nil;
                     var harmonic_factor_samples: [Float32] = [Float32](repeating: Float32.zero, count: frame_count)
                     let combinedSamples                    = (Int.zero ..< frame_count).map { i in
                         if frame_indicies[i] == 0 {
+                            print("\(frame_indicies[i])     \(i))")
                             root = randomPianoNoteFrequency()
                             harmonic = randomPianoNoteFrequency()
                         }
-//                        print("\(frame_indicies[i])     \(i))")
                         
                         let time: Float32          = Float32(scale(min_new: 0.0, max_new: 1.0, val_old: Float32(frame_indicies[i]), min_old: 0.0, max_old: Float32(buffer_length))) //Float32(~(-frame_count))))
                         root_frequency_samples[i]  = cos(tau * time * root)
