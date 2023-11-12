@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
-    <device id="retina6_72" orientation="landscape" appearance="dark"/>
+    <device id="retina6_72" orientation="portrait" appearance="dark"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Image references" minToolsVersion="12.0"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -13,12 +14,12 @@
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="ToneBarrier" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleAspectFit" insetsLayoutMarginsFromSafeArea="NO" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="932" height="430"/>
+                    <view key="view" contentMode="scaleAspectFit" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.14999999999999999" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="waveform.path" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="JxM-Sh-sV2">
-                                <rect key="frame" x="0.0" y="0.0" width="932" height="431"/>
+                                <rect key="frame" x="0.0" y="0.0" width="430" height="933"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" systemColor="systemBlueColor"/>
                                 <constraints>
@@ -26,8 +27,16 @@
                                 </constraints>
                                 <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="regular"/>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" alpha="0.25" contentMode="left" text="5c6cd2d" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2OI-2K-jPW">
+                                <rect key="frame" x="21.666666666666657" y="441" width="387" height="50.333333333333314"/>
+                                <color key="tintColor" systemColor="linkColor"/>
+                                <fontDescription key="fontDescription" type="system" weight="black" pointSize="42"/>
+                                <color key="textColor" name="AccentColor"/>
+                                <nil key="highlightedColor"/>
+                                <size key="shadowOffset" width="0.0" height="0.0"/>
+                            </label>
                             <imageView opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dOm-P1-ib0">
-                                <rect key="frame" x="401.66666666666669" y="77.333333333333314" width="129.00000000000006" height="275.66666666666663"/>
+                                <rect key="frame" x="75.333333333333343" y="403.66666666666669" width="279.33333333333326" height="125.33333333333343"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" systemColor="systemBlueColor"/>
                                 <imageReference key="image" image="play" catalog="system" renderingMode="template"/>
@@ -38,7 +47,7 @@
                                 </connections>
                             </imageView>
                             <view opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="Ryi-yd-PoM" customClass="AVRoutePickerView">
-                                <rect key="frame" x="433.66666666666669" y="290.33333333333331" width="64.666666666666686" height="139.66666666666669"/>
+                                <rect key="frame" x="145" y="867.66666666666663" width="140" height="64.333333333333371"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" systemColor="systemRedColor"/>
                             </view>
@@ -49,6 +58,8 @@
                             <constraint firstItem="dOm-P1-ib0" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.3" id="4l0-sU-QtY"/>
                             <constraint firstItem="Ryi-yd-PoM" firstAttribute="height" secondItem="dOm-P1-ib0" secondAttribute="height" multiplier="0.5" id="93r-3q-OOp"/>
                             <constraint firstItem="Ryi-yd-PoM" firstAttribute="width" secondItem="dOm-P1-ib0" secondAttribute="width" multiplier="0.5" id="9KG-OH-LM3"/>
+                            <constraint firstItem="2OI-2K-jPW" firstAttribute="centerY" secondItem="dOm-P1-ib0" secondAttribute="centerY" id="GjT-6e-MaU"/>
+                            <constraint firstItem="2OI-2K-jPW" firstAttribute="width" secondItem="6Tk-OE-BBY" secondAttribute="width" multiplier="0.9" id="KyU-Oz-0Ee"/>
                             <constraint firstItem="JxM-Sh-sV2" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="L1q-ex-Ta9"/>
                             <constraint firstItem="JxM-Sh-sV2" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" id="PD5-lH-OwK"/>
                             <constraint firstItem="JxM-Sh-sV2" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="PWw-03-G9g"/>
@@ -58,6 +69,7 @@
                             <constraint firstItem="dOm-P1-ib0" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="ier-hg-nAi"/>
                             <constraint firstItem="Ryi-yd-PoM" firstAttribute="baseline" secondItem="8bC-Xf-vdC" secondAttribute="baseline" id="ktt-mp-Ad3"/>
                             <constraint firstItem="JxM-Sh-sV2" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="qOw-Ux-6He"/>
+                            <constraint firstItem="2OI-2K-jPW" firstAttribute="centerX" secondItem="dOm-P1-ib0" secondAttribute="centerX" id="w7b-FX-Hgx"/>
                         </constraints>
                     </view>
                     <connections>
@@ -82,14 +94,20 @@
         <image name="play" catalog="system" width="117" height="128"/>
         <image name="stop" catalog="system" width="128" height="113"/>
         <image name="waveform.path" catalog="system" width="128" height="113"/>
+        <namedColor name="AccentColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="linkColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
