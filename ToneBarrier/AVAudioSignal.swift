@@ -14,10 +14,10 @@ import ObjectiveC
 import Dispatch
 import Accelerate
 
-var root: Float32         = Float32(440.0)
-var harmonic: Float32     = Float32(440.0 * (5.0/4.0))
-let amplitude: Float32    = Float32(0.5)
-let tau: Float32          = Float32(2.0 * Float32.pi)
+var root:         Float32 = Float32(440.0)
+var harmonic:     Float32 = Float32(440.0 * (5.0/4.0))
+let amplitude:    Float32 = Float32(0.5)
+let tau:          Float32 = Float32(2.0 * Float32.pi)
 let phase_offset: Float32 = Float32(Float32.pi / 2.0)
 var frame: AVAudioFramePosition = Int64.zero
 var frame_t: UnsafeMutablePointer<AVAudioFramePosition> = UnsafeMutablePointer(&frame)
@@ -37,6 +37,15 @@ var normalized_times_ref: UnsafeMutablePointer<Float32>? = nil;
         let audio_format: AVAudioFormat       = AVAudioFormat(standardFormatWithSampleRate: audio_engine.mainMixerNode.outputFormat(forBus: 0).sampleRate, channels: audio_engine.mainMixerNode.outputFormat(forBus: 0).channelCount )!
         let buffer_length: Int = Int(audio_format.sampleRate) * Int(audio_format.channelCount)
         
+        let gaussianDistribution: (Float32, Float32, Float32) -> Float32 = { x, mean, variance in
+            let numerator = pow(x - mean, 2)
+            let denominator = 2 * pow(variance, 2)
+            let exponent = -numerator / denominator
+            let gaussianValue = exp(exponent)
+
+            return gaussianValue
+        }
+
         
         func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float32, max_old: Float32) -> Float32 {
             let val_new = min_new + ((((val_old - min_old) * (max_new - min_new))) / (max_old - min_old));
@@ -45,26 +54,6 @@ var normalized_times_ref: UnsafeMutablePointer<Float32>? = nil;
         
 /** --------------------------------  **/
         
-        enum MusicalNoteFrequency: UInt {
-            case a = 440
-            case bFlat = 466
-            case b = 494
-            case c = 523
-            case cSharp = 554
-            case d = 587
-            case dSharp = 622
-            case e = 659
-            case f = 698
-            case fSharp = 740
-            case g = 784
-            case aFlat = 831
-        }
-        
-        let noteFrequency: (MusicalNoteFrequency) -> Float32 = { musicalNote in
-            let randomNote = pow(2.0, Float32(musicalNote.rawValue) / 12.0) * 440.0
-            return randomNote
-        }
-        
         enum CombinationTone: UInt {
             case CombinationToneRoot
             case CombinationToneFifth
@@ -72,9 +61,14 @@ var normalized_times_ref: UnsafeMutablePointer<Float32>? = nil;
             case CombinationToneRandom
         };
         
+
+        
         func randomPianoNoteFrequency() -> Float32 {
-            let n = Int.random(in: 1...88) - 49
-            return 440 * pow(2, Float32(n) / 12.0)
+            let r: Float32 = pow(Float32.random(in: 0.0...1.0), 0.875) * 88
+            print(r)
+            print(floor(r))
+            print("--------\n")
+            return 440 * pow(2, floor(r) / 12.0)
         }
         
 /** --------------------------------  **/
