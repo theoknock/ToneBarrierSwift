@@ -64,7 +64,7 @@ var normalized_times_ref: UnsafeMutablePointer<Float32>? = nil;
 
         
         func randomPianoNoteFrequency() -> Float32 {
-            let r: Float32 = pow(Float32.random(in: 0.15,...1.0), 0.875) * 50
+            let r: Float32 = pow(Float32.random(in: 0.15...1.0), 0.875) * 50
             return 440 * pow(2, floor(r) / 12.0)
         }
         
