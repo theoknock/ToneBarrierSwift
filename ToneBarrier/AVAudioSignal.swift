@@ -83,7 +83,7 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
         }
         
         
-        var generateNormalizedRandom: () -> (() -> Float32) = {
+        var normalizedRandomGenerator: () -> (() -> Float32) = {
             var generator: RandomNumberGenerator = SystemRandomNumberGenerator()
             var random: Float32 = Float32.zero // Use a exponential or logarithmic curve to weight results
             return {
@@ -94,17 +94,20 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
             }()
         }
         
-        let randomizer = generateNormalizedRandom()
-
-        func randomPianoNoteFrequency() -> Float32 {
-            let note: Float32 = floor(randomizer() * 88.0)
-            let frequency = 440.0 * pow(2.0, (note - 49.0) / 12.0)
-            print("\(note)\t\(frequency)\n")
-            
-            return frequency
-        }
-        
         /** --------------------------------  **/
+        
+        func generateNormalizedRandom(using generator: (() -> (() -> Float32))) -> (() -> Float32) {
+          var randomizer = generator() // Use a exponential or logarithmic curve to weight results
+          func randomPianoNoteFrequency() -> Float32 {
+            let note: Float32 = randomizer()
+              let frequency = 440.0 * pow(2.0, (floor(note * 88.0) - 49.0) / 12.0)
+
+            return frequency
+          }
+
+          return randomPianoNoteFrequency
+        }
+
         
         func makeIncrementerWithReset(maximumValue: Int32) -> (Int32) -> ([Int32], [Float32]) {
             var counter = Int32.zero
@@ -126,7 +129,6 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
                         return counter
                     })
 
-                    // DOES NOT CALCULATE CORRECTLY
                     float32Array.append(contentsOf: (Int32.zero ..< count).map { index in
                         let time: Float32 = Float32(scale(min_new: 0.0, max_new: 1.0, val_old: Float32(int32Array[Int(index)]), min_old: 0.0, max_old: Float32(maximumValue))) //Float32(~(-frame_count)))))
                         
@@ -139,7 +141,6 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
         }
         
         let incrementer = makeIncrementerWithReset(maximumValue: Int32(buffer_length))
-        let max_increment = incrementer
         var currentPhase:     [Float32] = [Float32.zero, Float32.zero]
         var phaseIncrement:   [Float32] = [tau / Float32(buffer_length), tau / Float32(buffer_length)]
         var signalPhase:      [Float32] = [Float32.zero, Float32.zero]
@@ -151,15 +152,16 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
         
         func generateFrequencies(frame_count: Int32) -> [Float32] {
             let frame_indicies                     = incrementer(frame_count)
+            let randomize_frequency                = generateNormalizedRandom(using: normalizedRandomGenerator)
             var root_frequency_samples: [Float32]  = [Float32](repeating: Float32.zero, count: Int(frame_count))
             var harmonic_factor_samples: [Float32] = [Float32](repeating: Float32.zero, count: Int(frame_count))
             let combinedSamples                    = (Int.zero ..< Int(exactly: frame_count)!).map { i in
                 if frame_indicies.0[i] == 0 {
-                    print("\(frame_indicies.0[i])      \(frame_indicies.1[i])     \(i))\n---------------------------\n")
-                    root = randomPianoNoteFrequency()
+                    print("\(frame_indicies.0[i])      \(frame_indicies.1[i])       \(i))\n---------------------------\n")
+                    root = randomize_frequency()
                     harmonic = root * (3.0 / 2.0)
                 } else if i == (~(-(frame_count))) {
-                    print("\t\t\(frame_indicies.0[i])      \(frame_indicies.1[i])     \(i))")
+                    print("\t\t\(frame_indicies.0[i])      \(frame_indicies.1[i])        \(i))")
                 }
                 
                 root_frequency_samples[i]  = cos(tau * frame_indicies.1[i] * root)
