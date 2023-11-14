@@ -20,11 +20,6 @@ var harmonic:     Float32 = Float32(440.0 * (5.0/4.0))
 let amplitude:    Float32 = Float32(0.5)
 let tau:          Float32 = Float32(2.0 * Float32.pi)
 let phase_offset: Float32 = Float32(Float32.pi / 2.0)
-var frame: AVAudioFramePosition = Int64.zero
-var frame_t: UnsafeMutablePointer<AVAudioFramePosition> = UnsafeMutablePointer(&frame)
-var n_time: Float32 = Float32.zero
-var n_time_t: UnsafeMutablePointer<Float32> = UnsafeMutablePointer(&n_time)
-var normalized_times_ref: UnsafeMutablePointer<Float32>? = nil;
 
 
 func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float32, max_old: Float32) -> Float32 {
@@ -111,35 +106,39 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
         
         /** --------------------------------  **/
         
-        func makeIncrementerWithReset(maximumValue: Int) -> ((Int) -> [Int]) {
-            var counter = 0
+        func makeIncrementerWithReset(maximumValue: Int32) -> (Int32) -> ([Int32], [Float32]) {
+            var counter = Int32.zero
             let counter_max = maximumValue
             
-            // Initialize "normalized time" array here
-            
-            func incrementCounter(count: Int) -> [Int] {
-                var numbersArray = [Int](repeating: 0, count: count)
-                for index in (0 ..< count) {
-                    let value = ((counter_max ^ 0) ^ (counter ^ counter_max))
-                    numbersArray[index] = value
-                    counter = (-(~(value)))
-                    if counter == counter_max {
-                        counter = 0
-                    }
-                    //                    print("\(index)\t\(value)")
-                }
+            func incrementCounter(count: Int32) -> ([Int32], [Float32]) {
+                var int32Array   = [Int32]()
+                var float32Array = [Float32]()
                 
-                func maximum_value() -> Int {
-                    return counter_max
-                }
-                
-                return numbersArray
+                return {
+                    int32Array.append(contentsOf: (Int32.zero ..< count).map { index in
+                        let value = ((counter_max ^ 0) ^ (counter ^ counter_max))
+                        
+                        counter = (-(~(value)))
+                        if counter == counter_max {
+                            counter = 0
+                        }
+                        
+                        return counter
+                    })
+
+                    // DOES NOT CALCULATE CORRECTLY
+                    float32Array.append(contentsOf: (Int32.zero ..< count).map { index in
+                        let time: Float32 = Float32(scale(min_new: 0.0, max_new: 1.0, val_old: Float32(int32Array[Int(index)]), min_old: 0.0, max_old: Float32(maximumValue))) //Float32(~(-frame_count)))))
+                        
+                        return time
+                    })
+                    return (int32Array, float32Array)
+                }()
             }
-            
             return incrementCounter
         }
         
-        let incrementer = makeIncrementerWithReset(maximumValue: buffer_length)
+        let incrementer = makeIncrementerWithReset(maximumValue: Int32(buffer_length))
         let max_increment = incrementer
         var currentPhase:     [Float32] = [Float32.zero, Float32.zero]
         var phaseIncrement:   [Float32] = [tau / Float32(buffer_length), tau / Float32(buffer_length)]
@@ -147,30 +146,24 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
         var signalIncrement:  [Float32] = [Float32.zero, Float32.zero]
         var signalFrequency:  [Float32] = [Float32.zero, Float32.zero]
         
-        func sample_buffers(frame_count: Int) -> [([Float32])] {
-            var buffers: [([Float32])] = [[Float32](repeating: Float32.zero, count: frame_count), [Float32](repeating: Float32.zero, count: frame_count)]
-            return buffers.map { innerArray in
-                (Int.zero ..< frame_count).map {
-                    return Float32($0)
-                }
-            }
-        }
+        
         /** --------------------------------  **/
         
-        func generateFrequencies(frame_count: Int) -> [Float32] {
+        func generateFrequencies(frame_count: Int32) -> [Float32] {
             let frame_indicies                     = incrementer(frame_count)
-            var root_frequency_samples: [Float32]  = [Float32](repeating: Float32.zero, count: frame_count)
-            var harmonic_factor_samples: [Float32] = [Float32](repeating: Float32.zero, count: frame_count)
-            let combinedSamples                    = (Int.zero ..< frame_count).map { i in
-                if frame_indicies[i] == 0 {
-                    print("\(frame_indicies[i])     \(i))")
+            var root_frequency_samples: [Float32]  = [Float32](repeating: Float32.zero, count: Int(frame_count))
+            var harmonic_factor_samples: [Float32] = [Float32](repeating: Float32.zero, count: Int(frame_count))
+            let combinedSamples                    = (Int.zero ..< Int(exactly: frame_count)!).map { i in
+                if frame_indicies.0[i] == 0 {
+                    print("\(frame_indicies.0[i])      \(frame_indicies.1[i])     \(i))\n---------------------------\n")
                     root = randomPianoNoteFrequency()
                     harmonic = root * (3.0 / 2.0)
+                } else if i == (~(-(frame_count))) {
+                    print("\t\t\(frame_indicies.0[i])      \(frame_indicies.1[i])     \(i))")
                 }
                 
-                let time: Float32          = Float32(scale(min_new: 0.0, max_new: 1.0, val_old: Float32(frame_indicies[i]), min_old: 0.0, max_old: Float32(buffer_length))) //Float32(~(-frame_count))))
-                root_frequency_samples[i]  = cos(tau * time * root)
-                harmonic_factor_samples[i] = cos(tau * time * root + phase_offset)
+                root_frequency_samples[i]  = cos(tau * frame_indicies.1[i] * root)
+                harmonic_factor_samples[i] = cos(tau * frame_indicies.1[i] * harmonic + phase_offset)
                 let scaledSamples          = Float32(scale(min_new: 0.0, max_new: 1.0, val_old: Float32(root_frequency_samples[i] + harmonic_factor_samples[i]), min_old: 0.0, max_old: 2.0)) //Float32(~(-frame_count))))
                 
                 return scaledSamples
@@ -183,7 +176,7 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
         
         let audio_source_node: AVAudioSourceNode = AVAudioSourceNode(format: audio_format, renderBlock: { _, _, frameCount, audioBufferList in
             
-            let signalSamples    = generateFrequencies(frame_count: Int(frameCount)) //generateFrequencies(root_frequency: root, harmonic_factor: harmonic, frame_count: Int(frameCount))
+            let signalSamples    = generateFrequencies(frame_count: Int32(frameCount)) //generateFrequencies(root_frequency: root, harmonic_factor: harmonic, frame_count: Int(frameCount))
             let ablPointer       = UnsafeMutableAudioBufferListPointer(audioBufferList)
             let leftChannelData  = ablPointer[0]
             let rightChannelData = ablPointer[1]

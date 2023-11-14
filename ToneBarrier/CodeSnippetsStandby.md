@@ -333,3 +333,15 @@ func generateSignalSamples(frequency: Float, sampleRate: Float, duration: Float)
         return signal_samples
     }
     
+
+# Sample-buffer generator template
+
+
+        func sample_buffers(frame_count: Int) -> [([Float32])] {
+            var buffers: [([Float32])] = [[Float32](repeating: Float32.zero, count: frame_count), [Float32](repeating: Float32.zero, count: frame_count)]
+            return buffers.map { innerArray in
+                (Int.zero ..< frame_count).map {
+                    return Float32($0)
+                }
+            }
+        }
