@@ -36,7 +36,7 @@
                                 <size key="shadowOffset" width="0.0" height="0.0"/>
                             </label>
                             <imageView opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dOm-P1-ib0">
-                                <rect key="frame" x="75.333333333333343" y="403.66666666666669" width="279.33333333333326" height="125.33333333333343"/>
+                                <rect key="frame" x="75.333333333333371" y="403.66666666666669" width="279.33333333333326" height="125.33333333333331"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" systemColor="systemBlueColor"/>
                                 <imageReference key="image" image="play" catalog="system" renderingMode="template"/>
