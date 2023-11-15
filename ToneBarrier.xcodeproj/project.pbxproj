@@ -19,6 +19,15 @@
 		B979461229FDEE8D00CE3139 /* AVRouting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B979461129FDEE8D00CE3139 /* AVRouting.framework */; };
 		B979461429FDEECC00CE3139 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B979461329FDEECC00CE3139 /* AVKit.framework */; };
 		B9A2E7152AC78B970051AB01 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9A2E7142AC78B970051AB01 /* Media.xcassets */; };
+		B9B609FA2B04E54000F564FD /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9B609F62B04E54000F564FD /* AudioToolbox.framework */; };
+		B9B609FB2B04E54000F564FD /* AVFAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9B609F72B04E54000F564FD /* AVFAudio.framework */; };
+		B9B609FC2B04E54000F564FD /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9B609F82B04E54000F564FD /* AVFoundation.framework */; };
+		B9B609FE2B04E58300F564FD /* AVFAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9B609F72B04E54000F564FD /* AVFAudio.framework */; };
+		B9B609FF2B04E58400F564FD /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9B609F82B04E54000F564FD /* AVFoundation.framework */; };
+		B9B60A002B04E58400F564FD /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B979461329FDEECC00CE3139 /* AVKit.framework */; };
+		B9B60A012B04E58400F564FD /* AVRouting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B979461129FDEE8D00CE3139 /* AVRouting.framework */; };
+		B9B60A052B04E58400F564FD /* CoreAudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9B60A022B04E58400F564FD /* CoreAudioKit.framework */; };
+		B9B60A072B04E58400F564FD /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9B60A042B04E58400F564FD /* CoreAudio.framework */; };
 		B9D7B5D629FDEB5E00954817 /* AVAudioSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D7B5D529FDEB5E00954817 /* AVAudioSignal.swift */; };
 /* End PBXBuildFile section */
 
@@ -39,6 +48,13 @@
 		B979461129FDEE8D00CE3139 /* AVRouting.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVRouting.framework; path = System/Library/Frameworks/AVRouting.framework; sourceTree = SDKROOT; };
 		B979461329FDEECC00CE3139 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		B9A2E7142AC78B970051AB01 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
+		B9B609F52B04E54000F564FD /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
+		B9B609F62B04E54000F564FD /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		B9B609F72B04E54000F564FD /* AVFAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFAudio.framework; path = System/Library/Frameworks/AVFAudio.framework; sourceTree = SDKROOT; };
+		B9B609F82B04E54000F564FD /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		B9B60A022B04E58400F564FD /* CoreAudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudioKit.framework; path = System/Library/Frameworks/CoreAudioKit.framework; sourceTree = SDKROOT; };
+		B9B60A032B04E58400F564FD /* CoreAudioTypes.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudioTypes.framework; path = System/Library/Frameworks/CoreAudioTypes.framework; sourceTree = SDKROOT; };
+		B9B60A042B04E58400F564FD /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		B9D7B5D529FDEB5E00954817 /* AVAudioSignal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVAudioSignal.swift; sourceTree = "<group>"; wrapsLines = 0; };
 /* End PBXFileReference section */
 
@@ -47,8 +63,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B9B60A072B04E58400F564FD /* CoreAudio.framework in Frameworks */,
+				B9B60A012B04E58400F564FD /* AVRouting.framework in Frameworks */,
+				B9B60A052B04E58400F564FD /* CoreAudioKit.framework in Frameworks */,
 				B979461429FDEECC00CE3139 /* AVKit.framework in Frameworks */,
 				B979461229FDEE8D00CE3139 /* AVRouting.framework in Frameworks */,
+				B9B60A002B04E58400F564FD /* AVKit.framework in Frameworks */,
+				B9B609FF2B04E58400F564FD /* AVFoundation.framework in Frameworks */,
+				B9B609FC2B04E54000F564FD /* AVFoundation.framework in Frameworks */,
+				B9B609FA2B04E54000F564FD /* AudioToolbox.framework in Frameworks */,
+				B9B609FE2B04E58300F564FD /* AVFAudio.framework in Frameworks */,
+				B9B609FB2B04E54000F564FD /* AVFAudio.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,6 +121,13 @@
 		B979461029FDEE8D00CE3139 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B9B60A042B04E58400F564FD /* CoreAudio.framework */,
+				B9B60A022B04E58400F564FD /* CoreAudioKit.framework */,
+				B9B60A032B04E58400F564FD /* CoreAudioTypes.framework */,
+				B9B609F62B04E54000F564FD /* AudioToolbox.framework */,
+				B9B609F52B04E54000F564FD /* AudioUnit.framework */,
+				B9B609F72B04E54000F564FD /* AVFAudio.framework */,
+				B9B609F82B04E54000F564FD /* AVFoundation.framework */,
 				B979461329FDEECC00CE3139 /* AVKit.framework */,
 				B979461129FDEE8D00CE3139 /* AVRouting.framework */,
 			);
