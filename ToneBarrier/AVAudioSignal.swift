@@ -165,9 +165,9 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
                     amplitude = 3.0
                 }
 //                let envelope_: Float32 = scale(min_new: Float32.zero, max_new: amplitude, val_old: cos((tau * frame_indicies.1[kv.offset] * 2.0)), min_old: Float32.zero, max_old: cos(tau * pow(amplitude, 0.333)))
-                let amplitude_ : Float32 = scale(min_new: Float32.zero, max_new: amplitude, val_old: Float32(0.5 * cos(Float32.pi * frame_indicies.1[kv.offset])), min_old: Float32.zero, max_old: cos(tau * pow(amplitude, 0.333)))
-                let root_      : Float32 = scale(min_new: Float32.zero, max_new: 1.0, val_old: cos(tau * frame_indicies.1[kv.offset] * root), min_old: Float32.zero, max_old: cos(tau * root))
-                let harmonic_  : Float32 = scale(min_new: Float32.zero, max_new: 1.0, val_old: cos(tau * frame_indicies.1[kv.offset] * harmonic), min_old: Float32.zero, max_old: cos(tau * harmonic))
+                let amplitude_ : Float32 = Float32(0.5 * cos(Float32.pi * frame_indicies.1[kv.offset]))
+                let root_      : Float32 = cos(tau * frame_indicies.1[kv.offset] * root)
+                let harmonic_  : Float32 = cos(tau * frame_indicies.1[kv.offset] * harmonic)
 
                 return (-amplitude_ * (root_ + harmonic_))
             }))
