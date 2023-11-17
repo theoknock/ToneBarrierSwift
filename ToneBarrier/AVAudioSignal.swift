@@ -159,7 +159,7 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
             let frame_indicies = incrementer(frame_count)
             var combined_frequency_samples: [Float32] = [Float32]() // [Float32](repeating: Float32.zero, count: frame_indicies.1.count)
             combined_frequency_samples.append(contentsOf: frame_indicies.0.enumerated().map({ kv in
-                if kv.element == Int.zero {
+                if kv.element == Int32.zero {
                     root = pianoNoteFrequency()
                     harmonic = root * (3.0 / 2.0)
                     amplitude = 3.0
