@@ -43,7 +43,7 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
         let buffer_length: Int32 = Int32(audio_format.sampleRate) * Int32(audio_format.channelCount)
         
         
-       
+        
         
         //        var normalized_random_generator: (_ gamma: Float32) -> (() -> Float32) = { gamma in
         //            var generator: RandomNumberGenerator = SystemRandomNumberGenerator()
@@ -80,30 +80,32 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
         func scaled_random_generator_exp(mid: Float32, lower: Float32, upper: Float32) -> Float32 {
             var r: Float32 = Float32.random(in: (Float32.zero...1.0))
             var s: Float32 = scale(min_new: lower, max_new: upper, val_old: r, min_old: Float.zero, max_old: 1.0)
+            var x: Float32 = pow(s, 1.0 / mid)
+            print("\(r)\t--->\t\(s)\t--->\t\(x)")
             
-            var x: Float32 = pow(s, mid)
-            
-            return s
+            return x
         }
         
         func scaled_random_generator_sinc(mid: Float32, lower: Float32, upper: Float32) -> Float32 {
-            var r: Float32 = Float32.random(in: (Float32.zero...1.0))
-            var s: Float32 = scale(min_new: Float.zero, max_new: 1.0, val_old: r, min_old: lower, max_old: upper)
+            var r: Float32 = Float32.leastNonzeroMagnitude //Float32.random(in: (-1.0...1.0))
+            var x: Float32 = pow(r, mid)
+            var s: Float32 = scale(min_new: lower, max_new: upper, val_old: x, min_old: -1.0, max_old: 1.0)
             
-            var t: Float32 = Float32.pi * (s - mid)
-            var d: Float32 = Float32(t / mid)
-            var c: Float32 = Float32(sin(d) / d)
+            var t: Float32 = Float32.pi * x
+            var d: Float32 = sin(t) / t
+        
+            print("\(r)\t--->\t\(s)\t--->\t\(d)")
             
-            return c
+            return d
         }
         
         func pianoNoteFrequency() -> Float32 {
-            let c: Float32 = scaled_random_generator_exp(mid: 0.666, lower: 0.333, upper: 0.888)
+            let c: Float32 = scaled_random_generator_exp(mid: 4.0, lower: Float.zero, upper: 1.0)
             let f: Float32 = 440.0 * pow(2.0, (floor(c * 88.0) - 49.0) / 12.0)
             
             return f
         }
-
+        
         func randomDurationFrequency(multiplier: Float32, exponent: Float32) -> Float32 {
             var subd: Float32 = Float32.random(in: (Float32.zero...1.0))
             let frequency: Float32 = scale(min_new: 0.125, max_new: 0.875, val_old: subd, min_old: Float32.zero, max_old: 1.0)
@@ -131,20 +133,20 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
                         
                         let time: Float32 = Float32(scale(min_new: Float32.zero, max_new: 1.0, val_old: Float32(counter), min_old: Float32.zero, max_old: Float32(maximumValue)))
                         float32Array.append(time)
-                            
+                        
                         
                         return counter
                     })
                     
                     func makePersistentProperty() -> (Int32) -> Int32 {
                         var storedValue: Int32 = 0
-
+                        
                         return { newValue in
                             storedValue = newValue
                             return storedValue
                         }
                     }
-                
+                    
                     return (int32Array, float32Array)
                 }()
             }
@@ -154,61 +156,30 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
         let incrementer = makeIncrementerWithReset(maximumValue: Int32(buffer_length))
         
         /** --------------------------------  **/
-        
+//        var root_:     [Float32] = [Float32].init(repeating: Float32.zero, count: 2)
+//        var harmonic_: [Float32] = [Float32].init(repeating: Float32.zero, count: 2)
+//        
         func generateFrequencies(frame_count: Int32) -> [Float32] {
             let frame_indicies = incrementer(frame_count)
             var combined_frequency_samples: [Float32] = [Float32]() // [Float32](repeating: Float32.zero, count: frame_indicies.1.count)
             combined_frequency_samples.append(contentsOf: frame_indicies.0.enumerated().map({ kv in
                 if kv.element == Int32.zero {
-                    root = pianoNoteFrequency()
-                    harmonic = root * (3.0 / 2.0)
-                    amplitude = 3.0
+                    harmonic = pianoNoteFrequency()
+                    root = harmonic * (2.0 / 3.0)
                 }
-//                let envelope_: Float32 = scale(min_new: Float32.zero, max_new: amplitude, val_old: cos((tau * frame_indicies.1[kv.offset] * 2.0)), min_old: Float32.zero, max_old: cos(tau * pow(amplitude, 0.333)))
-                let amplitude_ : Float32 = Float32(0.5 * cos(Float32.pi * frame_indicies.1[kv.offset]))
+                
+                let amplitude_ : Float32 = Float32(0.5 * cos(0.5 * Float32.pi * frame_indicies.1[kv.offset]))
                 let root_      : Float32 = cos(tau * frame_indicies.1[kv.offset] * root)
                 let harmonic_  : Float32 = cos(tau * frame_indicies.1[kv.offset] * harmonic)
-
+                
                 return (-amplitude_ * (root_ + harmonic_))
             }))
-//            (frame_indicies.0).enumerated() { (i, element) in
-//                if frame_indicies.0[Int(i)] == Int.zero {
-//                    root = pianoNoteFrequency()
-//                    harmonic = root * (3.0 / 2.0)
-//                    amplitude = 3.0
-//                }
-//                
-//                let amplitude_ : Float32 = scale(min_new: Float32.zero, max_new: amplitude, val_old: cos((tau * frame_indicies.1[Int(i)] * amplitude) - phase_offset), min_old: Float32.zero, max_old: cos(tau * pow(amplitude, 0.333)))
-//                let root_      : Float32 = scale(min_new: Float32.zero, max_new: 1.0, val_old: cos(tau * frame_indicies.1[Int(i)] * root), min_old: Float32.zero, max_old: cos(tau * root))
-//                let harmonic_  : Float32 = scale(min_new: Float32.zero, max_new: 1.0, val_old: cos(tau * frame_indicies.1[Int(i)] * harmonic), min_old: Float32.zero, max_old: cos(tau * harmonic))
-//
-//                return (amplitude_ * (root_ + harmonic_))
-//            }
-//            combined_frequency_samples.with  d(contentsOf: (Int32.zero ..< frame_indicies.0.count).map { i in
-//                if frame_indicies.0[Int(i)] == Int.zero {
-//                    root = pianoNoteFrequency()
-//                    harmonic = root * (3.0 / 2.0)
-//                    amplitude = 3.0
-//                }
-//                
-//                let amplitude_ : Float32 = scale(min_new: Float32.zero, max_new: amplitude, val_old: cos((tau * frame_indicies.1[Int(i)] * amplitude) - phase_offset), min_old: Float32.zero, max_old: cos(tau * pow(amplitude, 0.333)))
-//                let root_      : Float32 = scale(min_new: Float32.zero, max_new: 1.0, val_old: cos(tau * frame_indicies.1[Int(i)] * root), min_old: Float32.zero, max_old: cos(tau * root))
-//                let harmonic_  : Float32 = scale(min_new: Float32.zero, max_new: 1.0, val_old: cos(tau * frame_indicies.1[Int(i)] * harmonic), min_old: Float32.zero, max_old: cos(tau * harmonic))
-//
-//                return (amplitude_ (root_ + harmonic_))
-//                
-////                amplitude_frequency_samples[Int(i)]  = scale(min_new: Float32.zero, max_new: amplitude, val_old: cos((tau * frame_indicies.1[Int(i)] * amplitude) - phase_offset), min_old: Float32.zero, max_old: cos(tau * pow(amplitude, 0.333)))
-////                root_frequency_samples[Int(i)]       = scale(min_new: Float32.zero, max_new: 1.0, val_old: cos(tau * frame_indicies.1[Int(i)] * root), min_old: Float32.zero, max_old: cos(tau * root))
-////                harmonic_frequency_samples[Int(i)]   = scale(min_new: Float32.zero, max_new: 1.0, val_old: cos(tau * frame_indicies.1[Int(i)] * harmonic), min_old: Float32.zero, max_old: cos(tau * harmonic))
-////                
-////                return (amplitude_frequency_samples[Int(i)] * (Float32(root_frequency_samples[Int(i)] + harmonic_frequency_samples[Int(i)])))
-//            })
-                
+    
             return combined_frequency_samples
         }
         
         let audio_source_node: AVAudioSourceNode = AVAudioSourceNode(format: audio_format, renderBlock: { _, _, frameCount, audioBufferList in
-            let signalSamples    = generateFrequencies(frame_count: Int32(frameCount)) //generateFrequencies(root_frequency: root, harmonic_factor: harmonic, frame_count: Int(frameCount))
+            let signalSamples    = generateFrequencies(frame_count: Int32(frameCount))
             let ablPointer       = UnsafeMutableAudioBufferListPointer(audioBufferList)
             let leftChannelData  = ablPointer[0]
             let rightChannelData = ablPointer[1]
