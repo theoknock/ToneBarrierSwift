@@ -78,7 +78,7 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
         
         
         func scaled_random_generator_exp(mid: Float32, lower: Float32, upper: Float32) -> Float32 {
-            var r: Float32 = Float32.random(in: (Float32.zero...1.0))
+            var r: Float32 = Float32.random(in: (Float32.leastNonzeroMagnitude...1.0))
             var s: Float32 = scale(min_new: lower, max_new: upper, val_old: r, min_old: Float.zero, max_old: 1.0)
             var x: Float32 = pow(s, 1.0 / mid)
             print("\(r)\t--->\t\(s)\t--->\t\(x)")
@@ -86,21 +86,33 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
             return x
         }
         
-        func scaled_random_generator_sinc(mid: Float32, lower: Float32, upper: Float32) -> Float32 {
-            var r: Float32 = Float32.leastNonzeroMagnitude //Float32.random(in: (-1.0...1.0))
-            var x: Float32 = pow(r, mid)
-            var s: Float32 = scale(min_new: lower, max_new: upper, val_old: x, min_old: -1.0, max_old: 1.0)
+        func scaled_random_generator_eulers(mid: Float32, lower: Float32, upper: Float32) -> Float32 {
+            var r: Float32 = Float32.random(in: (Float32.leastNonzeroMagnitude...1.0))
+            var e: Float32 = Float32(expf(pow(-(r / mid), 2.0)))  //(pow(-r, 2.0)))
+            print("\(r)\t--->\t\(e)")
+//            var s: Float32 = scale(min_new: lower, max_new: upper, val_old: r, min_old: Float.zero, max_old: 1.0)
+//            var x: Float32 = pow(s, 1.0 / mid)
+//            print("\(r)\t--->\t\(s)\t--->\t\(x)")
             
-            var t: Float32 = Float32.pi * x
-            var d: Float32 = sin(t) / t
+            return e
+        }
         
-            print("\(r)\t--->\t\(s)\t--->\t\(d)")
+        func scaled_random_generator_sinc(mid: Float32, lower: Float32, upper: Float32) -> Float32 {
+            var r: Float32 = Float32.random(in: (-1.0...1.0))
+//            var x: Float32 = pow(r, 1.0 / mid)
+//            var s: Float32 = scale(min_new: lower, max_new: upper, val_old: x, min_old: -1.0, max_old: 1.0)
             
-            return d
+            var a: Float32 = (Float32.pi * mid)
+            var t: Float32 = a * r
+            var d: Float32 = sin(t) / t
+            var v: Float32 = scale(min_new: 0.0, max_new: 1.0, val_old: d, min_old: -1.0, max_old: 1.0)
+            print("\(r)\t--->\t\(d)\t--->\t\(v)")
+            
+            return v
         }
         
         func pianoNoteFrequency() -> Float32 {
-            let c: Float32 = scaled_random_generator_exp(mid: 4.0, lower: Float.zero, upper: 1.0)
+            let c: Float32 = scaled_random_generator_sinc(mid: 4.0, lower: Float.zero, upper: 1.0)
             let f: Float32 = 440.0 * pow(2.0, (floor(c * 88.0) - 49.0) / 12.0)
             
             return f
@@ -156,9 +168,7 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
         let incrementer = makeIncrementerWithReset(maximumValue: Int32(buffer_length))
         
         /** --------------------------------  **/
-//        var root_:     [Float32] = [Float32].init(repeating: Float32.zero, count: 2)
-//        var harmonic_: [Float32] = [Float32].init(repeating: Float32.zero, count: 2)
-//        
+        
         func generateFrequencies(frame_count: Int32) -> [Float32] {
             let frame_indicies = incrementer(frame_count)
             var combined_frequency_samples: [Float32] = [Float32]() // [Float32](repeating: Float32.zero, count: frame_indicies.1.count)
@@ -168,11 +178,24 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
                     root = harmonic * (2.0 / 3.0)
                 }
                 
-                let amplitude_ : Float32 = Float32(0.5 * cos(0.5 * Float32.pi * frame_indicies.1[kv.offset]))
-                let root_      : Float32 = cos(tau * frame_indicies.1[kv.offset] * root)
-                let harmonic_  : Float32 = cos(tau * frame_indicies.1[kv.offset] * harmonic)
+                // Each tone-pair in a dyad is modulated by an amplitude with almost identical characteristics except for the attack rate:
+                //      - The rate of attack for the first tone-pair is gradual; and,
+                //      - for the second, sharp.
+                //      - The transition between the two will be more distinct (which makes for a better ToneBarrier score).
+                let amplitude_  : Float32 = Float32(0.5 * cos(0.5 * Float32.pi * frame_indicies.1[kv.offset]))
+                let amplitude_b : Float32 = Float32(cos(Float32.pi * frame_indicies.1[kv.offset]))
+                let root_       : Float32 = Float32(cos(tau * frame_indicies.1[kv.offset] * root))
+                let root_b      : Float32 = Float32(cos(Float32.pi * frame_indicies.1[kv.offset]))
+                let harmonic_   : Float32 = Float32(cos(tau * frame_indicies.1[kv.offset] * harmonic))
+                let harmonic_b  : Float32 = Float32(sin(2.0 * tau * frame_indicies.1[kv.offset] * harmonic))
                 
-                return (-amplitude_ * (root_ + harmonic_))
+                let wave_1 : Float32 = Float32(sin(2.0 * tau * frame_indicies.1[kv.offset] * harmonic + (frame_indicies.1[kv.offset] * (0.5 * tau))))
+                let wave_2 : Float32 = Float32(sin(2.0 * tau * frame_indicies.1[kv.offset] * harmonic - (frame_indicies.1[kv.offset] * (0.5 * tau))))
+                
+                return (wave_1 + wave_2) / 2.0
+                
+//                return (root_b + harmonic_b)
+//                return (-amplitude_ * (root_ + harmonic_))
             }))
     
             return combined_frequency_samples
