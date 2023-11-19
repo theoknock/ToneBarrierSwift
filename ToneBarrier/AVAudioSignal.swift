@@ -22,8 +22,9 @@ var harmonic_:    Float32 = Float32(root_ * (3.0/2.0))
 var amplitude:    Float32 = Float32(0.25)
 var envelope:     Float32 = Float32(1.0)
 let tau:          Float32 = Float32(Float32.pi * 2.0)
-let phase_offset: Float32 = Float32(Float32.pi / 2.0)
-
+let theta:        Float32 = Float32(Float32.pi / 2.0)
+let trill:        Float32 = Float32.zero
+let tremolo:      Float32 = Float32(1.0)
 
 func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float32, max_old: Float32) -> Float32 {
     let val_new = min_new + ((((val_old - min_old) * (max_new - min_new))) / (max_old - min_old));
@@ -39,49 +40,15 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
     
     override init() {
         let main_mixer_node: AVAudioMixerNode = audio_engine.mainMixerNode
-        let audio_format: AVAudioFormat       = AVAudioFormat(standardFormatWithSampleRate: audio_engine.mainMixerNode.outputFormat(forBus: 0).sampleRate, channels: audio_engine.mainMixerNode.outputFormat(forBus: 0).channelCount )!
+        let audio_format: AVAudioFormat       = AVAudioFormat(standardFormatWithSampleRate: audio_engine.mainMixerNode.outputFormat(forBus: Int.zero).sampleRate, channels: audio_engine.mainMixerNode.outputFormat(forBus: Int.zero).channelCount )!
         let buffer_length: Int32 = Int32(audio_format.sampleRate) * Int32(audio_format.channelCount)
-        
-        
-        
-        
-        //        var normalized_random_generator: (_ gamma: Float32) -> (() -> Float32) = { gamma in
-        //            var generator: RandomNumberGenerator = SystemRandomNumberGenerator()
-        //            var random: Float32 = Float32.zero // Use a exponential or logarithmic curve to weight results
-        //            return {
-        //                return {
-        //                    random = pow(Float32.random(in: (0.0...1.0), using: &generator), gamma)
-        //
-        //                    return random
-        //                }
-        //            }()
-        //        }
-        //
-        //        /** --------------------------------  **/
-        //
-        //        func normalized_random_generator(range: Range<Float32>, gamma: Float32) {
-        //
-        //        }
-        //
-        //        func randomGenerator(using generator: (() -> Float32) -> (() -> Float32)) -> Float32 {
-        //            func randomPianoNoteFrequency() -> Float32 {
-        //                let note: Float32 = randomizer()
-        //                let frequency = 440.0 * pow(2.0, (floor(note * 88.0) - 49.0) / 12.0)
-        //
-        //                return frequency
-        //            }
-        //
-        //            var randomizer = generator(randomPianoNoteFrequency) // Use a exponential or logarithmic curve to weight results
-        //
-        //            return randomizer()
-        //        }
         
         
         func scaled_random_generator_exp(mid: Float32, lower: Float32, upper: Float32) -> Float32 {
             var r: Float32 = Float32.random(in: (Float32.leastNonzeroMagnitude...1.0))
-            var s: Float32 = scale(min_new: lower, max_new: upper, val_old: r, min_old: Float.zero, max_old: 1.0)
+            var s: Float32 = scale(min_new: lower, max_new: upper, val_old: r, min_old: Float32.leastNonzeroMagnitude, max_old: 1.0)
             var x: Float32 = pow(s, 1.0 / mid)
-            print("\(r)\t--->\t\(s)\t--->\t\(x)")
+            print("\(r)\t->\t\(s)\t->\t\(x)")
             
             return x
         }
@@ -89,7 +56,7 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
         func scaled_random_generator_eulers(mid: Float32, lower: Float32, upper: Float32) -> Float32 {
             var r: Float32 = Float32.random(in: (Float32.leastNonzeroMagnitude...1.0))
             var e: Float32 = Float32(expf(pow(-(r / mid), 2.0)))  //(pow(-r, 2.0)))
-            print("\(r)\t--->\t\(e)")
+            print("\(r)\t->\t\(e)")
 //            var s: Float32 = scale(min_new: lower, max_new: upper, val_old: r, min_old: Float.zero, max_old: 1.0)
 //            var x: Float32 = pow(s, 1.0 / mid)
 //            print("\(r)\t--->\t\(s)\t--->\t\(x)")
@@ -105,15 +72,16 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
             var a: Float32 = (Float32.pi * mid)
             var t: Float32 = a * r
             var d: Float32 = sin(t) / t
-            var v: Float32 = scale(min_new: 0.0, max_new: 1.0, val_old: d, min_old: -1.0, max_old: 1.0)
-            print("\(r)\t--->\t\(d)\t--->\t\(v)")
+            var v: Float32 = scale(min_new: Float32.leastNonzeroMagnitude, max_new: 1.0, val_old: d, min_old: -1.0, max_old: 1.0)
+            print("\(r)\t->\t\(d)\t->\t\(v)")
             
             return v
         }
         
         func pianoNoteFrequency() -> Float32 {
-            let c: Float32 = scaled_random_generator_sinc(mid: 4.0, lower: Float.zero, upper: 1.0)
+            let c: Float32 = scaled_random_generator_sinc(mid: 1.0, lower: Float32.leastNonzeroMagnitude, upper: 1.0)
             let f: Float32 = 440.0 * pow(2.0, (floor(c * 88.0) - 49.0) / 12.0)
+//            print("\(c)\t->\t\(f)\t->\t\(v)")
             
             return f
         }
@@ -126,13 +94,13 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
         }
         
         // To-Do: makeOscillatorWithReset
-        func makeIncrementerWithReset(maximumValue: Int32) -> (Int32) -> ([Int32], [Float32]) {
+        func makeIncrementerWithReset(maximumValue: Int32) -> (Int32) -> ([Int32], [[Float32]]) {
             let counter_max = maximumValue
             var counter = Int32.zero
             
-            func incrementCounter(count: Int32) -> ([Int32], [Float32]) {
+            func incrementCounter(count: Int32) -> ([Int32], [[Float32]]) {
                 var int32Array   = [Int32]()
-                var float32Array = [Float32]()
+                var float32Array: [[Float32]] = [[Float32]](repeating: [Float32](), count: 2)
                 
                 return {
                     int32Array.append(contentsOf: (Int32.zero ..< count).map { index in
@@ -143,15 +111,16 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
                             counter = Int32.zero
                         }
                         
-                        let time: Float32 = Float32(scale(min_new: Float32.zero, max_new: 1.0, val_old: Float32(counter), min_old: Float32.zero, max_old: Float32(maximumValue)))
-                        float32Array.append(time)
-                        
+                        let scaled_time:     Float32 = Float32(scale(min_new: Float32.zero, max_new: 1.0, val_old: Float32(counter), min_old: Float32(maximumValue), max_old: Float32.zero))
+                        float32Array[0].append(scaled_time)
+                        let normalized_time: Float32 = Float32(scale(min_new: -1.0, max_new: 1.0, val_old: Float32(counter), min_old: Float32(maximumValue), max_old: Float32.zero))
+                        float32Array[1].append(normalized_time)
                         
                         return counter
                     })
                     
                     func makePersistentProperty() -> (Int32) -> Int32 {
-                        var storedValue: Int32 = 0
+                        var storedValue: Int32 = Int32.zero
                         
                         return { newValue in
                             storedValue = newValue
@@ -176,23 +145,34 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
                 if kv.element == Int32.zero {
                     harmonic = pianoNoteFrequency()
                     root = harmonic * (2.0 / 3.0)
+                    print("0 = \(frame_indicies.1[0].first)\t\t1 = \(frame_indicies.1[1].first)")
+                    print("0 = \(frame_indicies.1[0].last)\t\t1 = \(frame_indicies.1[1].last)")
+//                    frame_indicies.1.makeIterator()
                 }
                 
                 // Each tone-pair in a dyad is modulated by an amplitude with almost identical characteristics except for the attack rate:
                 //      - The rate of attack for the first tone-pair is gradual; and,
                 //      - for the second, sharp.
-                //      - The transition between the two will be more distinct (which makes for a better ToneBarrier score).
-                let amplitude_  : Float32 = Float32(0.5 * cos(0.5 * Float32.pi * frame_indicies.1[kv.offset]))
-                let amplitude_b : Float32 = Float32(cos(Float32.pi * frame_indicies.1[kv.offset]))
-                let root_       : Float32 = Float32(cos(tau * frame_indicies.1[kv.offset] * root))
-                let root_b      : Float32 = Float32(cos(Float32.pi * frame_indicies.1[kv.offset]))
-                let harmonic_   : Float32 = Float32(cos(tau * frame_indicies.1[kv.offset] * harmonic))
-                let harmonic_b  : Float32 = Float32(sin(2.0 * tau * frame_indicies.1[kv.offset] * harmonic))
+//                //      - The transition between the two will be more distinct (which makes for a better ToneBarrier score).
+//                let amplitude_  : Float32 = Float32(0.5 * cos(0.5 * Float32.pi * frame_indicies.1[kv.offset]))
+//                let amplitude_b : Float32 = Float32(cos(Float32.pi * frame_indicies.1[kv.offset]))
+//                let root_       : Float32 = Float32(cos(tau * frame_indicies.1[kv.offset] * root))
+//                let root_b      : Float32 = Float32(cos(Float32.pi * frame_indicies.1[kv.offset]))
+//                let harmonic_   : Float32 = Float32(cos(tau * frame_indicies.1[kv.offset] * harmonic))
+//                let harmonic_b  : Float32 = Float32(sin(2.0 * tau * frame_indicies.1[kv.offset] * harmonic))
                 
-                let wave_1 : Float32 = Float32(sin(2.0 * tau * frame_indicies.1[kv.offset] * harmonic + (frame_indicies.1[kv.offset] * (0.5 * tau))))
-                let wave_2 : Float32 = Float32(sin(2.0 * tau * frame_indicies.1[kv.offset] * harmonic - (frame_indicies.1[kv.offset] * (0.5 * tau))))
+//                let wave_w  : Float32 = Float32(tau * frame_indicies.1[0][kv.offset])
+//                let wave_p  : Float32 = Float32(frame_indicies.1[1][kv.offset] * tau)
+//                
+//                let wave_a1 : Float32 = Float32(sin(wave_w * harmonic - wave_p))
+//                let wave_a2 : Float32 = Float32(sin(wave_w * harmonic + wave_p))
+//                let wave_a  : Float32 = Float32(wave_a1 + wave_a2)
+//                let wave_b1 : Float32 = Float32(sin(wave_w * root - wave_p))
+//                let wave_b2 : Float32 = Float32(sin(wave_w * root + wave_p))
+//                let wave_b  : Float32 = Float32(wave_b1 + wave_b2)
+//                let wave_   : Float32 = Float32(wave_a + wave_b)
                 
-                return (wave_1 + wave_2) / 2.0
+                return 1.0
                 
 //                return (root_b + harmonic_b)
 //                return (-amplitude_ * (root_ + harmonic_))
