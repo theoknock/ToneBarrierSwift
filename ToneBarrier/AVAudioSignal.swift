@@ -110,15 +110,13 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
             for i in 0..<frame_count {
                 n = circularNumbers.next()
                 if n == 0 {
-                    print(n)
-                    
                     combination_notes = note_frequencies(pianoNoteFrequency())
                     fadeBit ^= 1
                 }
                 let t  = Float(n) / (Float(buffer_length) - 1.0)
                 // To-Do: Generate two circular counter arrays, one for each envelope/frequency to crossfade tones
-                left_channel_samples[i]  = e_sustain(t, 1.0) * sin(tau * combination_notes[Int(0)] * t)
-                right_channel_samples[i] = e_sustain(t, 1.0) * sin(tau * combination_notes[Int(1)] * t)
+                left_channel_samples[i]  = e_sustain(t, 1.0) * (sin(tau * combination_notes[Int(0)] * t) + sin(tau * combination_notes[Int(1)] * t))
+                right_channel_samples[i] = e_sustain(t, 1.0) * (sin(tau * combination_notes[Int(1)] * t) + sin(tau * combination_notes[Int(2)] * t))
                 combined_frequency_samples[0][i] = left_channel_samples[i]
                 combined_frequency_samples[1][i] = right_channel_samples[i]
             }
