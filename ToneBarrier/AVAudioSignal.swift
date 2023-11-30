@@ -62,27 +62,27 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
 
             mutating func next() -> T {
                 let element = array[currentIndex]
-                currentIndex = (currentIndex + 1) % (array.count / 2)
+                currentIndex = (currentIndex + 1) % (array.count)
                 return element
             }
         }
 
         // To-Do: Pass two joined Arrays of varied duration/length to circularArray parameter
         var duration = (buffer_length / 2)
-        var circularNumbers = CircularArray(Array(0..<duration) + Array(0..<duration))
+        var circularNumbers = CircularArray(Array(0..<buffer_length))// CircularArray(Array(0..<duration) + Array(0..<duration))
         var n: Int32 = Int32.zero
         
         let e_sustain: (Float32, Float32) -> Float32 = { t,d in
             return pow(sin(Float32.pi * t), d) // 2.0 to 10.0
         }
         let e_attack: (Float32, Float32) -> Float32 = { t, d in
-            return e_sustain(t, 2.0) * pow(sin(pow(Float32.pi * t, 0.5)), d) // 2.0 to 10.0
+            return pow(sin(pow(Float32.pi * t, 0.5)), d) // 2.0 to 10.0
         }
         let e_release: (Float32, Float32) -> Float32 = { t, d in
-            return e_sustain(t, 2.0) * pow(sin(pow(Float32.pi * t, 2.0)), d) // 2.0 to 10.0
+            return pow(sin(pow(Float32.pi * t, 2.0)), d) // 2.0 to 10.0
         }
         
-        let envelopes = [e_attack, e_release]
+        let envelopes = [e_attack, e_sustain]
         var fadeBit: UInt32 = 1
         
         
@@ -90,34 +90,37 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
             var storedOctave:   Float32 = Float32.zero
             var storedRoot:     Float32 = Float32.zero
             var storedHarmonic: Float32 = Float32.zero
+            var storedSum: Float32 = Float32.zero
 
             return { newValue in
-                storedOctave   = newValue
                 storedRoot     = newValue * 0.5
+                storedOctave   = newValue
                 storedHarmonic = newValue * (2.0 / 3.0)
-                return [storedRoot, storedOctave, storedHarmonic]
+                storedSum = storedRoot + storedHarmonic
+                return [storedRoot, storedHarmonic, storedOctave]
             }
         }
         let note_frequencies  = store_note_frequency()
         var combination_notes = note_frequencies(pianoNoteFrequency())
         
-        func generateFrequencies(frame_count: Int) -> [Float32] {
-            var combined_frequency_samples: [Float32] = [Float32](repeating: Float32.zero, count: frame_count)
+        func generateFrequencies(frame_count: Int) -> [[Float32]] {
+            var left_channel_samples:  [Float32] = [Float32](repeating: Float32.zero, count: frame_count)
+            var right_channel_samples: [Float32] = [Float32](repeating: Float32.zero, count: frame_count)
+            var combined_frequency_samples: [[Float32]] = [[Float32]]([left_channel_samples, right_channel_samples])
             for i in 0..<frame_count {
                 n = circularNumbers.next()
                 if n == 0 {
+                    print(n)
+                    
                     combination_notes = note_frequencies(pianoNoteFrequency())
                     fadeBit ^= 1
                 }
-                let t = Float(n) / (Float(buffer_length) - 1.0)
-                let r = ((combination_notes[Int(fadeBit)] + combination_notes[Int(2)]) / 2.0)
-                let h = ((combination_notes[Int(fadeBit)] - combination_notes[Int(2)]) / 2.0)
-                let a = sin(tau * r * t + (t * theta)) + sin(tau * r * t - (t * theta))
-                let b = sin(tau * h * t + (t * theta)) + sin(tau * h * t - (t * theta))
-                let f = a * b
-                
+                let t  = Float(n) / (Float(buffer_length) - 1.0)
                 // To-Do: Generate two circular counter arrays, one for each envelope/frequency to crossfade tones
-                combined_frequency_samples[i] = /*(e_sustain(t, 1.0)*/ (envelopes[Int(1)](t, 1.0) * f)
+                left_channel_samples[i]  = e_sustain(t, 1.0) * sin(tau * combination_notes[Int(0)] * t)
+                right_channel_samples[i] = e_sustain(t, 1.0) * sin(tau * combination_notes[Int(1)] * t)
+                combined_frequency_samples[0][i] = left_channel_samples[i]
+                combined_frequency_samples[1][i] = right_channel_samples[i]
             }
             
             return combined_frequency_samples
@@ -131,8 +134,12 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
             let leftBuffer: UnsafeMutableBufferPointer<Float32> = UnsafeMutableBufferPointer(leftChannelData)
             let rightBuffer: UnsafeMutableBufferPointer<Float32> = UnsafeMutableBufferPointer(rightChannelData)
             signalSamples.withUnsafeBufferPointer { sourceBuffer in
-                leftBuffer.baseAddress!.initialize(from: sourceBuffer.baseAddress!, count: Int(frameCount))
-                rightBuffer.baseAddress!.initialize(from: sourceBuffer.baseAddress!, count: Int(frameCount))
+                ([Float32]([Float32](sourceBuffer[0]))).withUnsafeBufferPointer { leftSourceBuffer in
+                    leftBuffer.baseAddress!.initialize(from: leftSourceBuffer.baseAddress!, count: Int(frameCount))
+                }
+                ([Float32]([Float32](sourceBuffer[1]))).withUnsafeBufferPointer { rightSourceBuffer in
+                    rightBuffer.baseAddress!.initialize(from: rightSourceBuffer.baseAddress!, count: Int(frameCount))
+                }
             }
             return noErr
         })
