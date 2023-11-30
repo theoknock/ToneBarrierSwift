@@ -67,7 +67,10 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
             }
         }
 
-        var circularNumbers = CircularArray(Array(0..<buffer_length))
+        // To-Do: Pass two joined Arrays of varied duration/length to circularArray parameter
+        var duration = (buffer_length / 2)
+        var circularNumbers = CircularArray(Array(0..<duration) + Array(0..<duration))
+        var n: Int32 = Int32.zero
         
         let e_sustain: (Float32, Float32) -> Float32 = { t,d in
             return pow(sin(Float32.pi * t), d) // 2.0 to 10.0
@@ -97,7 +100,6 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
         }
         let note_frequencies  = store_note_frequency()
         var combination_notes = note_frequencies(pianoNoteFrequency())
-        var n = circularNumbers.next()
         
         func generateFrequencies(frame_count: Int) -> [Float32] {
             var combined_frequency_samples: [Float32] = [Float32](repeating: Float32.zero, count: frame_count)
