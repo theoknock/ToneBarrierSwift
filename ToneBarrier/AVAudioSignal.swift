@@ -14,8 +14,12 @@ import ObjectiveC
 import Dispatch
 import Accelerate
 import GameKit
+import Algorithms
 
 var octave:       Float32 = Float32(440.0 * 2.0)
+/**
+ The lowest frequency (or note) of a tone pair and/or tone-pair dyad. This fundamental frequency is the basis for 'harmonic' and 'octave', and the combination tones.
+ */
 var root:         Float32 = Float32(octave * 0.5)
 var harmonic:     Float32 = Float32(root * (3.0/2.0))
 
@@ -23,7 +27,7 @@ var root_:        Float32 = Float32(root  *  2.0)
 var harmonic_:    Float32 = Float32(root_ * (3.0/2.0))
 var amplitude:    Float32 = Float32(0.25)
 var envelope:     Float32 = Float32(1.0)
-let tau:          Float32 = Float32(Float32.pi * 2.0)
+let tau:          Double = Double(Double.pi * 2.0)
 let theta:        Float32 = Float32(Float32.pi / 2.0)
 let trill:        Float32 = Float32.zero
 let tremolo:      Float32 = Float32(1.0)
@@ -37,9 +41,8 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
 
 @objc class AVAudioSignal: NSObject {
     private static let shared = AVAudioSignal()
-    
     let audio_engine: AVAudioEngine = AVAudioEngine()
-    
+
     override init() {
         let main_mixer_node: AVAudioMixerNode = audio_engine.mainMixerNode
         let audio_format: AVAudioFormat       = AVAudioFormat(standardFormatWithSampleRate: audio_engine.mainMixerNode.outputFormat(forBus: Int.zero).sampleRate, channels: audio_engine.mainMixerNode.outputFormat(forBus: Int.zero).channelCount )!
@@ -48,29 +51,21 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
         func pianoNoteFrequency() -> Float32 {
             let c: Float32 = Float32.random(in: (0.5...1.0))
             let f: Float32 = 440.0 * pow(2.0, (floor(c * 88.0) - 49.0) / 12.0)
-            
+                
             return f
         }
         
-        struct CircularArray<T> {
-            private var array: [T]
-            private var currentIndex: Int = 0
-
-            init(_ elements: [T]) {
-                self.array = elements
-            }
-
-            mutating func next() -> T {
-                let element = array[currentIndex]
-                currentIndex = (currentIndex + 1) % (array.count)
-                return element
-            }
-        }
-
-        // To-Do: Pass two joined Arrays of varied duration/length to circularArray parameter
-        var duration = (buffer_length / 2)
-        var circularNumbers = CircularArray(Array(0..<buffer_length))// CircularArray(Array(0..<duration) + Array(0..<duration))
+        var duration = buffer_length
+        var cycleFrames = Array(0..<buffer_length).cycled()
+        var frameIterator =  cycleFrames.makeIterator()
+        
+        var cycleTime    = Array(0..<buffer_length).cycled()
+        var timeIterator =  cycleTime.makeIterator()
+        
+//        var frame_indicies  = Array(0..<buffer_length)
         var n: Int32 = Int32.zero
+        
+        let tetradBuffer: TetradBuffer = TetradBuffer()
         
         let e_sustain: (Float32, Float32) -> Float32 = { t,d in
             return pow(sin(Float32.pi * t), d) // 2.0 to 10.0
@@ -79,11 +74,13 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
             return pow(sin(pow(Float32.pi * t, 0.5)), d) // 2.0 to 10.0
         }
         let e_release: (Float32, Float32) -> Float32 = { t, d in
-            return pow(sin(pow(Float32.pi * t, 2.0)), d) // 2.0 to 10.0
+            return pow(cos(pow(Float32.pi * t, 0.5)), d) // 2.0 to 10.0
         }
+        //        let e_release: (Float32, Float32) -> Float32 = { t, d in
+        //            return pow(sin(pow(Float32.pi * t, 2.0)), d) // 2.0 to 10.0
+        //        }
         
         let envelopes = [e_attack, e_sustain]
-        var fadeBit: UInt32 = 1
         
         
         func store_note_frequency() -> (Float32) -> ([Float32]) {
@@ -91,37 +88,105 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
             var storedRoot:     Float32 = Float32.zero
             var storedHarmonic: Float32 = Float32.zero
             var storedSum: Float32 = Float32.zero
-
+            
             return { newValue in
                 storedRoot     = newValue * 0.5
                 storedOctave   = newValue
                 storedHarmonic = newValue * (2.0 / 3.0)
-                storedSum = storedRoot + storedHarmonic
                 return [storedRoot, storedHarmonic, storedOctave]
             }
         }
         let note_frequencies  = store_note_frequency()
         var combination_notes = note_frequencies(pianoNoteFrequency())
         
-        func generateFrequencies(frame_count: Int) -> [[Float32]] {
-            var left_channel_samples:  [Float32] = [Float32](repeating: Float32.zero, count: frame_count)
-            var right_channel_samples: [Float32] = [Float32](repeating: Float32.zero, count: frame_count)
-            var combined_frequency_samples: [[Float32]] = [[Float32]]([left_channel_samples, right_channel_samples])
-            for i in 0..<frame_count {
-                n = circularNumbers.next()
-                if n == 0 {
-                    combination_notes = note_frequencies(pianoNoteFrequency())
-                    fadeBit ^= 1
+        /// Generates an array of signal samples for the specified number of frames.
+        ///
+        /// - Parameter frame_count: The required number of signal samples and array elements to generate.
+        /// - Returns: An array of signal samples required by the ``frame_count`` parameter.
+        func generateFrequencies(frame_count: Int) -> [[Double]] {
+//            var left_channel_samples:  [Float32] = [Float32](repeating: Float32.zero, count: frame_count)
+//            var right_channel_samples: [Float32] = [Float32](repeating: Float32.zero, count: frame_count)
+//            var combined_frequency_samples: [[Float32]] = [[Float32]]([left_channel_samples, right_channel_samples])
+            
+            let tetrad: TetradBuffer.Tetrad = tetradBuffer.generateTetrad()
+            let frequencies: [([(Double, Double)], [(Double, Double)])] = [
+                ([(tetrad.dyads[0].harmonies[0].tones[0].frequency, tetrad.dyads[0].harmonies[0].tones[1].frequency)], [(tetrad.dyads[0].harmonies[1].tones[0].frequency, tetrad.dyads[0].harmonies[1].tones[1].frequency)]),
+                ([(tetrad.dyads[1].harmonies[0].tones[0].frequency, tetrad.dyads[1].harmonies[1].tones[1].frequency)], [(tetrad.dyads[1].harmonies[1].tones[0].frequency, tetrad.dyads[1].harmonies[1].tones[1].frequency)])
+            ]
+            var dyadFrequencies: [(Double, Double)] = [(Double.zero, Double.zero), (Double.zero, Double.zero)]
+            let harmonyDurations: [(Int32, Int32)] = [
+                (Int32((tetrad.dyads[0].harmonies[0].duration / 2.0) * Double(buffer_length)), Int32((tetrad.dyads[0].harmonies[1].duration / 2.0) * Double(buffer_length))),
+                (Int32((tetrad.dyads[1].harmonies[0].duration / 2.0) * Double(buffer_length)), Int32((tetrad.dyads[1].harmonies[1].duration / 2.0) * Double(buffer_length)))
+            ]
+            
+            var combined_frequency_samples = { return (0..<frame_count).map {_ in
+                let t: Double = Double(frameIterator.next()!) / (Double(buffer_length) - 1.0)
+                let n: Int32 = timeIterator.next()!
+                switch n {
+                case 0:
+                    dyadFrequencies[0] = frequencies[0].0[0]
+                    dyadFrequencies[1] = frequencies[1].0[0]
+                case harmonyDurations[0].0:
+                    dyadFrequencies[0] = frequencies[0].0[1]
+                case harmonyDurations[1].0:
+                    dyadFrequencies[1] = frequencies[1].0[1]
+                default:
+                    dyadFrequencies[0] = (240.0, 440.0)
+                    dyadFrequencies[1] = (640.0, 880.0)
                 }
-                let t  = Float(n) / (Float(buffer_length) - 1.0)
-                // To-Do: Generate two circular counter arrays, one for each envelope/frequency to crossfade tones
-                left_channel_samples[i]  = e_sustain(t, 1.0) * (sin(tau * combination_notes[Int(0)] * t) + sin(tau * combination_notes[Int(1)] * t))
-                right_channel_samples[i] = e_sustain(t, 1.0) * (sin(tau * combination_notes[Int(1)] * t) + sin(tau * combination_notes[Int(2)] * t))
-                combined_frequency_samples[0][i] = left_channel_samples[i]
-                combined_frequency_samples[1][i] = right_channel_samples[i]
+                return
+                    ([(Float32(tetrad.dyads[0].harmonies[0].tones[0].frequency), Float32(tetrad.dyads[0].harmonies[0].tones[1].frequency)), (Float32(tetrad.dyads[0].harmonies[1].tones[0].frequency), Float32(tetrad.dyads[0].harmonies[1].tones[1].frequency))],
+                     ([(Float32(tetrad.dyads[0].harmonies[0].tones[0].frequency), Float32(tetrad.dyads[0].harmonies[0].tones[1].frequency)), (Float32(tetrad.dyads[0].harmonies[1].tones[0].frequency), Float32(tetrad.dyads[0].harmonies[1].tones[1].frequency))]))
             }
             
-            return combined_frequency_samples
+//            var right_channel_samples: [Float32] { return (0..<frame_count).map { Float32($0) } }
+//            var combined_frequency_samples: [[Float32]] { zip(left_channel_samples, right_channel_samples).map { [$0, $1] } }
+//            
+//            for i in 0..<frame_count {
+//                n = frameIterator.next()!
+//                switch n {
+//                case 0:
+//                    dyadFrequencies[0] = frequencies[0][0]
+//                    dyadFrequencies[1] = frequencies[1][0]
+//                case harmonyDurations[0].0:
+//                    dyadFrequencies[0] = frequencies[0][1]
+//                case harmonyDurations[1].0:
+//                    dyadFrequencies[1] = frequencies[1][1]
+//                default:
+//                    dyadFrequencies[0] = (240.0, 440.0)
+//                    dyadFrequencies[1] = (640.0, 880.0)
+//                }
+//            
+//                let t: Double  = Double(n) / (Double(buffer_length) - 1.0)
+//                let left: Double  = sin(sin(tau * dyadFrequencies[0].0 * t) + sin(tau * dyadFrequencies[0].1 * t))
+//                let right: Double = sin(sin(tau * dyadFrequencies[1].0 * t) + sin(tau * dyadFrequencies[1].1 * t))
+//                left_channel_samples[i]          = Float32(left)
+//                right_channel_samples[i]         = Float32(right)
+//                combined_frequency_samples[0][i] = left_channel_samples[i]
+//                combined_frequency_samples[1][i] = right_channel_samples[i]
+//            }
+            
+                return combined_frequency_samples()
+        }
+        
+        func sineWaveValue(time t: Float32, duration: Float32, baseFrequency f1: Float32, trillFrequency f2: Float32, initialTrillRate: Float32, trillDecay: Float32, initialTremoloRate: Float32, tremoloDepth: Float32, tremoloDecay: Float32) -> Float32 {
+            // Calculate the decreasing trill rate over time
+            let trillRate = initialTrillRate * exp(-trillDecay * t)
+            let trillPeriod = 1 / trillRate
+            let trillTime = fmod(t, trillPeriod) / trillPeriod
+            let f = f1 + (f2 - f1) * sin(trillTime * 2 * .pi)
+            
+            // Calculate the decreasing tremolo rate over time
+            let tremoloRate = initialTremoloRate * exp(-tremoloDecay * t)
+            let tremolo = 1.0 - tremoloDepth + tremoloDepth * sin(2 * .pi * t * tremoloRate)
+            
+            // Calculate the amplitude envelope with a linear fade-out
+            let amplitudeDecayRate = 1.0 / duration
+            let A = max(0.0, (1.0 - amplitudeDecayRate * t) * tremolo) // Ensures amplitude doesn't go below 0
+            
+            // Calculate the sine wave value with the current frequency and amplitude
+            let value = A * sin(2 * Float32.pi * t * f)
+            return value
         }
         
         let audio_source_node: AVAudioSourceNode = AVAudioSourceNode(format: audio_format, renderBlock: { _, _, frameCount, audioBufferList in
@@ -146,4 +211,3 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
         audio_engine.connect(audio_source_node, to: main_mixer_node, format: audio_format)
     }
 }
-

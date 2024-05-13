@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B9245AB92B2BE41D000A0388 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = B9245AB82B2BE41D000A0388 /* Algorithms */; };
+		B9346FEA2BF1C48400FA1D4F /* TetradBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9346FE92BF1C48400FA1D4F /* TetradBuffer.swift */; };
 		B96AD37929FD763700A61F7B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96AD37829FD763700A61F7B /* AppDelegate.swift */; };
 		B96AD37B29FD763700A61F7B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96AD37A29FD763700A61F7B /* SceneDelegate.swift */; };
 		B96AD37D29FD763700A61F7B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96AD37C29FD763700A61F7B /* ViewController.swift */; };
@@ -15,22 +17,21 @@
 		B96AD38F29FD799B00A61F7B /* ToneBarrierIntentDefinition.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = B96AD38E29FD799B00A61F7B /* ToneBarrierIntentDefinition.intentdefinition */; };
 		B96AD39129FD7C3F00A61F7B /* ToggleToneBarrierIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96AD39029FD7C3F00A61F7B /* ToggleToneBarrierIntentHandler.swift */; };
 		B97713D32A0B1D1A003C1389 /* PauseToneBarrierIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97713D22A0B1D1A003C1389 /* PauseToneBarrierIntentHandler.swift */; };
-		B979461229FDEE8D00CE3139 /* AVRouting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B979461129FDEE8D00CE3139 /* AVRouting.framework */; };
 		B979461429FDEECC00CE3139 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B979461329FDEECC00CE3139 /* AVKit.framework */; };
+		B98C0B732B1C273700520381 /* SlothCreator in Frameworks */ = {isa = PBXBuildFile; productRef = B98C0B722B1C273700520381 /* SlothCreator */; };
 		B9A2E7152AC78B970051AB01 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9A2E7142AC78B970051AB01 /* Media.xcassets */; };
+		B9B564AA2B657474005E1B05 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9B60A042B04E58400F564FD /* CoreAudio.framework */; };
 		B9B609FA2B04E54000F564FD /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9B609F62B04E54000F564FD /* AudioToolbox.framework */; };
-		B9B609FB2B04E54000F564FD /* AVFAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9B609F72B04E54000F564FD /* AVFAudio.framework */; };
-		B9B609FC2B04E54000F564FD /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9B609F82B04E54000F564FD /* AVFoundation.framework */; };
 		B9B609FE2B04E58300F564FD /* AVFAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9B609F72B04E54000F564FD /* AVFAudio.framework */; };
 		B9B609FF2B04E58400F564FD /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9B609F82B04E54000F564FD /* AVFoundation.framework */; };
-		B9B60A002B04E58400F564FD /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B979461329FDEECC00CE3139 /* AVKit.framework */; };
 		B9B60A012B04E58400F564FD /* AVRouting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B979461129FDEE8D00CE3139 /* AVRouting.framework */; };
 		B9B60A052B04E58400F564FD /* CoreAudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9B60A022B04E58400F564FD /* CoreAudioKit.framework */; };
-		B9B60A072B04E58400F564FD /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9B60A042B04E58400F564FD /* CoreAudio.framework */; };
 		B9D7B5D629FDEB5E00954817 /* AVAudioSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D7B5D529FDEB5E00954817 /* AVAudioSignal.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B9346FE42BF1171200FA1D4F /* libswiftCoreAudio.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswiftCoreAudio.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/usr/lib/swift/libswiftCoreAudio.tbd; sourceTree = DEVELOPER_DIR; };
+		B9346FE92BF1C48400FA1D4F /* TetradBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TetradBuffer.swift; sourceTree = "<group>"; };
 		B960CD352AC6F11300DD56C3 /* CodeSnippetsStandby.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CodeSnippetsStandby.md; sourceTree = "<group>"; };
 		B96AD37529FD763700A61F7B /* ToneBarrier.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToneBarrier.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B96AD37829FD763700A61F7B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -41,7 +42,6 @@
 		B96AD38629FD763800A61F7B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B96AD38E29FD799B00A61F7B /* ToneBarrierIntentDefinition.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = ToneBarrierIntentDefinition.intentdefinition; sourceTree = "<group>"; };
 		B96AD39029FD7C3F00A61F7B /* ToggleToneBarrierIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleToneBarrierIntentHandler.swift; sourceTree = "<group>"; };
-		B97713CE2A0B0942003C1389 /* ToneBarrier-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ToneBarrier-Bridging-Header.h"; sourceTree = "<group>"; };
 		B97713D22A0B1D1A003C1389 /* PauseToneBarrierIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PauseToneBarrierIntentHandler.swift; sourceTree = "<group>"; };
 		B979461129FDEE8D00CE3139 /* AVRouting.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVRouting.framework; path = System/Library/Frameworks/AVRouting.framework; sourceTree = SDKROOT; };
 		B979461329FDEECC00CE3139 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
@@ -53,6 +53,7 @@
 		B9B60A022B04E58400F564FD /* CoreAudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudioKit.framework; path = System/Library/Frameworks/CoreAudioKit.framework; sourceTree = SDKROOT; };
 		B9B60A032B04E58400F564FD /* CoreAudioTypes.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudioTypes.framework; path = System/Library/Frameworks/CoreAudioTypes.framework; sourceTree = SDKROOT; };
 		B9B60A042B04E58400F564FD /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		B9C2EE7B2B673BB600631C57 /* ToneBarrier.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ToneBarrier.entitlements; sourceTree = "<group>"; };
 		B9D7B5D529FDEB5E00954817 /* AVAudioSignal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVAudioSignal.swift; sourceTree = "<group>"; wrapsLines = 0; };
 /* End PBXFileReference section */
 
@@ -61,17 +62,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B9B60A072B04E58400F564FD /* CoreAudio.framework in Frameworks */,
+				B9B564AA2B657474005E1B05 /* CoreAudio.framework in Frameworks */,
 				B9B60A012B04E58400F564FD /* AVRouting.framework in Frameworks */,
 				B9B60A052B04E58400F564FD /* CoreAudioKit.framework in Frameworks */,
 				B979461429FDEECC00CE3139 /* AVKit.framework in Frameworks */,
-				B979461229FDEE8D00CE3139 /* AVRouting.framework in Frameworks */,
-				B9B60A002B04E58400F564FD /* AVKit.framework in Frameworks */,
+				B9245AB92B2BE41D000A0388 /* Algorithms in Frameworks */,
 				B9B609FF2B04E58400F564FD /* AVFoundation.framework in Frameworks */,
-				B9B609FC2B04E54000F564FD /* AVFoundation.framework in Frameworks */,
 				B9B609FA2B04E54000F564FD /* AudioToolbox.framework in Frameworks */,
 				B9B609FE2B04E58300F564FD /* AVFAudio.framework in Frameworks */,
-				B9B609FB2B04E54000F564FD /* AVFAudio.framework in Frameworks */,
+				B98C0B732B1C273700520381 /* SlothCreator in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,6 +80,7 @@
 		B96AD36C29FD763700A61F7B = {
 			isa = PBXGroup;
 			children = (
+				B9346FE92BF1C48400FA1D4F /* TetradBuffer.swift */,
 				B96AD37729FD763700A61F7B /* ToneBarrier */,
 				B96AD37629FD763700A61F7B /* Products */,
 				B979461029FDEE8D00CE3139 /* Frameworks */,
@@ -98,6 +98,7 @@
 		B96AD37729FD763700A61F7B /* ToneBarrier */ = {
 			isa = PBXGroup;
 			children = (
+				B9C2EE7B2B673BB600631C57 /* ToneBarrier.entitlements */,
 				B96AD38629FD763800A61F7B /* Info.plist */,
 				B96AD37829FD763700A61F7B /* AppDelegate.swift */,
 				B96AD37A29FD763700A61F7B /* SceneDelegate.swift */,
@@ -110,7 +111,6 @@
 				B96AD38E29FD799B00A61F7B /* ToneBarrierIntentDefinition.intentdefinition */,
 				B96AD39029FD7C3F00A61F7B /* ToggleToneBarrierIntentHandler.swift */,
 				B97713D22A0B1D1A003C1389 /* PauseToneBarrierIntentHandler.swift */,
-				B97713CE2A0B0942003C1389 /* ToneBarrier-Bridging-Header.h */,
 			);
 			path = ToneBarrier;
 			sourceTree = "<group>";
@@ -118,6 +118,7 @@
 		B979461029FDEE8D00CE3139 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B9346FE42BF1171200FA1D4F /* libswiftCoreAudio.tbd */,
 				B9B60A042B04E58400F564FD /* CoreAudio.framework */,
 				B9B60A022B04E58400F564FD /* CoreAudioKit.framework */,
 				B9B60A032B04E58400F564FD /* CoreAudioTypes.framework */,
@@ -147,6 +148,10 @@
 			dependencies = (
 			);
 			name = ToneBarrier;
+			packageProductDependencies = (
+				B98C0B722B1C273700520381 /* SlothCreator */,
+				B9245AB82B2BE41D000A0388 /* Algorithms */,
+			);
 			productName = ToneBarrier;
 			productReference = B96AD37529FD763700A61F7B /* ToneBarrier.app */;
 			productType = "com.apple.product-type.application";
@@ -159,7 +164,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1430;
-				LastUpgradeCheck = 1500;
+				LastUpgradeCheck = 1520;
 				TargetAttributes = {
 					B96AD37429FD763700A61F7B = {
 						CreatedOnToolsVersion = 14.3;
@@ -176,6 +181,10 @@
 				Base,
 			);
 			mainGroup = B96AD36C29FD763700A61F7B;
+			packageReferences = (
+				B98C0B712B1C273700520381 /* XCLocalSwiftPackageReference "../../Downloads/SlothCreatorBuildingDocCDocumentationInXcode" */,
+				B9245AB72B2BE41D000A0388 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
+			);
 			productRefGroup = B96AD37629FD763700A61F7B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -205,6 +214,7 @@
 			files = (
 				B97713D32A0B1D1A003C1389 /* PauseToneBarrierIntentHandler.swift in Sources */,
 				B96AD37D29FD763700A61F7B /* ViewController.swift in Sources */,
+				B9346FEA2BF1C48400FA1D4F /* TetradBuffer.swift in Sources */,
 				B96AD39129FD7C3F00A61F7B /* ToggleToneBarrierIntentHandler.swift in Sources */,
 				B96AD37929FD763700A61F7B /* AppDelegate.swift in Sources */,
 				B96AD37B29FD763700A61F7B /* SceneDelegate.swift in Sources */,
@@ -287,7 +297,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -345,7 +355,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -365,9 +375,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = ToneBarrier/ToneBarrier.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = N9987K9442;
+				DOCC_EXTRACT_OBJC_INFO_FOR_SWIFT_SYMBOLS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ToneBarrier/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ToneBarrier;
@@ -377,6 +389,7 @@
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -384,6 +397,11 @@
 				MARKETING_VERSION = Alpha;
 				PRODUCT_BUNDLE_IDENTIFIER = com.blogspot.demonicactivity.bush.alan.james.ToneBarrier;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUN_DOCUMENTATION_COMPILER = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "ToneBarrier/ToneBarrier-Bridging-Header.h";
@@ -401,9 +419,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = ToneBarrier/ToneBarrier.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = N9987K9442;
+				DOCC_EXTRACT_OBJC_INFO_FOR_SWIFT_SYMBOLS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ToneBarrier/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ToneBarrier;
@@ -413,6 +433,7 @@
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -420,6 +441,11 @@
 				MARKETING_VERSION = Alpha;
 				PRODUCT_BUNDLE_IDENTIFIER = com.blogspot.demonicactivity.bush.alan.james.ToneBarrier;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUN_DOCUMENTATION_COMPILER = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "ToneBarrier/ToneBarrier-Bridging-Header.h";
@@ -451,6 +477,36 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		B98C0B712B1C273700520381 /* XCLocalSwiftPackageReference "../../Downloads/SlothCreatorBuildingDocCDocumentationInXcode" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../Downloads/SlothCreatorBuildingDocCDocumentationInXcode;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B9245AB72B2BE41D000A0388 /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-algorithms.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B9245AB82B2BE41D000A0388 /* Algorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B9245AB72B2BE41D000A0388 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
+			productName = Algorithms;
+		};
+		B98C0B722B1C273700520381 /* SlothCreator */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SlothCreator;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B96AD36D29FD763700A61F7B /* Project object */;
 }
