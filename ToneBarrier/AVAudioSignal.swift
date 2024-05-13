@@ -42,7 +42,7 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
 @objc class AVAudioSignal: NSObject {
     private static let shared = AVAudioSignal()
     let audio_engine: AVAudioEngine = AVAudioEngine()
-
+    
     override init() {
         let main_mixer_node: AVAudioMixerNode = audio_engine.mainMixerNode
         let audio_format: AVAudioFormat       = AVAudioFormat(standardFormatWithSampleRate: audio_engine.mainMixerNode.outputFormat(forBus: Int.zero).sampleRate, channels: audio_engine.mainMixerNode.outputFormat(forBus: Int.zero).channelCount )!
@@ -51,7 +51,7 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
         func pianoNoteFrequency() -> Float32 {
             let c: Float32 = Float32.random(in: (0.5...1.0))
             let f: Float32 = 440.0 * pow(2.0, (floor(c * 88.0) - 49.0) / 12.0)
-                
+            
             return f
         }
         
@@ -62,7 +62,7 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
         var cycleTime    = Array(0..<buffer_length).cycled()
         var timeIterator =  cycleTime.makeIterator()
         
-//        var frame_indicies  = Array(0..<buffer_length)
+        //        var frame_indicies  = Array(0..<buffer_length)
         var n: Int32 = Int32.zero
         
         let tetradBuffer: TetradBuffer = TetradBuffer()
@@ -103,10 +103,10 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
         ///
         /// - Parameter frame_count: The required number of signal samples and array elements to generate.
         /// - Returns: An array of signal samples required by the ``frame_count`` parameter.
-        func generateFrequencies(frame_count: Int) -> [[Double]] {
-//            var left_channel_samples:  [Float32] = [Float32](repeating: Float32.zero, count: frame_count)
-//            var right_channel_samples: [Float32] = [Float32](repeating: Float32.zero, count: frame_count)
-//            var combined_frequency_samples: [[Float32]] = [[Float32]]([left_channel_samples, right_channel_samples])
+        func generateFrequencies(frame_count: Int) -> [[Float32]] {
+            //            var left_channel_samples:  [Float32] = [Float32](repeating: Float32.zero, count: frame_count)
+            //            var right_channel_samples: [Float32] = [Float32](repeating: Float32.zero, count: frame_count)
+            //            var combined_frequency_samples: [[Float32]] = [[Float32]]([left_channel_samples, right_channel_samples])
             
             let tetrad: TetradBuffer.Tetrad = tetradBuffer.generateTetrad()
             let frequencies: [([(Double, Double)], [(Double, Double)])] = [
@@ -119,7 +119,7 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
                 (Int32((tetrad.dyads[1].harmonies[0].duration / 2.0) * Double(buffer_length)), Int32((tetrad.dyads[1].harmonies[1].duration / 2.0) * Double(buffer_length)))
             ]
             
-            var combined_frequency_samples = { return (0..<frame_count).map {_ in
+            var combined_frequency_samples: [([(Double, Double)], [(Double, Double)])] = { return (0..<frame_count).map {_ in
                 let t: Double = Double(frameIterator.next()!) / (Double(buffer_length) - 1.0)
                 let n: Int32 = timeIterator.next()!
                 switch n {
@@ -134,80 +134,86 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
                     dyadFrequencies[0] = (240.0, 440.0)
                     dyadFrequencies[1] = (640.0, 880.0)
                 }
+//                return
+//                    ([(Double(tetrad.dyads[0].harmonies[0].tones[0].frequency), Double(tetrad.dyads[0].harmonies[0].tones[1].frequency)),  (Double(tetrad.dyads[0].harmonies[1].tones[0].frequency), Double(tetrad.dyads[0].harmonies[1].tones[1].frequency))],
+//                     ([(Double(tetrad.dyads[0].harmonies[0].tones[0].frequency), Double(tetrad.dyads[0].harmonies[0].tones[1].frequency)), (Double(tetrad.dyads[0].harmonies[1].tones[0].frequency), Double(tetrad.dyads[0].harmonies[1].tones[1].frequency))]))
+                
                 return
-                    ([(Float32(tetrad.dyads[0].harmonies[0].tones[0].frequency), Float32(tetrad.dyads[0].harmonies[0].tones[1].frequency)), (Float32(tetrad.dyads[0].harmonies[1].tones[0].frequency), Float32(tetrad.dyads[0].harmonies[1].tones[1].frequency))],
-                     ([(Float32(tetrad.dyads[0].harmonies[0].tones[0].frequency), Float32(tetrad.dyads[0].harmonies[0].tones[1].frequency)), (Float32(tetrad.dyads[0].harmonies[1].tones[0].frequency), Float32(tetrad.dyads[0].harmonies[1].tones[1].frequency))]))
+                    ([(Double(tetrad.dyads[0].harmonies[0].tones[0].frequency), Double(tetrad.dyads[0].harmonies[0].tones[1].frequency)),  (Double(tetrad.dyads[0].harmonies[1].tones[0].frequency), Double(tetrad.dyads[0].harmonies[1].tones[1].frequency))],
+                     ([(Double(tetrad.dyads[0].harmonies[0].tones[0].frequency), Double(tetrad.dyads[0].harmonies[0].tones[1].frequency)), (Double(tetrad.dyads[0].harmonies[1].tones[0].frequency), Double(tetrad.dyads[0].harmonies[1].tones[1].frequency))]))
+            }
+                
+                //            var right_channel_samples: [Float32] { return (0..<frame_count).map { Float32($0) } }
+                //            var combined_frequency_samples: [[Float32]] { zip(left_channel_samples, right_channel_samples).map { [$0, $1] } }
+                //
+                //            for i in 0..<frame_count {
+                //                n = frameIterator.next()!
+                //                switch n {
+                //                case 0:
+                //                    dyadFrequencies[0] = frequencies[0][0]
+                //                    dyadFrequencies[1] = frequencies[1][0]
+                //                case harmonyDurations[0].0:
+                //                    dyadFrequencies[0] = frequencies[0][1]
+                //                case harmonyDurations[1].0:
+                //                    dyadFrequencies[1] = frequencies[1][1]
+                //                default:
+                //                    dyadFrequencies[0] = (240.0, 440.0)
+                //                    dyadFrequencies[1] = (640.0, 880.0)
+                //                }
+                //
+                //                let t: Double  = Double(n) / (Double(buffer_length) - 1.0)
+                //                let left: Double  = sin(sin(tau * dyadFrequencies[0].0 * t) + sin(tau * dyadFrequencies[0].1 * t))
+                //                let right: Double = sin(sin(tau * dyadFrequencies[1].0 * t) + sin(tau * dyadFrequencies[1].1 * t))
+                //                left_channel_samples[i]          = Float32(left)
+                //                right_channel_samples[i]         = Float32(right)
+                //                combined_frequency_samples[0][i] = left_channel_samples[i]
+                //                combined_frequency_samples[1][i] = right_channel_samples[i]
+                //            }
+                
+                
+            }()
+            return combined_frequency_samples
+        }
+            
+            func sineWaveValue(time t: Float32, duration: Float32, baseFrequency f1: Float32, trillFrequency f2: Float32, initialTrillRate: Float32, trillDecay: Float32, initialTremoloRate: Float32, tremoloDepth: Float32, tremoloDecay: Float32) -> Float32 {
+                // Calculate the decreasing trill rate over time
+                let trillRate = initialTrillRate * exp(-trillDecay * t)
+                let trillPeriod = 1 / trillRate
+                let trillTime = fmod(t, trillPeriod) / trillPeriod
+                let f = f1 + (f2 - f1) * sin(trillTime * 2 * .pi)
+                
+                // Calculate the decreasing tremolo rate over time
+                let tremoloRate = initialTremoloRate * exp(-tremoloDecay * t)
+                let tremolo = 1.0 - tremoloDepth + tremoloDepth * sin(2 * .pi * t * tremoloRate)
+                
+                // Calculate the amplitude envelope with a linear fade-out
+                let amplitudeDecayRate = 1.0 / duration
+                let A = max(0.0, (1.0 - amplitudeDecayRate * t) * tremolo) // Ensures amplitude doesn't go below 0
+                
+                // Calculate the sine wave value with the current frequency and amplitude
+                let value = A * sin(2 * Float32.pi * t * f)
+                return value
             }
             
-//            var right_channel_samples: [Float32] { return (0..<frame_count).map { Float32($0) } }
-//            var combined_frequency_samples: [[Float32]] { zip(left_channel_samples, right_channel_samples).map { [$0, $1] } }
-//            
-//            for i in 0..<frame_count {
-//                n = frameIterator.next()!
-//                switch n {
-//                case 0:
-//                    dyadFrequencies[0] = frequencies[0][0]
-//                    dyadFrequencies[1] = frequencies[1][0]
-//                case harmonyDurations[0].0:
-//                    dyadFrequencies[0] = frequencies[0][1]
-//                case harmonyDurations[1].0:
-//                    dyadFrequencies[1] = frequencies[1][1]
-//                default:
-//                    dyadFrequencies[0] = (240.0, 440.0)
-//                    dyadFrequencies[1] = (640.0, 880.0)
-//                }
-//            
-//                let t: Double  = Double(n) / (Double(buffer_length) - 1.0)
-//                let left: Double  = sin(sin(tau * dyadFrequencies[0].0 * t) + sin(tau * dyadFrequencies[0].1 * t))
-//                let right: Double = sin(sin(tau * dyadFrequencies[1].0 * t) + sin(tau * dyadFrequencies[1].1 * t))
-//                left_channel_samples[i]          = Float32(left)
-//                right_channel_samples[i]         = Float32(right)
-//                combined_frequency_samples[0][i] = left_channel_samples[i]
-//                combined_frequency_samples[1][i] = right_channel_samples[i]
-//            }
-            
-                return combined_frequency_samples()
-        }
-        
-        func sineWaveValue(time t: Float32, duration: Float32, baseFrequency f1: Float32, trillFrequency f2: Float32, initialTrillRate: Float32, trillDecay: Float32, initialTremoloRate: Float32, tremoloDepth: Float32, tremoloDecay: Float32) -> Float32 {
-            // Calculate the decreasing trill rate over time
-            let trillRate = initialTrillRate * exp(-trillDecay * t)
-            let trillPeriod = 1 / trillRate
-            let trillTime = fmod(t, trillPeriod) / trillPeriod
-            let f = f1 + (f2 - f1) * sin(trillTime * 2 * .pi)
-            
-            // Calculate the decreasing tremolo rate over time
-            let tremoloRate = initialTremoloRate * exp(-tremoloDecay * t)
-            let tremolo = 1.0 - tremoloDepth + tremoloDepth * sin(2 * .pi * t * tremoloRate)
-            
-            // Calculate the amplitude envelope with a linear fade-out
-            let amplitudeDecayRate = 1.0 / duration
-            let A = max(0.0, (1.0 - amplitudeDecayRate * t) * tremolo) // Ensures amplitude doesn't go below 0
-            
-            // Calculate the sine wave value with the current frequency and amplitude
-            let value = A * sin(2 * Float32.pi * t * f)
-            return value
-        }
-        
-        let audio_source_node: AVAudioSourceNode = AVAudioSourceNode(format: audio_format, renderBlock: { _, _, frameCount, audioBufferList in
-            let signalSamples    = generateFrequencies(frame_count: Int(frameCount))
-            let ablPointer       = UnsafeMutableAudioBufferListPointer(audioBufferList)
-            let leftChannelData  = ablPointer[0]
-            let rightChannelData = ablPointer[1]
-            let leftBuffer: UnsafeMutableBufferPointer<Float32> = UnsafeMutableBufferPointer(leftChannelData)
-            let rightBuffer: UnsafeMutableBufferPointer<Float32> = UnsafeMutableBufferPointer(rightChannelData)
-            signalSamples.withUnsafeBufferPointer { sourceBuffer in
-                ([Float32]([Float32](sourceBuffer[0]))).withUnsafeBufferPointer { leftSourceBuffer in
-                    leftBuffer.baseAddress!.initialize(from: leftSourceBuffer.baseAddress!, count: Int(frameCount))
+            let audio_source_node: AVAudioSourceNode = AVAudioSourceNode(format: audio_format, renderBlock: { _, _, frameCount, audioBufferList in
+                let signalSamples    = generateFrequencies(frame_count: Int(frameCount))
+                let ablPointer       = UnsafeMutableAudioBufferListPointer(audioBufferList)
+                let leftChannelData  = ablPointer[0]
+                let rightChannelData = ablPointer[1]
+                let leftBuffer: UnsafeMutableBufferPointer<Float32> = UnsafeMutableBufferPointer(leftChannelData)
+                let rightBuffer: UnsafeMutableBufferPointer<Float32> = UnsafeMutableBufferPointer(rightChannelData)
+                signalSamples.withUnsafeBufferPointer { sourceBuffer in
+                    ([Float32]([Float32](sourceBuffer[0]))).withUnsafeBufferPointer { leftSourceBuffer in
+                        leftBuffer.baseAddress!.initialize(from: leftSourceBuffer.baseAddress!, count: Int(frameCount))
+                    }
+                    ([Float32]([Float32](sourceBuffer[1]))).withUnsafeBufferPointer { rightSourceBuffer in
+                        rightBuffer.baseAddress!.initialize(from: rightSourceBuffer.baseAddress!, count: Int(frameCount))
+                    }
                 }
-                ([Float32]([Float32](sourceBuffer[1]))).withUnsafeBufferPointer { rightSourceBuffer in
-                    rightBuffer.baseAddress!.initialize(from: rightSourceBuffer.baseAddress!, count: Int(frameCount))
-                }
-            }
-            return noErr
-        })
-        
-        audio_engine.attach(audio_source_node)
-        audio_engine.connect(audio_source_node, to: main_mixer_node, format: audio_format)
+                return noErr
+            })
+            
+            audio_engine.attach(audio_source_node)
+            audio_engine.connect(audio_source_node, to: main_mixer_node, format: audio_format)
+        }
     }
-}
