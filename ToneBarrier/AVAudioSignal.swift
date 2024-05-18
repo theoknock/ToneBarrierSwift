@@ -64,8 +64,7 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
         //        var frame_indicies  = Array(0..<buffer_length)
         var n: Int32 = Int32.zero
         
-        let tetradBuffer: TetradBuffer = TetradBuffer()
-        
+    
         let e_sustain: (Float32, Float32) -> Float32 = { t,d in
             return pow(sin(Float32.pi * t), d) // 2.0 to 10.0
         }
@@ -301,8 +300,14 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
             return value
         }
         
-        var tetrad: TetradBuffer.Tetrad = TetradBuffer.Tetrad.init(bufferLength: Int(buffer_length))
-        var s = tetrad.samplesIterator
+//        var tetrad: TetradBuffer = TetradBuffer()
+//        var s = TetradBuffer().generateSignalSamplesIterator(bufferLength: Int(buffer_length))
+        
+        
+        var tetradBuffer = TetradBuffer(bufferLength: Int(buffer_length))
+        var s = tetradBuffer.generateSignalSamplesIterator()
+
+
         func numbers(count: Int) -> [[Float32]] {
             let allNumbers: [[Float32]] = ({ (operation: (Int) -> (() -> [[Float32]])) in
                 operation(count)()
@@ -310,8 +315,15 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
                 var channels: [[Float32]] = [Array(repeating: Float32.zero, count: count), Array(repeating: Float32.zero, count: count)]
                 
                 for i in 0..<number {
-                    channels[0][i] = Float32(s.0.next().unsafelyUnwrapped)
-                    channels[1][i] = Float32(s.1.next().unsafelyUnwrapped)
+                    if let leftSample = s.0.next(), let rightSample = s.1.next() {
+                        channels[0][i] = leftSample
+                        channels[1][i] = rightSample
+                    } else {
+                        tetradBuffer.resetIterator()
+                        s = tetradBuffer.generateSignalSamplesIterator()
+                        channels[0][i] = Float32(s.0.next()!)
+                        channels[1][i] = Float32(s.1.next()!)
+                    }
                 }
                 
                 return {
