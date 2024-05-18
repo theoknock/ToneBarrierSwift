@@ -178,8 +178,7 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
 //                }
 //            }
 //        }
-        var tetrad: TetradBuffer.Tetrad = TetradBuffer.Tetrad.init(bufferLength: Int(buffer_length))
-        var s = tetrad.samplesIterator
+        
 //        func generateFrequencies(frame_count: Int) -> [[Float32]] {
 //            
 //            
@@ -302,6 +301,8 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
             return value
         }
         
+        var tetrad: TetradBuffer.Tetrad = TetradBuffer.Tetrad.init(bufferLength: Int(buffer_length))
+        var s = tetrad.samplesIterator
         func numbers(count: Int) -> [[Float32]] {
             let allNumbers: [[Float32]] = ({ (operation: (Int) -> (() -> [[Float32]])) in
                 operation(count)()
@@ -309,22 +310,21 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
                 var channels: [[Float32]] = [Array(repeating: Float32.zero, count: count), Array(repeating: Float32.zero, count: count)]
                 
                 for i in 0..<count {
-                    var f = s.next()
-                    channels[0][i] = Float32(f.unsafelyUnwrapped)
-                    channels[1][i] = Float32(f.unsafelyUnwrapped)
+                    channels[0][i] = Float32(s.0.next().unsafelyUnwrapped)
+                    channels[1][i] = Float32(s.1.next().unsafelyUnwrapped)
                 }
                 
                 return {
                     channels
                 }
             })
-            print(allNumbers)
+//            print(allNumbers)
             
             return allNumbers
         }
         
         let audio_source_node: AVAudioSourceNode = AVAudioSourceNode(format: audio_format, renderBlock: { _, _, frameCount, audioBufferList in
-            let signalSamples    = numbers(count: Int(frameCount)) //generateFrequencies(frame_count: Int(frameCount))
+            let signalSamples    = numbers(count: Int(frameCount))
             let ablPointer       = UnsafeMutableAudioBufferListPointer(audioBufferList)
             let leftChannelData  = ablPointer[0]
             let rightChannelData = ablPointer[1]
