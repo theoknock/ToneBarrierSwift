@@ -34,11 +34,6 @@ let tremolo:      Float32 = Float32(1.0)
 var split:        Int32   = Int32(2)
 var duration:     Int32   = Int32.zero
 
-func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float32, max_old: Float32) -> Float32 {
-    let val_new = min_new + (((val_old - min_old) * (max_new - (min_new))) / (max_old - min_old))
-    return val_new;
-}
-
 @objc class AVAudioSignal: NSObject {
     private static let shared = AVAudioSignal()
     let audio_engine: AVAudioEngine = AVAudioEngine()
@@ -353,7 +348,15 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
             return noErr
         })
         
+        
+        var reverb: AVAudioUnitReverb = AVAudioUnitReverb()
+        reverb.loadFactoryPreset(AVAudioUnitReverbPreset.largeChamber)
+        reverb.wetDryMix = 50.0
+        
         audio_engine.attach(audio_source_node)
-        audio_engine.connect(audio_source_node, to: main_mixer_node, format: audio_format)
+        audio_engine.attach(reverb)
+        
+        audio_engine.connect(audio_source_node, to: reverb, format: audio_format)
+        audio_engine.connect(reverb, to: main_mixer_node, format: audio_format)
     }
 }
