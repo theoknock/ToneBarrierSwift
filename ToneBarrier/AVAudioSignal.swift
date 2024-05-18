@@ -309,7 +309,7 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
             })( { number in
                 var channels: [[Float32]] = [Array(repeating: Float32.zero, count: count), Array(repeating: Float32.zero, count: count)]
                 
-                for i in 0..<count {
+                for i in 0..<number {
                     channels[0][i] = Float32(s.0.next().unsafelyUnwrapped)
                     channels[1][i] = Float32(s.1.next().unsafelyUnwrapped)
                 }
@@ -318,7 +318,6 @@ func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float3
                     channels
                 }
             })
-//            print(allNumbers)
             
             return allNumbers
         }

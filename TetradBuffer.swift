@@ -71,9 +71,9 @@ class TetradBuffer {
             struct Harmony {
                 struct Tone {
                     var frequency: (Double, Double) = (Double.zero, Double.zero)
-                    //                    init(frequency: (Double, Double)) {
-                    //                        self.frequency = frequency
-                    //                    }
+                    init(frequency: (Double, Double)) {
+                        self.frequency = frequency
+                    }
                 }
                 var duration: Double
                 var tones: [Tone]
@@ -179,6 +179,33 @@ class TetradBuffer {
                             }()
                         }()
                     }()
+                    for n in 0..<number {
+                        let t: Double = Double(Double(n) / (Double(bufferLength) - 1.0))
+                        
+                        (n >= 0 && n < 20500)
+                        ? {
+                            channel_signals[0][n] = Float32(sin(tau * dyads[0].harmonies[0].tones[0].frequency.0 * t) + sin(tau * dyads[0].harmonies[0].tones[0].frequency.1 * t))
+                            channel_signals[1][n] = Float32(sin(tau * dyads[1].harmonies[0].tones[0].frequency.0 * t) + sin(tau * dyads[1].harmonies[0].tones[0].frequency.1 * t))
+                        }()
+                        : {
+                            (n >= 0 && n < 41000)
+                            ? {
+                                channel_signals[0][n] = Float32(sin(tau * dyads[0].harmonies[1].tones[0].frequency.0 * t) + sin(tau * dyads[0].harmonies[1].tones[0].frequency.1 * t))
+                                channel_signals[1][n] = Float32(sin(tau * dyads[1].harmonies[1].tones[0].frequency.0 * t) + sin(tau * dyads[1].harmonies[1].tones[0].frequency.1 * t))
+                            }()
+                            : {
+                                (n >= 41000 && n < 61500)
+                                ? {
+                                    channel_signals[0][n] = Float32(sin(tau * dyads[0].harmonies[0].tones[1].frequency.0 * t) + sin(tau * dyads[0].harmonies[0].tones[1].frequency.1 * t))
+                                    channel_signals[1][n] = Float32(sin(tau * dyads[1].harmonies[0].tones[1].frequency.0 * t) + sin(tau * dyads[1].harmonies[0].tones[1].frequency.1 * t))
+                                }()
+                                : {
+                                    channel_signals[0][n] = Float32(sin(tau * dyads[0].harmonies[1].tones[1].frequency.0 * t) + sin(tau * dyads[0].harmonies[1].tones[1].frequency.1 * t))
+                                    channel_signals[1][n] = Float32(sin(tau * dyads[1].harmonies[1].tones[1].frequency.0 * t) + sin(tau * dyads[1].harmonies[1].tones[1].frequency.1 * t))
+                                    
+                                }()
+                            }()
+                        }()
                 }
                 return {
                     channel_signals
