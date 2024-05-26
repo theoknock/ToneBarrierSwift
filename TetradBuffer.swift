@@ -221,8 +221,8 @@ class TetradBuffer: NSObject {
 //                      &c,
 //                      stride,
 //                      n)
-            let tau: simd_double1 = simd_double1(simd_double1.pi * 2.0)
-            var channel_signals: [[Float32]] = [Array(repeating: Float32.zero, count: Int(bufferLength)), Array(repeating: Float32.zero, count: bufferLength)]
+//            let tau: simd_double1 = simd_double1(simd_double1.pi * 2.0)
+//            var channel_signals: [[Float32]] = [Array(repeating: Float32.zero, count: Int(bufferLength)), Array(repeating: Float32.zero, count: bufferLength)]
             let audio_buffer: [[Float32]] =  ({ (operation: (Int) -> (() -> [[Float32]])) in
                 operation(bufferLength)()
             })( { frames in
@@ -261,7 +261,8 @@ class TetradBuffer: NSObject {
 //                vDSP_vsmul(c, stride, [frequency], &sineWave, stride, n)
 //                vvsinf(&sineWave, sineWave, [Int32(n)])
                 
-                var signal = synthesizeSignal(frequencyAmplitudePairs: [(f: Float32(frequencies[4]), a: (2.0 * Float32.pi))], count: bufferLength)  //, [Float32](repeating: 0, count: bufferLength)]
+                var signal1 = synthesizeSignal(frequencyAmplitudePairs: [(f: Float32(frequencies[4]), a: (0.25 * Float32.pi))], count: bufferLength / 2)  //, [Float32](repeating: 0, count: bufferLength)]
+                var signal = synthesizeSignal(frequencyAmplitudePairs: [(f: Float32(frequencies[4]), a: (0.25 * Float32.pi))], count: bufferLength / 2)
                 
                 return {
 //                    channel_signals
