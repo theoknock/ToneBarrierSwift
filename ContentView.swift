@@ -16,21 +16,25 @@ struct ContentView: View {
                 HStack(spacing: 0) {
                     Image(systemName: "waveform.path")
                         .resizable()
-                        .aspectRatio(1.0, contentMode: .fit)
                         .scaledToFit()
-                        .clipped()
+                        .aspectRatio(1.0, contentMode: .fit)
+                        .frame(width: proxy.size.width)
+                        .clipShape(Rectangle())
                         .foregroundStyle(Color.init(uiColor: UIColor.systemBlue).opacity(0.15))
                 }
-                HStack(spacing: 0) {
+                HStack(alignment: .center, content: {
                     Image(systemName: "play")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: UIScreen.main.bounds.width * 0.5, height: UIScreen.main.bounds.height * 0.5)
-//                        .aspectRatio(0.5, contentMode: .fit)
+                        .aspectRatio(0.5, contentMode: .fit)
+                        .frame(width: proxy.size.width * 0.5)
+                        .clipShape(Rectangle())
                         
-                        .clipped()
+                        
+                        
+                        
                         .foregroundStyle(Color.init(uiColor: UIColor.systemBlue))
-                }
+                })
             })
             .background {
                 
