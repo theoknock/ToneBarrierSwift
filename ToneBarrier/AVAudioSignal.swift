@@ -303,7 +303,7 @@ var duration:     Int32   = Int32.zero
         var s = tetradBuffer.generateSignalSamplesIterator()
 
 //        // Example usage
-        let processor = AudioSignalProcessor(sampleRate: 44100.0, length: 88200)
+//        let processor = AudioSignalProcessor(sampleRate: 44100.0, length: 88200)
 //        let frequency = 440.0
 //        let signal = processor.generateSignal(frequency: frequency)
 //
@@ -313,8 +313,8 @@ var duration:     Int32   = Int32.zero
 //        let mixedSignal = processor.mixSignals(signal1: signal1, signal2: signal2)
 //
 //        // Low-pass filter example (replace with actual filter coefficients)
-        let filterCoefficients: [Double] = [0.1, 0.15, 0.5, 0.15, 0.1]
-        let filteredSignal = processor.lowPassFilter(signal: mixedSignal, filterCoefficients: filterCoefficients)
+//        let filterCoefficients: [Double] = [0.1, 0.15, 0.5, 0.15, 0.1]
+//        let filteredSignal = processor.lowPassFilter(signal: mixedSignal, filterCoefficients: filterCoefficients)
         
 
         func numbers(count: Int) -> [[Float32]] {

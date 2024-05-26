@@ -37,12 +37,6 @@ class AudioSignalProcessor {
         return signal
     }
 
-    func mixSignals(signal1: [Double], signal2: [Double]) -> [Double] {
-        var mixedSignal = [Double](repeating: 0.0, count: length)
-        vDSP_vaddD(signal1, 1, signal2, 1, &mixedSignal, 1, vDSP_Length(length))
-        return mixedSignal
-    }
-
     func lowPassFilter(signal: [Double], filterCoefficients: [Double]) -> [Double] {
         var filteredSignal = [Double](repeating: 0.0, count: length)
         var delay = [Double](repeating: 0.0, count: 4)
@@ -59,18 +53,18 @@ class AudioSignalProcessor {
 }
 
 // Example usage
-let processor = AudioSignalProcessor(sampleRate: 44100.0, length: 88200)
-let frequency = 440.0
-let signal = processor.generateSignal(frequency: frequency)
-
-// Mixing two signals
-let signal1 = processor.generateSignal(frequency: 440.0)
-let signal2 = processor.generateSignal(frequency: 220.0)
-let mixedSignal = processor.mixSignals(signal1: signal1, signal2: signal2)
-
-// Low-pass filter example (replace with actual filter coefficients)
-let filterCoefficients: [Double] = [0.1, 0.15, 0.5, 0.15, 0.1]
-let filteredSignal = processor.lowPassFilter(signal: mixedSignal, filterCoefficients: filterCoefficients)
+//let processor = AudioSignalProcessor(sampleRate: 44100.0, length: 88200)
+//let frequency = 440.0
+//let signal = processor.generateSignal(frequency: frequency)
+//
+//// Mixing two signals
+//let signal1 = processor.generateSignal(frequency: 440.0)
+//let signal2 = processor.generateSignal(frequency: 220.0)
+//let mixedSignal = processor.mixSignals(signal1: signal1, signal2: signal2)
+//
+//// Low-pass filter example (replace with actual filter coefficients)
+//let filterCoefficients: [Double] = [0.1, 0.15, 0.5, 0.15, 0.1]
+//let filteredSignal = processor.lowPassFilter(signal: mixedSignal, filterCoefficients: filterCoefficients)
 
 //
 //// Example usage
