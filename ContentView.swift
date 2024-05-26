@@ -11,17 +11,32 @@ struct ContentView: View {
     var body: some View {
         let divideValue = 2.0
         GeometryReader { proxy in
-            ZStack {
-                Color.clear
+            ZStack(alignment: Alignment(horizontal: .center, vertical: .center), content: {
+                Color.black
                 HStack(spacing: 0) {
-                    Image(systemName: "sun.dust")
+                    Image(systemName: "waveform.path")
                         .resizable()
-                        .scaledToFill()
-                        .frame(width: proxy.size.width / divideValue, height: proxy.size.height / divideValue)
-                        .scaleEffect(0.5)
+                        .aspectRatio(1.0, contentMode: .fit)
+                        .scaledToFit()
                         .clipped()
+                        .foregroundStyle(Color.init(uiColor: UIColor.systemBlue).opacity(0.15))
                 }
+                HStack(spacing: 0) {
+                    Image(systemName: "play")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: UIScreen.main.bounds.width * 0.5, height: UIScreen.main.bounds.height * 0.5)
+//                        .aspectRatio(0.5, contentMode: .fit)
+                        
+                        .clipped()
+                        .foregroundStyle(Color.init(uiColor: UIColor.systemBlue))
+                }
+            })
+            .background {
+                
             }
+            .ignoresSafeArea()
+            
         }
     }
 }
