@@ -192,18 +192,24 @@ class TetradBuffer: NSObject {
         
             
         public func synthesizeSignal(frequencyAmplitudePairs: [(f: Float32, a: Float32)],
-                                     count: Int) -> [Float] {
+                                     count: Int) -> [Float32] {
             
             let tau: Float32 = Float32.pi * 2
             let signal: [Float32] = (0 ..< count).map { index in
                 frequencyAmplitudePairs.reduce(0) { accumulator, frequenciesAmplitudePair in
-                    let normalizedIndex = Float32(index) / Float(count)
+                    let normalizedIndex = Float32(index) / Float32(count)
                     return accumulator + sin(normalizedIndex * frequenciesAmplitudePair.f * tau) * frequenciesAmplitudePair.a
                 }
             }
             
             return signal
         }
+        
+        
+
+
+        
+//        lo
         
         var samplesIterator: (Array<Float32>.Iterator, Array<Float32>.Iterator) {
 //            let n = vDSP_Length(88200)
@@ -261,11 +267,22 @@ class TetradBuffer: NSObject {
 //                vDSP_vsmul(c, stride, [frequency], &sineWave, stride, n)
 //                vvsinf(&sineWave, sineWave, [Int32(n)])
                 
-                var signal1 = synthesizeSignal(frequencyAmplitudePairs: [(f: Float32(frequencies[4]), a: (0.25 * Float32.pi))], count: bufferLength / 2)  //, [Float32](repeating: 0, count: bufferLength)]
-                var signal = synthesizeSignal(frequencyAmplitudePairs: [(f: Float32(frequencies[4]), a: (0.25 * Float32.pi))], count: bufferLength / 2)
+                var signal = synthesizeSignal(frequencyAmplitudePairs: [(f: Float32(frequencies[4]), a: (0.25 * Float32.pi))], count: bufferLength)
                 
+                // Ensure the signal does not cross the Nyquist threshold using a low-pass filter
+//                var filterCoefficients: [Double] = [Double]([0.1, 0.15, 0.5, 0.15])
+//                var delay = [Float32](repeating: 0.0, count: 4)
+//                var setup = vDSP_biquad_CreateSetup(&filterCoefficients, vDSP_Length(bufferLength)) //vDSP_biquad_CreateSetup(&filterCoefficients, vDSP_Length(bufferLength))
+//
+//                
+//                var filteredSignal = [Float32](repeating: 0.0, count: bufferLength)
+//                
+//                vDSP_biquad((&setup)!, &delay, &signal, 1, &filteredSignal, 1, vDSP_Length(bufferLength))
+//                
+//                vDSP_biquad_DestroySetup(setup)
+//                
                 return {
-//                    channel_signals
+                    //                    channel_signals
                     [signal, signal]
                 }
             })

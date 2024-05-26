@@ -120,19 +120,32 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
     }
     
     func setUpNowPlayingInfoCenter() {
-        var now_playinfo_info = [String : Any]()
-        now_playinfo_info[MPMediaItemPropertyTitle] = "ToneBarrier"
-        now_playinfo_info[MPMediaItemPropertyArtist] = "James Alan Bush"
-        now_playinfo_info[MPMediaItemPropertyAlbumTitle] = "The Life of a Demoniac"
+        var nowPlayingInfo = [String : Any]()
+        nowPlayingInfo[MPMediaItemPropertyTitle] = "ToneBarrier"
+        nowPlayingInfo[MPMediaItemPropertyArtist] = "James Alan Bush"
+        nowPlayingInfo[MPMediaItemPropertyAlbumTitle] = "The Life of a Demoniac"
         
-        DispatchQueue.main.async { [self] in
-            lockScreenImageView = UIImageView(image: lockScreenImage)
-            let artwork: MPMediaItemArtwork = MPMediaItemArtwork(boundsSize: lockScreenImageView.image?.size ?? CGSizeZero, requestHandler: { [self] _ in lockScreenImageView.image! })
-            now_playinfo_info[MPMediaItemPropertyArtwork] = artwork
-        }
-        
-        nowPlayingInfoCenter.nowPlayingInfo = now_playinfo_info
+//        let image = UIImage(named: "LockScreenIcon")
+//        let artwork: MPMediaItemArtwork = MPMediaItemArtwork(boundsSize: image?.size ?? CGSizeZero) { _ in image ?? UIImage(named: "LockScreenIcon")! }
+//        nowPlayingInfo[MPMediaItemPropertyArtwork] = artwork
+//        
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     }
+    
+//    func setUpNowPlayingInfoCenter() {
+//        var now_playinfo_info = [String : Any]()
+//        now_playinfo_info[MPMediaItemPropertyTitle] = "ToneBarrier"
+//        now_playinfo_info[MPMediaItemPropertyArtist] = "James Alan Bush"
+//        now_playinfo_info[MPMediaItemPropertyAlbumTitle] = "The Life of a Demoniac"
+//        
+//        DispatchQueue.main.async { [self] in
+//            lockScreenImageView = UIImageView(image: lockScreenImage)
+//            let artwork: MPMediaItemArtwork = MPMediaItemArtwork(boundsSize: lockScreenImageView.image?.size ?? CGSizeZero, requestHandler: { [self] _ in lockScreenImageView.image! })
+//            nowPlayingInfoCenter.nowPlayingInfo?[MPMediaItemPropertyArtwork] = artwork
+//        }
+//        
+////        nowPlayingInfoCenter.nowPlayingInfo = now_playinfo_info
+//    }
     
     func setupAudioSessionInterruptionNotification() {
         let center = NotificationCenter.default
