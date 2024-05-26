@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B91466902BFB6A2A005E2E7B /* TetradBufferRevamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B914668F2BFB6A2A005E2E7B /* TetradBufferRevamp.swift */; };
+		B914671A2C02A155005E2E7B /* AudioSignalProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91467192C02A155005E2E7B /* AudioSignalProcessing.swift */; };
+		B914671C2C02E2C7005E2E7B /* AngularRandomDistributor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B914671B2C02E2C7005E2E7B /* AngularRandomDistributor.swift */; };
 		B9245AB92B2BE41D000A0388 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = B9245AB82B2BE41D000A0388 /* Algorithms */; };
 		B9346FEA2BF1C48400FA1D4F /* TetradBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9346FE92BF1C48400FA1D4F /* TetradBuffer.swift */; };
 		B96AD37929FD763700A61F7B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96AD37829FD763700A61F7B /* AppDelegate.swift */; };
@@ -31,6 +34,9 @@
 
 /* Begin PBXFileReference section */
 		B90381492BF69BBB001049F9 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		B914668F2BFB6A2A005E2E7B /* TetradBufferRevamp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TetradBufferRevamp.swift; sourceTree = "<group>"; };
+		B91467192C02A155005E2E7B /* AudioSignalProcessing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSignalProcessing.swift; sourceTree = "<group>"; };
+		B914671B2C02E2C7005E2E7B /* AngularRandomDistributor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AngularRandomDistributor.swift; sourceTree = "<group>"; };
 		B9346FE42BF1171200FA1D4F /* libswiftCoreAudio.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswiftCoreAudio.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/usr/lib/swift/libswiftCoreAudio.tbd; sourceTree = DEVELOPER_DIR; };
 		B9346FE92BF1C48400FA1D4F /* TetradBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TetradBuffer.swift; sourceTree = "<group>"; };
 		B960CD352AC6F11300DD56C3 /* CodeSnippetsStandby.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CodeSnippetsStandby.md; sourceTree = "<group>"; };
@@ -82,6 +88,9 @@
 			isa = PBXGroup;
 			children = (
 				B9346FE92BF1C48400FA1D4F /* TetradBuffer.swift */,
+				B914671B2C02E2C7005E2E7B /* AngularRandomDistributor.swift */,
+				B91467192C02A155005E2E7B /* AudioSignalProcessing.swift */,
+				B914668F2BFB6A2A005E2E7B /* TetradBufferRevamp.swift */,
 				B90381492BF69BBB001049F9 /* File.swift */,
 				B96AD37729FD763700A61F7B /* ToneBarrier */,
 				B96AD37629FD763700A61F7B /* Products */,
@@ -217,9 +226,12 @@
 				B97713D32A0B1D1A003C1389 /* PauseToneBarrierIntentHandler.swift in Sources */,
 				B96AD37D29FD763700A61F7B /* ViewController.swift in Sources */,
 				B9346FEA2BF1C48400FA1D4F /* TetradBuffer.swift in Sources */,
+				B914671A2C02A155005E2E7B /* AudioSignalProcessing.swift in Sources */,
 				B96AD39129FD7C3F00A61F7B /* ToggleToneBarrierIntentHandler.swift in Sources */,
 				B96AD37929FD763700A61F7B /* AppDelegate.swift in Sources */,
+				B91466902BFB6A2A005E2E7B /* TetradBufferRevamp.swift in Sources */,
 				B96AD37B29FD763700A61F7B /* SceneDelegate.swift in Sources */,
+				B914671C2C02E2C7005E2E7B /* AngularRandomDistributor.swift in Sources */,
 				B9D7B5D629FDEB5E00954817 /* AVAudioSignal.swift in Sources */,
 				B96AD38F29FD799B00A61F7B /* ToneBarrierIntentDefinition.intentdefinition in Sources */,
 			);
