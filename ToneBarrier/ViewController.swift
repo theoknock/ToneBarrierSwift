@@ -125,8 +125,8 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
         nowPlayingInfo[MPMediaItemPropertyArtist] = "James Alan Bush"
         nowPlayingInfo[MPMediaItemPropertyAlbumTitle] = "The Life of a Demoniac"
         
-        let image: UIImage = UIImage(systemName: "waveform.path") ?? UIImage.init(systemName: "waveform.path")! //UIImage(named: "LockScreenIcon")
-        let artwork: MPMediaItemArtwork = MPMediaItemArtwork(boundsSize: image.size ?? CGSizeZero) { _ in image ?? UIImage.init(systemName: "waveform.path")! }
+        let image: UIImage = UIImage.init(systemName: "waveform.path")! //UIImage(named: "LockScreenIcon")
+        let artwork: MPMediaItemArtwork = MPMediaItemArtwork(boundsSize: image.size) { _ in image }
         nowPlayingInfo[MPMediaItemPropertyArtwork] = artwork
 //        
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo

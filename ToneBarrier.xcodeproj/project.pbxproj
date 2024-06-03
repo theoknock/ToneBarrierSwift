@@ -9,8 +9,9 @@
 /* Begin PBXBuildFile section */
 		B91466902BFB6A2A005E2E7B /* TetradBufferRevamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B914668F2BFB6A2A005E2E7B /* TetradBufferRevamp.swift */; };
 		B914671C2C02E2C7005E2E7B /* AngularRandomDistributor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B914671B2C02E2C7005E2E7B /* AngularRandomDistributor.swift */; };
-		B9245AB92B2BE41D000A0388 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = B9245AB82B2BE41D000A0388 /* Algorithms */; };
 		B9346FEA2BF1C48400FA1D4F /* TetradBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9346FE92BF1C48400FA1D4F /* TetradBuffer.swift */; };
+		B93538212C0E187B003BBD1A /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = B93538202C0E187B003BBD1A /* Algorithms */; };
+		B93538232C0E4484003BBD1A /* Toggler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93538222C0E4484003BBD1A /* Toggler.swift */; };
 		B96AD37929FD763700A61F7B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96AD37829FD763700A61F7B /* AppDelegate.swift */; };
 		B96AD37B29FD763700A61F7B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96AD37A29FD763700A61F7B /* SceneDelegate.swift */; };
 		B96AD37D29FD763700A61F7B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96AD37C29FD763700A61F7B /* ViewController.swift */; };
@@ -20,7 +21,6 @@
 		B96AD39129FD7C3F00A61F7B /* ToggleToneBarrierIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96AD39029FD7C3F00A61F7B /* ToggleToneBarrierIntentHandler.swift */; };
 		B97713D32A0B1D1A003C1389 /* PauseToneBarrierIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97713D22A0B1D1A003C1389 /* PauseToneBarrierIntentHandler.swift */; };
 		B979461429FDEECC00CE3139 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B979461329FDEECC00CE3139 /* AVKit.framework */; };
-		B98C0B732B1C273700520381 /* SlothCreator in Frameworks */ = {isa = PBXBuildFile; productRef = B98C0B722B1C273700520381 /* SlothCreator */; };
 		B9A2E7152AC78B970051AB01 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9A2E7142AC78B970051AB01 /* Media.xcassets */; };
 		B9B564AA2B657474005E1B05 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9B60A042B04E58400F564FD /* CoreAudio.framework */; };
 		B9B609FA2B04E54000F564FD /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9B609F62B04E54000F564FD /* AudioToolbox.framework */; };
@@ -38,6 +38,7 @@
 		B914671B2C02E2C7005E2E7B /* AngularRandomDistributor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AngularRandomDistributor.swift; sourceTree = "<group>"; };
 		B9346FE42BF1171200FA1D4F /* libswiftCoreAudio.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswiftCoreAudio.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/usr/lib/swift/libswiftCoreAudio.tbd; sourceTree = DEVELOPER_DIR; };
 		B9346FE92BF1C48400FA1D4F /* TetradBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TetradBuffer.swift; sourceTree = "<group>"; };
+		B93538222C0E4484003BBD1A /* Toggler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toggler.swift; sourceTree = "<group>"; };
 		B960CD352AC6F11300DD56C3 /* CodeSnippetsStandby.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CodeSnippetsStandby.md; sourceTree = "<group>"; };
 		B96AD37529FD763700A61F7B /* ToneBarrier.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToneBarrier.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B96AD37829FD763700A61F7B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -73,11 +74,10 @@
 				B9B60A012B04E58400F564FD /* AVRouting.framework in Frameworks */,
 				B9B60A052B04E58400F564FD /* CoreAudioKit.framework in Frameworks */,
 				B979461429FDEECC00CE3139 /* AVKit.framework in Frameworks */,
-				B9245AB92B2BE41D000A0388 /* Algorithms in Frameworks */,
+				B93538212C0E187B003BBD1A /* Algorithms in Frameworks */,
 				B9B609FF2B04E58400F564FD /* AVFoundation.framework in Frameworks */,
 				B9B609FA2B04E54000F564FD /* AudioToolbox.framework in Frameworks */,
 				B9B609FE2B04E58300F564FD /* AVFAudio.framework in Frameworks */,
-				B98C0B732B1C273700520381 /* SlothCreator in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,6 +88,7 @@
 			isa = PBXGroup;
 			children = (
 				B9346FE92BF1C48400FA1D4F /* TetradBuffer.swift */,
+				B93538222C0E4484003BBD1A /* Toggler.swift */,
 				B9EEEA232C03ACC200CCE653 /* ContentView.swift */,
 				B914671B2C02E2C7005E2E7B /* AngularRandomDistributor.swift */,
 				B914668F2BFB6A2A005E2E7B /* TetradBufferRevamp.swift */,
@@ -160,8 +161,7 @@
 			);
 			name = ToneBarrier;
 			packageProductDependencies = (
-				B98C0B722B1C273700520381 /* SlothCreator */,
-				B9245AB82B2BE41D000A0388 /* Algorithms */,
+				B93538202C0E187B003BBD1A /* Algorithms */,
 			);
 			productName = ToneBarrier;
 			productReference = B96AD37529FD763700A61F7B /* ToneBarrier.app */;
@@ -193,8 +193,7 @@
 			);
 			mainGroup = B96AD36C29FD763700A61F7B;
 			packageReferences = (
-				B98C0B712B1C273700520381 /* XCLocalSwiftPackageReference "../../Downloads/SlothCreatorBuildingDocCDocumentationInXcode" */,
-				B9245AB72B2BE41D000A0388 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
+				B935381F2C0E187B003BBD1A /* XCRemoteSwiftPackageReference "swift-algorithms" */,
 			);
 			productRefGroup = B96AD37629FD763700A61F7B /* Products */;
 			projectDirPath = "";
@@ -223,6 +222,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B93538232C0E4484003BBD1A /* Toggler.swift in Sources */,
 				B97713D32A0B1D1A003C1389 /* PauseToneBarrierIntentHandler.swift in Sources */,
 				B9EEEA242C03ACC200CCE653 /* ContentView.swift in Sources */,
 				B96AD37D29FD763700A61F7B /* ViewController.swift in Sources */,
@@ -492,15 +492,8 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		B98C0B712B1C273700520381 /* XCLocalSwiftPackageReference "../../Downloads/SlothCreatorBuildingDocCDocumentationInXcode" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../Downloads/SlothCreatorBuildingDocCDocumentationInXcode;
-		};
-/* End XCLocalSwiftPackageReference section */
-
 /* Begin XCRemoteSwiftPackageReference section */
-		B9245AB72B2BE41D000A0388 /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
+		B935381F2C0E187B003BBD1A /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-algorithms.git";
 			requirement = {
@@ -511,14 +504,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		B9245AB82B2BE41D000A0388 /* Algorithms */ = {
+		B93538202C0E187B003BBD1A /* Algorithms */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = B9245AB72B2BE41D000A0388 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
+			package = B935381F2C0E187B003BBD1A /* XCRemoteSwiftPackageReference "swift-algorithms" */;
 			productName = Algorithms;
-		};
-		B98C0B722B1C273700520381 /* SlothCreator */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = SlothCreator;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

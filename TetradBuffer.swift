@@ -10,7 +10,6 @@ import AVFoundation
 import AVFAudio
 import Algorithms
 import Accelerate
-import simd
 
 protocol ValueStore {
     var selfPointer: UnsafeMutablePointer<Self>? { get set }
@@ -72,7 +71,6 @@ func scale(oldMin: Double, oldMax: Double, value: Double, newMin: Double, newMax
     return newMin + ((newMax - newMin) * ((value - oldMin) / (oldMax - oldMin)))
 }
 
-
 class TetradBuffer: NSObject {
     
     let randomDistributor: (Double) -> Double = { value in
@@ -94,7 +92,6 @@ class TetradBuffer: NSObject {
         valueStore.store(value: transformedValue)
     }
     
-    
     public func generateSignalSamplesIterator() -> (Array<Float32>.Iterator, Array<Float32>.Iterator) {
         return tetrad.samplesIterator
     }
@@ -105,6 +102,7 @@ class TetradBuffer: NSObject {
     
     var tetrad: Tetrad
     var bufferLength: Int
+    
     
     init(bufferLength: Int) {
         self.bufferLength = bufferLength
@@ -174,6 +172,7 @@ class TetradBuffer: NSObject {
         var frameIterator: CycledSequence<Array<Int>>.Iterator
         
         init(bufferLength: Int) {
+            self.bufferLength = bufferLength
             dyads = [
                 Dyad.init(),
                 Dyad.init()
@@ -192,40 +191,23 @@ class TetradBuffer: NSObject {
         
         
         
-        public func synthesizeSignal(frequencyAmplitudePairs: [(f: Double, a: Double)],
-                                     count: Int) -> [Double] {
+        public func synthesizeSignal(frequencyAmplitudePairs: [(f: Float32, a: Float32)],
+                                     count: Int) -> [Float] {
             
-            let tau: Double = Double.pi * 2
-            let signal: [Double] = (0 ..< count).map { index in
+            let tau: Float32 = Float32.pi * 2
+            let signal: [Float32] = (0 ..< count).map { index in
                 frequencyAmplitudePairs.reduce(0) { accumulator, frequenciesAmplitudePair in
-                    let normalizedIndex = Double(index) / Double(count)
-                    return (accumulator + sin(normalizedIndex * frequenciesAmplitudePair.f * tau) * frequenciesAmplitudePair.a)
+                    let normalizedIndex = Float32(index) / Float(count)
+                    return accumulator + sin(normalizedIndex * frequenciesAmplitudePair.f * tau) * frequenciesAmplitudePair.a
                 }
             }
             
             return signal
         }
         
-        
-        func lowPassFilter(signal: [Double], filterCoefficients: UnsafePointer<Double>) -> [Double] {
-            var filteredSignal = [Double](repeating: Double.zero, count: bufferLength)
-            var delay = [Double](repeating: Double.zero, count: 4)
-            guard let setup = vDSP_biquad_CreateSetupD(filterCoefficients, 1) else {
-                print("Error: Failed to create biquad setup.")
-                return signal // Or handle the error as needed
-            }
-            
-            vDSP_biquadD(setup, &delay, signal, 1, &filteredSignal, 1, vDSP_Length(bufferLength))
-            vDSP_biquad_DestroySetupD(setup)
-            
-            return filteredSignal
-        }
-        
-        
-        
-        //        lo
-        
+        var togglerInstance: Toggler = Toggler()
         var samplesIterator: (Array<Float32>.Iterator, Array<Float32>.Iterator) {
+            print(togglerInstance.miscellaneousFunction())
             //            let n = vDSP_Length(88200)
             //            let stride = vDSP_Stride(1)
             //
@@ -242,33 +224,48 @@ class TetradBuffer: NSObject {
             //                      stride,
             //                      n)
             //            let tau: simd_double1 = simd_double1(simd_double1.pi * 2.0)
-            //            var channel_signals: [[Float32]] = [Array(repeating: Float32.zero, count: Int(bufferLength)), Array(repeating: Float32.zero, count: bufferLength)]
+            var channel_signals: [[Float32]] = [Array(repeating: Float32.zero, count: Int(bufferLength)), Array(repeating: Float32.zero, count: bufferLength)]
             let audio_buffer: [[Float32]] =  ({ (operation: (Int) -> (() -> [[Float32]])) in
                 operation(bufferLength)()
             })( { frames in
-                let frequencies: [Double] = [Double(dyads[0].harmonies[0].tones[0].frequencies[0]), Double(dyads[0].harmonies[0].tones[0].frequencies[0]),
-                                             Double(dyads[0].harmonies[0].tones[0].frequencies[0]), Double(dyads[0].harmonies[0].tones[0].frequencies[0]),
-                                             Double(dyads[0].harmonies[0].tones[0].frequencies[0]), Double(dyads[0].harmonies[0].tones[0].frequencies[0]),
-                                             Double(dyads[0].harmonies[0].tones[0].frequencies[0]), Double(dyads[0].harmonies[0].tones[0].frequencies[0])]
+                let frequencies: [Double] = [Double(dyads[0].harmonies[0].tones[0].frequencies[0]), Double(dyads[0].harmonies[0].tones[0].frequencies[1]),
+                                             Double(dyads[0].harmonies[0].tones[1].frequencies[0]), Double(dyads[0].harmonies[0].tones[1].frequencies[1]),
+                                             Double(dyads[0].harmonies[1].tones[0].frequencies[0]), Double(dyads[0].harmonies[1].tones[0].frequencies[1]),
+                                             Double(dyads[0].harmonies[1].tones[1].frequencies[0]), Double(dyads[0].harmonies[1].tones[1].frequencies[1])]
                 
-                //                channel_signals[0] = (Int.zero...44099).map { n -> Float32 in
-                //                    let t: Double = scale(oldMin: Double.zero, oldMax: 44099, value: Double(n), newMin: Double.zero, newMax: 1.0)
-                //                    let f: Double = Double(0.125) * (2.0 * sin((sin(tau * frequencies[0] * t)) + (sin(tau * frequencies[1] * t))) * cos((sin(tau * frequencies[0] * t)) - (sin(tau * frequencies[1] * t)))) / 2.0
-                //                    return Float32(f)
+                //                channel_signals = (Int.zero...44099).map { n -> Float32 in
+                //                    let t: Double = scale(oldMin: Double.zero, oldMax: Double(bufferLength), value: Double(n), newMin: Double.zero, newMax: 1.0)
+                //                    let f: Double = Double(0.125) * (sin(tau * frequencies[4] * t))
+                //                    let f2: Double = Double(0.125) * (sin(tau * frequencies[4] * t))
+                //                    return [Float32(f), Float32(f2)]
                 //                } + (44100..<bufferLength).map { n -> Float32 in
-                //                    let t: Double = scale(oldMin: Double.zero, oldMax: 44099, value: Double(n), newMin: Double.zero, newMax: 1.0)
-                //                    let f: Double = Double(0.125) * (2.0 * sin((sin(tau * frequencies[2] * t)) + (sin(tau * frequencies[3] * t))) * cos((sin(tau * frequencies[2] * t)) - (sin(tau * frequencies[3] * t)))) / 2.0
-                //                    return Float32(f)
-                //                }
+                //                    let t: Double = scale(oldMin: Double.zero, oldMax: Double(bufferLength), value: Double(n), newMin: Double.zero, newMax: 1.0)
+                //                    let f: Double = Double(0.125) * (sin(tau * frequencies[4] * t))
+                //                    let f2: Double = Double(0.125) * (sin(tau * frequencies[4] * t))
                 //
+                //                    return [Float32(f), Float32(f2)]
+                //                }
+                
+                for n in 0..<bufferLength {
+                    let t: Double = Double(n) / Double(bufferLength)
+                    let gammaCurve = pow(t, (1.0 + sin(tau * t)) / 2.0)
+                    let variable = 2.0 + (12.0 * gammaCurve)
+                    let p: Double = Double(sin(tau * t * frequencies[4]))
+                    let q: Double = Double(sin(t * tau))
+                    let f: Double = Double((p * q) + (p * abs(-q)))
+                    channel_signals[0][n] = Float32(f)
+                    channel_signals[1][n] = Float32(f)
+                }
+                
+                
                 //                channel_signals[1] = (Int.zero...44099).map { n -> Float32 in
-                //                    let t: Double = scale(oldMin: Double.zero, oldMax: 44099, value: Double(n), newMin: Double.zero, newMax: 1.0)
-                //                    let f: Double = Double(0.125) * (2.0 * sin((sin(tau * frequencies[4] * t)) + (sin(tau * frequencies[5] * t))) * cos((sin(tau * frequencies[4] * t)) - (sin(tau * frequencies[5] * t)))) / 2.0
-                //                    return Float32(f)
+                //                    let t: Double = scale(oldMin: Double.zero, oldMax: Double(bufferLength), value: Double(n), newMin: Double.zero, newMax: 1.0)
+                //                    let f: Double = Double(0.125) * (sin(tau * frequencies[4] * t))let f2: Double = Double(0.125) * (sin(tau * frequencies[4] * t))
+                //                    return [Float32(f), Float32(f2)]
                 //                } + (44100..<bufferLength).map { n -> Float32 in
-                //                    let t: Double = scale(oldMin: Double.zero, oldMax: 44099, value: Double(n), newMin: Double.zero, newMax: 1.0)
-                //                    let f: Double = Double(0.125) * (2.0 * sin((sin(tau * frequencies[6] * t)) + (sin(tau * frequencies[7] * t))) * cos((sin(tau * frequencies[6] * t)) - (sin(tau * frequencies[7] * t)))) / 2.0
-                //                    return Float32(f)
+                //                    let t: Double = scale(oldMin: Double.zero, oldMax: Double(bufferLength), value: Double(n), newMin: Double.zero, newMax: 1.0)
+                //                    let f: Double = Double(0.125) * (sin(tau * frequencies[4] * t))let f2: Double = Double(0.125) * (sin(tau * frequencies[4] * t))
+                //                    return [Float32(f), Float32(f2)]
                 //                }
                 
                 
@@ -281,47 +278,12 @@ class TetradBuffer: NSObject {
                 //                vDSP_vsmul(c, stride, [frequency], &sineWave, stride, n)
                 //                vvsinf(&sineWave, sineWave, [Int32(n)])
                 
-                var signalr = synthesizeSignal(frequencyAmplitudePairs: [(f: Double(frequencies[4]), a: (0.25 * Double.pi))], count: frames)
-                var signalh = synthesizeSignal(frequencyAmplitudePairs: [(f: Double(frequencies[5]), a: (0.25 * Double.pi))], count: frames)
+                //                var signal1 = synthesizeSignal(frequencyAmplitudePairs: [(f: Float32(frequencies[0]), a: (0.25 * Float32.pi))], count: bufferLength / 2)  //, [Float32](repeating: 0, count: bufferLength)]
+                //                var signal = synthesizeSignal(frequencyAmplitudePairs: [(f: Float32(frequencies[1]), a: (0.25 * Float32.pi))], count: bufferLength / 2)
                 
-//                var filterCoefficients: [Double] = [Double]([0.1, 0.15, 0.5, 0.15])
-//                var signala = lowPassFilter(signal: [Double](signalr), filterCoefficients: &filterCoefficients)  //mixSignals(signal1: signalr, signal2: signalh) // synthesizeSignal(frequencyAmplitudePairs: [(f: (0.25 * Float32.pi), a: (0.25 * Float32.pi))], count: frames)
-                
-                let signal: [Float32] = zip(signalr, signalh).map {
-                    Float32($0.0 + $0.1)
-                }
-                
-                //                var vectorC = [Float32](repeating: 0.0, count: frames)
-                
-                // Using vDSP_vtmerg with stride 1 for all vectors and processing all elements
-                //                signal.withUnsafeBufferPointer { __A in
-                //                    signalh.withUnsafeBufferPointer { __B in
-                //                        vectorC.withUnsafeMutableBufferPointer { __C in
-                //                            vDSP_vtmerg(__A.baseAddress!, 1,
-                //                                        __B.baseAddress!, 1,
-                //                                        __C.baseAddress!, 1,
-                //                                        vDSP_Length(frames))
-                //                        }
-                //                    }
-                //                }
-                
-                
-                // Ensure the signal does not cross the Nyquist threshold using a low-pass filter
-//                var filterCoefficients: [Double] = [Double]([0.1, 0.15, 0.5, 0.15])
-//                var delay = [Float32](repeating: 0.0, count: 4)
-//                var setup = vDSP_biquad_CreateSetup(&filterCoefficients, vDSP_Length(bufferLength)) //vDSP_biquad_CreateSetup(&filterCoefficients, vDSP_Length(bufferLength))
-//                
-//                
-//                var filteredSignal = [Float32](repeating: 0.0, count: bufferLength)
-//                
-//                vDSP_biquad(setup!, &delay, signalr, 1, &filteredSignal, 1, vDSP_Length(bufferLength))
-//                
-//                vDSP_biquad_DestroySetup(setup)
-                //
                 return {
-                    //                    channel_signals
-                    [signal, signal]
-                    //                    [vectorC, vectorC]
+                    channel_signals
+                    //                    [signal, signal1]
                 }
             })
             
