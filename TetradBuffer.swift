@@ -17,6 +17,16 @@ protocol ValueStore {
     func retrieve<T>() -> [T]
 }
 
+// Example usage
+//            var combinationTones: [Double] { CombinationTones(root: 1.0)
+//                randomGenerator(randomDistributor: randomDistributor,
+//                                distributionRange: 0.0...1.0,
+//                                valueTransformer: valueTransformer,
+//                                valueStore: &combinationTones)
+//
+//                print(combinationTones.retrieve() as [Double])
+//            }
+
 struct CombinationTones: ValueStore {
     private var selfPointer_ : UnsafeMutablePointer<CombinationTones>?
     var selfPointer: UnsafeMutablePointer<CombinationTones>? {
@@ -103,7 +113,6 @@ class TetradBuffer: NSObject {
     var tetrad: Tetrad
     var bufferLength: Int
     
-    
     init(bufferLength: Int) {
         self.bufferLength = bufferLength
         self.tetrad = Tetrad(bufferLength: bufferLength)
@@ -113,34 +122,19 @@ class TetradBuffer: NSObject {
         var dyads: [Dyad]
         
         struct Dyad {
-            
-            // Example usage
-            //            var combinationTones: [Double] { CombinationTones(root: 1.0)
-            //                randomGenerator(randomDistributor: randomDistributor,
-            //                                distributionRange: 0.0...1.0,
-            //                                valueTransformer: valueTransformer,
-            //                                valueStore: &combinationTones)
-            //
-            //                print(combinationTones.retrieve() as [Double])
-            //            }
-            
-            
+            var durations: [Int] = [Int.zero, Int.zero]
             struct Harmony {
                 struct Tone {
+                    
                     var frequencies: [Double] {
-                        let frequencyLowerBound = 400.0
-                        let frequencyUpperBound = 3000.0
-                        let threshold = 2000.0
-                        let probabilityThreshold = 1600.0 / 3600.0
-                        
-                        var root: Double = {
-                            if Double.random(in: 0.0..<1.0) > probabilityThreshold {
-                                return Double.random(in: threshold...frequencyUpperBound)
-                            } else {
-                                return Double.random(in: frequencyLowerBound..<threshold)
-                            }
+                        let root: Double = {
+                            let c: Double = Double.random(in: (0.5...1.0))
+                            let f: Double = 440.0 * pow(2.0, (floor(c * 88.0) - 49.0) / 12.0)
+                            
+                            return f
                         }()
-                        var harmonic = root * (5.0 / 4.0)
+                        let harmonic = root * (5.0 / 4.0)
+                        
                         return [root, harmonic]
                     }
                     
@@ -149,20 +143,21 @@ class TetradBuffer: NSObject {
                     }
                 }
                 var tones: [Tone]
-                var durationSplit: Int = 44100
-                init(durationSplit: Int) {
+                var duration: Int = 44100
+                init(duration: Int) {
                     tones = [
                         Tone.init(),
                         Tone.init()
                     ]
-                    self.durationSplit = durationSplit
+                    self.duration = duration
                 }
             }
             var harmonies: [Harmony]
-            init() {
+            init(durations: [Int]) {
+                self.durations = durations
                 harmonies = [
-                    Harmony.init(durationSplit: 44100),
-                    Harmony.init(durationSplit: 44100),
+                    Harmony.init(duration: durations[0]),
+                    Harmony.init(duration: durations[1]),
                 ]
             }
         }
@@ -170,12 +165,24 @@ class TetradBuffer: NSObject {
         var bufferLength: Int = 88200
         var cycleFrames: CycledSequence<Array<Int>>
         var frameIterator: CycledSequence<Array<Int>>.Iterator
+//        var randoms: [Int]  {
+//            var circularDistributor: CircularLatticeDistribution = CircularLatticeDistribution(boundLower: 0.0625, boundUpper: 0.9375, threshholdLeft: 0.0625, threshholdRight: 0.0625)
+//            return [Int(circularDistributor.randoms[0] * Float64(bufferLength)), Int(circularDistributor.randoms[1] * Float64(bufferLength))]
+//        }
+        
         
         init(bufferLength: Int) {
             self.bufferLength = bufferLength
+            
             dyads = [
-                Dyad.init(),
-                Dyad.init()
+                Dyad.init(durations: {
+                    var circularDistributor: CircularLatticeDistribution = CircularLatticeDistribution(boundLower: 0.0625, boundUpper: 0.9375, threshholdLeft: 0.0625, threshholdRight: 0.0625)
+                    return [Int(circularDistributor.randoms[0] * Float64(bufferLength)), Int(circularDistributor.randoms[1] * Float64(bufferLength))]
+                }()),
+                Dyad.init(durations: {
+                    var circularDistributor: CircularLatticeDistribution = CircularLatticeDistribution(boundLower: 0.0625, boundUpper: 0.9375, threshholdLeft: 0.0625, threshholdRight: 0.0625)
+                    return [Int(circularDistributor.randoms[0] * Float64(bufferLength)), Int(circularDistributor.randoms[1] * Float64(bufferLength))]
+                }())
             ]
             
             
@@ -239,22 +246,29 @@ class TetradBuffer: NSObject {
                 //                    let f2: Double = Double(0.125) * (sin(tau * frequencies[4] * t))
                 //                    return [Float32(f), Float32(f2)]
                 //                } + (44100..<bufferLength).map { n -> Float32 in
-                //                    let t: Double = scale(oldMin: Double.zero, oldMax: Double(bufferLength), value: Double(n), newMin: Double.zero, newMax: 1.0)
+                //                    let t: Double = scale(oldMin: Double.z.ero, oldMax: Double(bufferLength), value: Double(n), newMin: Double.zero, newMax: 1.0)
                 //                    let f: Double = Double(0.125) * (sin(tau * frequencies[4] * t))
                 //                    let f2: Double = Double(0.125) * (sin(tau * frequencies[4] * t))
                 //
                 //                    return [Float32(f), Float32(f2)]
                 //                }
                 
-                for n in 0..<bufferLength {
-                    let t: Double = Double(n) / Double(bufferLength)
-                    let gammaCurve = pow(t, (1.0 + sin(tau * t)) / 2.0)
-                    let variable = 2.0 + (12.0 * gammaCurve)
+                let duration: Int = (dyads[0].harmonies[0].duration)
+                for n in 0..<duration {
+                    let t: Double = Double(n) / Double(duration)
+                    let d: Double = Double(sin(t * tau))
+                    
                     let p: Double = Double(sin(tau * t * frequencies[4]))
-                    let q: Double = Double(sin(t * tau))
-                    let f: Double = Double((p * q) + (p * abs(-q)))
-                    channel_signals[0][n] = Float32(f)
-                    channel_signals[1][n] = Float32(f)
+                    let r: Double = Double(sin(tau * t * (frequencies[4] * (5.0 / 4.0))))
+                    let pr: Double = Double(((p + r) * d) + ((p + r) * abs(-d)))
+                    
+                    let u: Double = Double(sin(tau * t * (frequencies[4] + 220.0)))
+                    let v: Double = Double(sin(tau * t * (frequencies[4] + 330.0)))
+                    let uv: Double = Double(((u) * d) + ((u) * abs(-d)))
+                    
+                   
+                    channel_signals[0][n] = Float32(d * pr)
+                    channel_signals[1][n] = Float32(d * pr)
                 }
                 
                 

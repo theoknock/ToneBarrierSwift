@@ -294,28 +294,9 @@ var duration:     Int32   = Int32.zero
             let value = A * sin(2 * Float32.pi * t * f)
             return value
         }
-        
-//        var tetrad: TetradBuffer = TetradBuffer()
-//        var s = TetradBuffer().generateSignalSamplesIterator(bufferLength: Int(buffer_length))
-        
-        
+    
         var tetradBuffer = TetradBuffer(bufferLength: Int(buffer_length))
         var s = tetradBuffer.generateSignalSamplesIterator()
-
-//        // Example usage
-//        let processor = AudioSignalProcessor(sampleRate: 44100.0, length: 88200)
-//        let frequency = 440.0
-//        let signal = processor.generateSignal(frequency: frequency)
-//
-//        // Mixing two signals
-//        let signal1 = processor.generateSignal(frequency: 440.0)
-//        let signal2 = processor.generateSignal(frequency: 220.0)
-//        let mixedSignal = processor.mixSignals(signal1: signal1, signal2: signal2)
-//
-//        // Low-pass filter example (replace with actual filter coefficients)
-//        let filterCoefficients: [Double] = [0.1, 0.15, 0.5, 0.15, 0.1]
-//        let filteredSignal = processor.lowPassFilter(signal: mixedSignal, filterCoefficients: filterCoefficients)
-        
 
         func numbers(count: Int) -> [[Float32]] {
             let allNumbers: [[Float32]] = ({ (operation: (Int) -> (() -> [[Float32]])) in
@@ -334,41 +315,14 @@ var duration:     Int32   = Int32.zero
                         channels[1][i] = Float32(s.1.next()!)
                     }
                 }
-                
-
-//                        let n = vDSP_Length(88200)
-//                        let stride = vDSP_Stride(1)
-//                        
-//                        var a: Float = 0.0
-//                        var b: Float = 1.0
-//                        
-//                        var timeArray = [Float](repeating: 0, count: Int(n))
-//                        
-//                        vDSP_vgen(&a, &b, &timeArray, stride, n)
-//                        
-//                        let frequency: Float = 440.0
-//                        let twoPi: Float = 2.0 * .pi
-//                        
-//                        var sineWave = [Float](repeating: 0, count: Int(n))
-//                        
-//                        // Calculate sin(2pi * time * frequency)
-//                        vDSP_vsmul(timeArray, stride, [twoPi * frequency], &sineWave, stride, n)
-//                        vvsinf(&sineWave, sineWave, [Int32(n)])
-//                        
-//                        print(sineWave)
-        
-                
+       
                 return {
                     channels
                 }
             })
             return allNumbers
         }
-        
-        
-        
-
-        
+         
         let audio_source_node: AVAudioSourceNode = AVAudioSourceNode(format: audio_format, renderBlock: { _, _, frameCount, audioBufferList in
             let signalSamples    = numbers(count: Int(frameCount))
             let ablPointer       = UnsafeMutableAudioBufferListPointer(audioBufferList)
@@ -388,9 +342,13 @@ var duration:     Int32   = Int32.zero
             return noErr
         })
         
+        audio_source_node.sourceMode = AVAudio3DMixingSourceMode.ambienceBed
+        audio_source_node.renderingAlgorithm = AVAudio3DMixingRenderingAlgorithm.HRTF
+        audio_source_node.reverbBlend = 50.0
+        
         var reverb: AVAudioUnitReverb = AVAudioUnitReverb()
         reverb.loadFactoryPreset(AVAudioUnitReverbPreset.largeChamber)
-        reverb.wetDryMix = 50.0
+        reverb.wetDryMix = 100.0
         
         audio_engine.attach(audio_source_node)
         audio_engine.attach(reverb)
