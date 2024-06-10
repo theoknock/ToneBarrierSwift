@@ -148,7 +148,8 @@ class TetradBuffer: NSObject {
                     
                     var frequencies: [Double] {
                         var c: Double {
-                            var r: Double = Double.random(in: (Double.leastNonzeroMagnitude...1.0))
+                            
+                            var r: Double = Double.random(in: (0.5...1.0))
                             var x: Double = pow(r, 1.0 / 4.0)
                             var s: Double = Double(scale(oldMin: Double(Double.zero), oldMax: Double(1.0), value: Double(x), newMin: -1.0, newMax: 1.0))
                             
@@ -160,7 +161,7 @@ class TetradBuffer: NSObject {
                             return d
                         }
 //                        scaled_random_generator_sinc(mid: 4.0, lower: Double.zero, upper: 1.0)
-                        let root: Double = 440.0 * pow(2.0, (floor(c * 88.0) - 49.0) / 12.0)
+                        let root: Double = 440.0 * pow(2.0, (floor(Double.random(in: (0.5...1.0)) * 88.0) - 49.0) / 12.0)
                         
                         let harmonic = root * (5.0 / 4.0)
                         
@@ -333,8 +334,8 @@ class TetradBuffer: NSObject {
                     SomeStructure.q = Double(sin(SomeStructure.t * tau))
                     let f: Double = Double((p * SomeStructure.q) + (p * abs(-SomeStructure.q)))
                     return Float32(f)
-                }, count: 2) + Array(repeating: (Int.zero...(bufferLength - duration)).map { n -> Float32 in
-                    SomeStructure.t = Double(n) / Double((bufferLength - duration)) //
+                }, count: 2) + Array(repeating: (duration...bufferLength).map { n -> Float32 in
+                    SomeStructure.t = Double(n + duration) / Double((bufferLength)) //
                     let p: Double = Double(sin(tau * SomeStructure.t * frequencies[2]))
                     SomeStructure.q = Double(sin(SomeStructure.t * tau))
                     let f: Double = Double((p * SomeStructure.q) + (p * abs(-SomeStructure.q)))
