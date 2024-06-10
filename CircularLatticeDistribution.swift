@@ -13,18 +13,18 @@ import Combine
 import Observation
 
 @Observable class CircularLatticeDistribution {
-    var boundLower: Float64
-    var boundUpper: Float64
+    var boundLower: Double
+    var boundUpper: Double
       
-    var randoms: [Float64] = [Float64.zero, Float64.zero]
-    var threshholdLeft: Float64
-    var threshholdRight: Float64
+    var randoms: [Double] = [Double.zero, Double.zero]
+    var threshholdLeft: Double
+    var threshholdRight: Double
     
-    func scaledAngle(scale: Float64) -> Float64 {
-        return Float64(abs(360.0 * scale))
+    func scaledAngle(scale: Double) -> Double {
+        return Double(abs(360.0 * scale))
     }
 
-    func offsetAngle(startAngle: Float64, offsetDegrees: Float64) -> Float64 {
+    func offsetAngle(startAngle: Double, offsetDegrees: Double) -> Double {
         let radians = (startAngle + offsetDegrees) * .pi / 180.0
         let sinValue = sin(radians)
         let cosValue = cos(radians)
@@ -38,32 +38,32 @@ import Observation
         return String("\(randoms[0])°\t\t\(randoms[1])°")
     }
     
-    func scale(min_new: Float64, max_new: Float64, val_old: Float64, min_old: Float64, max_old: Float64) -> Float64 {
+    func scale(min_new: Double, max_new: Double, val_old: Double, min_old: Double, max_old: Double) -> Double {
         let val_new = min_new + ((((val_old - min_old) * (max_new - min_new))) / (max_old - min_old));
         return val_new;
     }
     
-    func distributeRandoms(randoms: inout [Float64]) -> (Void) {
-        let lowerRangeBoundary: Float64 = scaledAngle(scale: 0.0625)
-        let upperRangeBoundary: Float64 = scaledAngle(scale: 0.9375)
+    func distributeRandoms(randoms: inout [Double]) -> (Void) {
+        let lowerRangeBoundary: Double = scaledAngle(scale: 0.0625)
+        let upperRangeBoundary: Double = scaledAngle(scale: 0.9375)
         //print("lowerRangeBoundary == \(lowerRangeBoundary)")
         //print("upperRangeBoundary == \(upperRangeBoundary)")
-        let firstRandom: Float64        = Float64.random(in: lowerRangeBoundary...upperRangeBoundary)
+        let firstRandom: Double        = Double.random(in: lowerRangeBoundary...upperRangeBoundary)
         //print("firstRandom == \(firstRandom)")
         
-        let lowerRandomThreshold: Float64 = scaledAngle(scale: 0.0625)
-        let upperRandomThreshold: Float64 = scaledAngle(scale: 0.0625)
+        let lowerRandomThreshold: Double = scaledAngle(scale: 0.0625)
+        let upperRandomThreshold: Double = scaledAngle(scale: 0.0625)
         //print("lowerRandomThreshold == \(lowerRandomThreshold)")
         //print("upperRandomThreshold == \(upperRandomThreshold)")
         
         // get the actual lowerRangeBoundary and the relative lowerRandomThreshold and use offset func to calculate new lower bounds
-        let secondRandomLowerRange: Float64 = Float64(offsetAngle(startAngle: lowerRangeBoundary, offsetDegrees: lowerRandomThreshold))
-        let secondRandomUpperRange: Float64 = Float64(offsetAngle(startAngle: upperRangeBoundary, offsetDegrees: -upperRandomThreshold))
+        let secondRandomLowerRange: Double = Double(offsetAngle(startAngle: lowerRangeBoundary, offsetDegrees: lowerRandomThreshold))
+        let secondRandomUpperRange: Double = Double(offsetAngle(startAngle: upperRangeBoundary, offsetDegrees: -upperRandomThreshold))
         //print("secondRandomLowerRange == \(secondRandomLowerRange)")
         //print("secondRandomUpperRange == \(secondRandomUpperRange)")
-        let nextRandom: Float64 = Float64.random(in: secondRandomLowerRange...secondRandomUpperRange)
+        let nextRandom: Double = Double.random(in: secondRandomLowerRange...secondRandomUpperRange)
         //print("nextRandom == \(nextRandom)")
-        let adjustedSecondRandom: Float64 = Float64(offsetAngle(startAngle: nextRandom, offsetDegrees: firstRandom))
+        let adjustedSecondRandom: Double = Double(offsetAngle(startAngle: nextRandom, offsetDegrees: firstRandom))
         //print("adjustedSecondRandom == \(adjustedSecondRandom)")
     
         randoms = [scale(min_new: 0.0, max_new: 1.0, val_old: firstRandom, min_old: 0.0, max_old: 360.0),
@@ -72,7 +72,7 @@ import Observation
     }
 
 
-    init(boundLower: Float64, boundUpper: Float64, threshholdLeft: Float64, threshholdRight: Float64) {
+    init(boundLower: Double, boundUpper: Double, threshholdLeft: Double, threshholdRight: Double) {
         self.boundLower = boundLower
         self.boundUpper = boundUpper
         

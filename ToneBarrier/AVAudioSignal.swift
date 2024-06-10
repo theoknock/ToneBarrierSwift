@@ -343,8 +343,8 @@ var duration:     Int32   = Int32.zero
         })
         
         audio_source_node.sourceMode = AVAudio3DMixingSourceMode.ambienceBed
-        audio_source_node.renderingAlgorithm = AVAudio3DMixingRenderingAlgorithm.HRTF
-        audio_source_node.reverbBlend = 50.0
+        audio_source_node.renderingAlgorithm = AVAudio3DMixingRenderingAlgorithm.auto
+        audio_source_node.reverbBlend = 1.0
         
         var reverb: AVAudioUnitReverb = AVAudioUnitReverb()
         reverb.loadFactoryPreset(AVAudioUnitReverbPreset.largeChamber)

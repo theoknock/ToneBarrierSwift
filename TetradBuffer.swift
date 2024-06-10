@@ -147,21 +147,8 @@ class TetradBuffer: NSObject {
                 struct Tone {
                     
                     var frequencies: [Double] {
-                        var c: Double {
-                            
-                            var r: Double = Double.random(in: (0.5...1.0))
-                            var x: Double = pow(r, 1.0 / 4.0)
-                            var s: Double = Double(scale(oldMin: Double(Double.zero), oldMax: Double(1.0), value: Double(x), newMin: -1.0, newMax: 1.0))
-                            
-                            var t: Double = Double.pi * s
-                            var d: Double = sin(t) / t
-                            
-//                            print("\(x)\t--->\t\(s)\t--->\t\(d)")
-                            
-                            return d
-                        }
-//                        scaled_random_generator_sinc(mid: 4.0, lower: Double.zero, upper: 1.0)
-                        let root: Double = 440.0 * pow(2.0, (floor(Double.random(in: (0.5...1.0)) * 88.0) - 49.0) / 12.0)
+                        var r: Double = Double.random(in: (0.5...1.0))
+                        let root: Double = 440.0 * pow(2.0, floor(((r * 88.0) - 49.0) / 12.0))
                         
                         let harmonic = root * (5.0 / 4.0)
                         
@@ -206,12 +193,12 @@ class TetradBuffer: NSObject {
             
             dyads = [
                 Dyad.init(durations: {
-                    var circularDistributor: CircularLatticeDistribution = CircularLatticeDistribution(boundLower: 0.25, boundUpper: 0.875, threshholdLeft: 0.0625, threshholdRight: 0.0625)
-                    return [Int(circularDistributor.randoms[0] * Float64(bufferLength)), Int(circularDistributor.randoms[1] * Float64(bufferLength))]
+                    var circularDistributor: CircularLatticeDistribution = CircularLatticeDistribution(boundLower: 0.3125, boundUpper: 0.6875, threshholdLeft: 0.3125, threshholdRight: 0.3125)
+                    return [Int(circularDistributor.randoms[0] * Double(bufferLength)), Int(circularDistributor.randoms[1] * Double(bufferLength))]
                 }()),
                 Dyad.init(durations: {
-                    var circularDistributor: CircularLatticeDistribution = CircularLatticeDistribution(boundLower: 0.25, boundUpper: 0.875, threshholdLeft: 0.0625, threshholdRight: 0.0625)
-                    return [Int(circularDistributor.randoms[0] * Float64(bufferLength)), Int(circularDistributor.randoms[1] * Float64(bufferLength))]
+                    var circularDistributor: CircularLatticeDistribution = CircularLatticeDistribution(boundLower: 0.3125, boundUpper: 0.6875, threshholdLeft: 0.3125, threshholdRight: 0.3125)
+                    return [Int(circularDistributor.randoms[0] * Double(bufferLength)), Int(circularDistributor.randoms[1] * Double(bufferLength))]
                 }())
             ]
             
