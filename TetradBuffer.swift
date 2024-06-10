@@ -295,22 +295,26 @@ class TetradBuffer: NSObject {
 
                 struct SomeStructure {
                     static var t: Double = Double.zero
+                    static var q: Double = Double.zero
                 }
                 
                 channel_signals = Array(repeating: (Int.zero...duration).map { n -> Float32 in
                     SomeStructure.t = Double(n) / Double(duration)
                     let p: Double = Double(sin(tau * SomeStructure.t * frequencies[4]))
-                    let q: Double = Double(sin(SomeStructure.t * tau))
-                    let f: Double = Double((p * q) + (p * abs(-q)))
+                    SomeStructure.q = Double(sin(SomeStructure.t * tau))
+                    let f: Double = Double((p * SomeStructure.q) + (p * abs(-SomeStructure.q)))
                     return Float32(f)
                 }, count: 2) + Array(repeating: (Int.zero...(bufferLength - duration)).map { n -> Float32 in
-                    SomeStructure.t = Double(n) / Double((bufferLength - duration))
+                    SomeStructure.t = Double(n) / Double((bufferLength - duration)) //
                     let p: Double = Double(sin(tau * SomeStructure.t * frequencies[2]))
-                    let q: Double = Double(sin(SomeStructure.t * tau))
-                    let f: Double = Double((p * q) + (p * abs(-q)))
+                    SomeStructure.q = Double(sin(SomeStructure.t * tau))
+                    let f: Double = Double((p * SomeStructure.q) + (p * abs(-SomeStructure.q)))
                     return Float32(f)
                 }, count: 2)
                 
+                
+                print(duration)
+                print(bufferLength - duration)
                 //                channel_signals[1] = (Int.zero...44099).map { n -> Float32 in
                 //                    let t: Double = scale(oldMin: Double.zero, oldMax: Double(bufferLength), value: Double(n), newMin: Double.zero, newMax: 1.0)
                 //                    let f: Double = Double(0.125) * (sin(tau * frequencies[4] * t))let f2: Double = Double(0.125) * (sin(tau * frequencies[4] * t))
