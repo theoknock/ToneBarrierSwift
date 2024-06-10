@@ -21,7 +21,7 @@
                             <imageView opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.14999999999999999" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="waveform.path" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="JxM-Sh-sV2">
                                 <rect key="frame" x="0.0" y="-0.5" width="1024" height="769.5"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <color key="tintColor" systemColor="systemBlueColor"/>
+                                <color key="tintColor" name="AccentColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="JxM-Sh-sV2" secondAttribute="height" multiplier="1:1" priority="999" id="ni1-hJ-tEi"/>
                                 </constraints>
@@ -29,7 +29,7 @@
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" alpha="0.20000000000000001" contentMode="left" text="214515c" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2OI-2K-jPW" userLabel="2588842">
                                 <rect key="frame" x="51" y="359" width="922" height="50"/>
-                                <color key="tintColor" systemColor="linkColor"/>
+                                <color key="tintColor" name="AccentColor"/>
                                 <fontDescription key="fontDescription" type="system" weight="black" pointSize="42"/>
                                 <color key="textColor" name="AccentColor"/>
                                 <nil key="highlightedColor"/>
@@ -38,7 +38,7 @@
                             <imageView opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dOm-P1-ib0">
                                 <rect key="frame" x="397" y="229.5" width="230" height="309"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <color key="tintColor" systemColor="systemBlueColor"/>
+                                <color key="tintColor" name="AccentColor"/>
                                 <imageReference key="image" image="play" catalog="system" symbolScale="large" renderingMode="template"/>
                                 <imageReference key="highlightedImage" image="stop" catalog="system" symbolScale="large" renderingMode="template"/>
                                 <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large" weight="thin"/>
@@ -49,7 +49,7 @@
                             <view opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="Ryi-yd-PoM" customClass="AVRoutePickerView">
                                 <rect key="frame" x="454.5" y="614.5" width="115" height="153.5"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <color key="tintColor" systemColor="systemRedColor"/>
+                                <color key="tintColor" name="AccentColor"/>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -95,19 +95,10 @@
         <image name="stop" catalog="system" width="128" height="113"/>
         <image name="waveform.path" catalog="system" width="128" height="113"/>
         <namedColor name="AccentColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.56666666669999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
-        <systemColor name="linkColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
