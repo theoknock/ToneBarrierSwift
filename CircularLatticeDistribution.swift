@@ -44,21 +44,21 @@ import Observation
     }
     
     func distributeRandoms(randoms: inout [Double]) -> (Void) {
-        let lowerRangeBoundary: Double = scaledAngle(scale: 0.0625)
-        let upperRangeBoundary: Double = scaledAngle(scale: 0.9375)
+        let lowerRangeBoundary: Double = scaledAngle(scale: boundLower)
+        let upperRangeBoundary: Double = scaledAngle(scale: boundUpper)
         //print("lowerRangeBoundary == \(lowerRangeBoundary)")
         //print("upperRangeBoundary == \(upperRangeBoundary)")
         let firstRandom: Double        = Double.random(in: lowerRangeBoundary...upperRangeBoundary)
         //print("firstRandom == \(firstRandom)")
         
-        let lowerRandomThreshold: Double = scaledAngle(scale: 0.0625)
-        let upperRandomThreshold: Double = scaledAngle(scale: 0.0625)
+        let lowerRandomThreshold: Double = scaledAngle(scale: threshholdLeft)
+        let upperRandomThreshold: Double = scaledAngle(scale: threshholdRight)
         //print("lowerRandomThreshold == \(lowerRandomThreshold)")
         //print("upperRandomThreshold == \(upperRandomThreshold)")
         
         // get the actual lowerRangeBoundary and the relative lowerRandomThreshold and use offset func to calculate new lower bounds
         let secondRandomLowerRange: Double = Double(offsetAngle(startAngle: lowerRangeBoundary, offsetDegrees: lowerRandomThreshold))
-        let secondRandomUpperRange: Double = Double(offsetAngle(startAngle: upperRangeBoundary, offsetDegrees: -upperRandomThreshold))
+        let secondRandomUpperRange: Double = Double(offsetAngle(startAngle: upperRangeBoundary, offsetDegrees: upperRandomThreshold))
         //print("secondRandomLowerRange == \(secondRandomLowerRange)")
         //print("secondRandomUpperRange == \(secondRandomUpperRange)")
         let nextRandom: Double = Double.random(in: secondRandomLowerRange...secondRandomUpperRange)
