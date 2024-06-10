@@ -297,18 +297,16 @@ class TetradBuffer: NSObject {
                     static var t: Double = Double.zero
                 }
                 
-                let structure: SomeStructure = SomeStructure()
-                
-                channel_signals = Array(repeating: (Int.zero...44099).map { n -> Float32 in
-                    SomeStructure.t = Double(n) / Double(44099)
+                channel_signals = Array(repeating: (Int.zero...duration).map { n -> Float32 in
+                    SomeStructure.t = Double(n) / Double(duration)
                     let p: Double = Double(sin(tau * SomeStructure.t * frequencies[4]))
-                    let q: Double = Double(pow(sin(SomeStructure.t * tau), 2.0))
+                    let q: Double = Double(sin(SomeStructure.t * tau))
                     let f: Double = Double((p * q) + (p * abs(-q)))
                     return Float32(f)
-                }, count: 2) + Array(repeating: (Int.zero...44099).map { n -> Float32 in
-                    SomeStructure.t = Double(n) / Double(44099)
-                    let p: Double = Double(sin(tau * SomeStructure.t * frequencies[5]))
-                    let q: Double = Double(pow(sin(SomeStructure.t * tau), 2.0))
+                }, count: 2) + Array(repeating: (Int.zero...(bufferLength - duration)).map { n -> Float32 in
+                    SomeStructure.t = Double(n) / Double((bufferLength - duration))
+                    let p: Double = Double(sin(tau * SomeStructure.t * frequencies[2]))
+                    let q: Double = Double(sin(SomeStructure.t * tau))
                     let f: Double = Double((p * q) + (p * abs(-q)))
                     return Float32(f)
                 }, count: 2)
