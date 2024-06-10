@@ -46,29 +46,29 @@ import Observation
     func distributeRandoms(randoms: inout [Float64]) -> (Void) {
         let lowerRangeBoundary: Float64 = scaledAngle(scale: 0.0625)
         let upperRangeBoundary: Float64 = scaledAngle(scale: 0.9375)
-        print("lowerRangeBoundary == \(lowerRangeBoundary)")
-        print("upperRangeBoundary == \(upperRangeBoundary)")
+        //print("lowerRangeBoundary == \(lowerRangeBoundary)")
+        //print("upperRangeBoundary == \(upperRangeBoundary)")
         let firstRandom: Float64        = Float64.random(in: lowerRangeBoundary...upperRangeBoundary)
-        print("firstRandom == \(firstRandom)")
+        //print("firstRandom == \(firstRandom)")
         
         let lowerRandomThreshold: Float64 = scaledAngle(scale: 0.0625)
         let upperRandomThreshold: Float64 = scaledAngle(scale: 0.0625)
-        print("lowerRandomThreshold == \(lowerRandomThreshold)")
-        print("upperRandomThreshold == \(upperRandomThreshold)")
+        //print("lowerRandomThreshold == \(lowerRandomThreshold)")
+        //print("upperRandomThreshold == \(upperRandomThreshold)")
         
         // get the actual lowerRangeBoundary and the relative lowerRandomThreshold and use offset func to calculate new lower bounds
         let secondRandomLowerRange: Float64 = Float64(offsetAngle(startAngle: lowerRangeBoundary, offsetDegrees: lowerRandomThreshold))
         let secondRandomUpperRange: Float64 = Float64(offsetAngle(startAngle: upperRangeBoundary, offsetDegrees: -upperRandomThreshold))
-        print("secondRandomLowerRange == \(secondRandomLowerRange)")
-        print("secondRandomUpperRange == \(secondRandomUpperRange)")
+        //print("secondRandomLowerRange == \(secondRandomLowerRange)")
+        //print("secondRandomUpperRange == \(secondRandomUpperRange)")
         let nextRandom: Float64 = Float64.random(in: secondRandomLowerRange...secondRandomUpperRange)
-        print("nextRandom == \(nextRandom)")
+        //print("nextRandom == \(nextRandom)")
         let adjustedSecondRandom: Float64 = Float64(offsetAngle(startAngle: nextRandom, offsetDegrees: firstRandom))
-        print("adjustedSecondRandom == \(adjustedSecondRandom)")
+        //print("adjustedSecondRandom == \(adjustedSecondRandom)")
     
         randoms = [scale(min_new: 0.0, max_new: 1.0, val_old: firstRandom, min_old: 0.0, max_old: 360.0),
                    scale(min_new: 0.0, max_new: 1.0, val_old: nextRandom, min_old: 0.0, max_old: 360.0)]
-        print("randoms == \(randoms)")
+        //print("randoms == \(randoms)")
     }
 
 

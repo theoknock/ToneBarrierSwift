@@ -25,7 +25,7 @@ struct ContentView: View {
                 audioSignal.audio_engine.pause()
             }
         } catch let error as NSError {
-            debugPrint("\(error.localizedDescription)")
+            print("\(error.localizedDescription)")
         }
         isPlaying = audioSignal.audio_engine.isRunning
     }
@@ -60,7 +60,7 @@ struct ContentView: View {
                         try audioSession.setCategory(.playback, mode: .default, policy: .longFormAudio)
                         try audioSession.setActive(true)
                     } catch {
-                        print("Failed to set audio session category.")
+                        //print("Failed to set audio session category.")
                     }
                 }
             })

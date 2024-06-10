@@ -26,7 +26,7 @@ import AVFoundation
 //            audioSessionInterruptionNotificationSetup()
 //            try self.setActive(true)
 //        } catch {
-//            debugPrint("Could not activate audio session: \(error)")
+//            debug//print("Could not activate audio session: \(error)")
 //        }
 //    }
 //
@@ -42,7 +42,7 @@ import AVFoundation
 //                                                   name: .AVAudioEngineConfigurationChange,
 //                                                   object: nil)
 //        } catch {
-//            print("Failed to set audio session category.")
+//            //print("Failed to set audio session category.")
 //        }
 //    }
 //
@@ -58,11 +58,11 @@ import AVFoundation
 //
 //        case .began:
 //            // An interruption began. Update the UI as necessary.
-//            debugPrint("Audio session interruption \(type) began")
+//            debug//print("Audio session interruption \(type) began")
 //
 //        case .ended:
 //            // An interruption ended. Resume playback, if appropriate.
-//            debugPrint("Audio session interruption \(type) ended")
+//            debug//print("Audio session interruption \(type) ended")
 //
 //            guard let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt else { return }
 //            let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
@@ -71,12 +71,12 @@ import AVFoundation
 //                do {
 //                    try audio_session.audio_engine.start()
 //                } catch {
-//                    debugPrint("Could not start audio engine: \(error)")
+//                    debug//print("Could not start audio engine: \(error)")
 //                }
-//                debugPrint("Resume playback.")
+//                debug//print("Resume playback.")
 //            } else {
 //                // An interruption ended. Don't resume playback.
-//                debugPrint("Don't resume playback.")
+//                debug//print("Don't resume playback.")
 //            }
 //
 //        default: ()
@@ -85,11 +85,11 @@ import AVFoundation
 //    }
 //
 //    @objc func restartEngineAfterConfigurationChange(_ notification: Notification) {
-//        debugPrint("restartEngineAfterConfigurationChange")
+//        debug//print("restartEngineAfterConfigurationChange")
 //        do {
 //            try self.audio_signal.audio_engine.start()
 //        } catch {
-//            debugPrint("Could not start audio engine: \(error)")
+//            debug//print("Could not start audio engine: \(error)")
 //        }
 //    }
 //}

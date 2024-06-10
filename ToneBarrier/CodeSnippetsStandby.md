@@ -24,7 +24,7 @@
     normalized_times(AVAudioFrameCount(audio_format.sampleRate))
     
     let normalizedTime = (0 ..< Int(frameCount)).map {
-        let x = 0.0 + (((Float($0) - 0.0) * (1.0 - 0.0))) / (Double(~frameCount) - 0.0) // Float($0)
+        let x = 0.0 + (((Float($0) - 0.0) * (1.0 - 0.0))) / (Float64(~frameCount) - 0.0) // Float($0)
         return sin((Float(frequency) / Float(frameCount)) * x)
     }
 
@@ -93,13 +93,13 @@ func generateSignalSamples(frequency: Float, sampleRate: Float, duration: Float)
                                of object: Any?,
                                change: [NSKeyValueChangeKey : Any]?,
                                context: UnsafeMutableRawPointer?) {
-        debugPrint("observeValue")
+        debug//print("observeValue")
         if keyPath == "isRunning",
            let running_state = change?[.newKey] {
-            print("running_state is: \(running_state)")
+            //print("running_state is: \(running_state)")
         } else {
-            print("keypath: \(String(describing: keyPath))")
-            print("change.newKey: \(String(describing: change?[.newKey]))")
+            //print("keypath: \(String(describing: keyPath))")
+            //print("change.newKey: \(String(describing: change?[.newKey]))")
         }
     }
 
@@ -241,7 +241,7 @@ func generateSignalSamples(frequency: Float, sampleRate: Float, duration: Float)
                 let bytesPointer = UnsafeMutableRawPointer.allocate(byteCount: Int(Float32.Stride()), alignment: 1)
                 bytesPointer.storeBytes(of: (descriptor.data?.load(fromByteOffset: 0, as: Float32.self))! , as: Float32.self)
                 let x = bytesPointer.load(as: Float32.self)
-                print("\(x)\n")
+                //print("\(x)\n")
                 
                 return x
             }

@@ -27,7 +27,7 @@ var root_:        Float32 = Float32(root  *  2.0)
 var harmonic_:    Float32 = Float32(root_ * (3.0/2.0))
 var amplitude:    Float32 = Float32(0.25)
 var envelope:     Float32 = Float32(1.0)
-let tau:          Double  = Double(Double.pi * 2.0)
+let tau:          Float64  = Float64(Float64.pi * 2.0)
 let theta:        Float32 = Float32(Float32.pi / 2.0)
 let trill:        Float32 = Float32.zero
 let tremolo:      Float32 = Float32(1.0)
@@ -43,12 +43,12 @@ var duration:     Int32   = Int32.zero
         let audio_format: AVAudioFormat       = AVAudioFormat(standardFormatWithSampleRate: audio_engine.mainMixerNode.outputFormat(forBus: Int.zero).sampleRate, channels: audio_engine.mainMixerNode.outputFormat(forBus: Int.zero).channelCount )!
         let buffer_length: Int32              = Int32(audio_format.sampleRate) * Int32(audio_format.channelCount)
         
-        func pianoNoteFrequency() -> Float32 {
-            let c: Float32 = Float32.random(in: (0.5...1.0))
-            let f: Float32 = 440.0 * pow(2.0, (floor(c * 88.0) - 49.0) / 12.0)
-            
-            return f
-        }
+//        func pianoNoteFrequency() -> Float32 {
+//            let c: Float32 = Float32.random(in: (0.5...1.0))
+//            let f: Float32 = 440.0 * pow(2.0, (floor(c * 88.0) - 49.0) / 12.0)
+//            
+//            return f
+//        }
         
         var duration = buffer_length
         var cycleFrames = Array(0..<buffer_length).cycled()
@@ -89,8 +89,8 @@ var duration:     Int32   = Int32.zero
                 return [storedRoot, storedHarmonic, storedOctave]
             }
         }
-        let note_frequencies  = store_note_frequency()
-        var combination_notes = note_frequencies(pianoNoteFrequency())
+//        let note_frequencies  = store_note_frequency()
+//        var combination_notes = note_frequencies(pianoNoteFrequency())
         
         /// Generates an array of signal samples for the specified number of frames.
         ///
@@ -98,18 +98,18 @@ var duration:     Int32   = Int32.zero
         /// - Returns: An array of signal samples required by the ``frame_count`` parameter.
         //        func generateFrequencies(frame_count: Int) -> [[Float32]] {
         //            let tetrad: TetradBuffer.Tetrad = tetradBuffer.generateTetrad()
-        //            let frequencies: [([(Double, Double)], [(Double, Double)])] = [
+        //            let frequencies: [([(Float64, Float64)], [(Float64, Float64)])] = [
         //                ([(tetrad.dyads[0].harmonies[0].tones[0].frequency, tetrad.dyads[0].harmonies[0].tones[1].frequency)], [(tetrad.dyads[0].harmonies[1].tones[0].frequency, tetrad.dyads[0].harmonies[1].tones[1].frequency)]),
         //                ([(tetrad.dyads[1].harmonies[0].tones[0].frequency, tetrad.dyads[1].harmonies[1].tones[1].frequency)], [(tetrad.dyads[1].harmonies[1].tones[0].frequency, tetrad.dyads[1].harmonies[1].tones[1].frequency)])
         //            ]
-        //            var dyadFrequencies: [(Double, Double)] = [(Double.zero, Double.zero), (Double.zero, Double.zero)]
+        //            var dyadFrequencies: [(Float64, Float64)] = [(Float64.zero, Float64.zero), (Float64.zero, Float64.zero)]
         //            let harmonyDurations: [(Int32, Int32)] = [
-        //                (Int32((tetrad.dyads[0].harmonies[0].duration / 2.0) * Double(buffer_length)), Int32((tetrad.dyads[0].harmonies[1].duration / 2.0) * Double(buffer_length))),
-        //                (Int32((tetrad.dyads[1].harmonies[0].duration / 2.0) * Double(buffer_length)), Int32((tetrad.dyads[1].harmonies[1].duration / 2.0) * Double(buffer_length)))
+        //                (Int32((tetrad.dyads[0].harmonies[0].duration / 2.0) * Float64(buffer_length)), Int32((tetrad.dyads[0].harmonies[1].duration / 2.0) * Float64(buffer_length))),
+        //                (Int32((tetrad.dyads[1].harmonies[0].duration / 2.0) * Float64(buffer_length)), Int32((tetrad.dyads[1].harmonies[1].duration / 2.0) * Float64(buffer_length)))
         //            ]
         //
-        //            var combined_frequency_samples: [([(Double, Double)], [(Double, Double)])] = { return (0..<frame_count).map {_ in
-        //                let t: Double = Double(frameIterator.next()!) / (Double(buffer_length) - 1.0)
+        //            var combined_frequency_samples: [([(Float64, Float64)], [(Float64, Float64)])] = { return (0..<frame_count).map {_ in
+        //                let t: Float64 = Float64(frameIterator.next()!) / (Float64(buffer_length) - 1.0)
         //                let n: Int32 = timeIterator.next()!
         //                switch n {
         //                case 0:
@@ -124,12 +124,12 @@ var duration:     Int32   = Int32.zero
         //                    dyadFrequencies[1] = (640.0, 880.0)
         //                }
         ////                return
-        ////                    ([(Double(tetrad.dyads[0].harmonies[0].tones[0].frequency), Double(tetrad.dyads[0].harmonies[0].tones[1].frequency)),  (Double(tetrad.dyads[0].harmonies[1].tones[0].frequency), Double(tetrad.dyads[0].harmonies[1].tones[1].frequency))],
-        ////                     ([(Double(tetrad.dyads[0].harmonies[0].tones[0].frequency), Double(tetrad.dyads[0].harmonies[0].tones[1].frequency)), (Double(tetrad.dyads[0].harmonies[1].tones[0].frequency), Double(tetrad.dyads[0].harmonies[1].tones[1].frequency))]))
+        ////                    ([(Float64(tetrad.dyads[0].harmonies[0].tones[0].frequency), Float64(tetrad.dyads[0].harmonies[0].tones[1].frequency)),  (Float64(tetrad.dyads[0].harmonies[1].tones[0].frequency), Float64(tetrad.dyads[0].harmonies[1].tones[1].frequency))],
+        ////                     ([(Float64(tetrad.dyads[0].harmonies[0].tones[0].frequency), Float64(tetrad.dyads[0].harmonies[0].tones[1].frequency)), (Float64(tetrad.dyads[0].harmonies[1].tones[0].frequency), Float64(tetrad.dyads[0].harmonies[1].tones[1].frequency))]))
         //
         //                return
-        //                    ([(Double(tetrad.dyads[0].harmonies[0].tones[0].frequency), Double(tetrad.dyads[0].harmonies[0].tones[1].frequency)),  (Double(tetrad.dyads[0].harmonies[1].tones[0].frequency), Double(tetrad.dyads[0].harmonies[1].tones[1].frequency))],
-        //                     ([(Double(tetrad.dyads[0].harmonies[0].tones[0].frequency), Double(tetrad.dyads[0].harmonies[0].tones[1].frequency)), (Double(tetrad.dyads[0].harmonies[1].tones[0].frequency), Double(tetrad.dyads[0].harmonies[1].tones[1].frequency))]))
+        //                    ([(Float64(tetrad.dyads[0].harmonies[0].tones[0].frequency), Float64(tetrad.dyads[0].harmonies[0].tones[1].frequency)),  (Float64(tetrad.dyads[0].harmonies[1].tones[0].frequency), Float64(tetrad.dyads[0].harmonies[1].tones[1].frequency))],
+        //                     ([(Float64(tetrad.dyads[0].harmonies[0].tones[0].frequency), Float64(tetrad.dyads[0].harmonies[0].tones[1].frequency)), (Float64(tetrad.dyads[0].harmonies[1].tones[0].frequency), Float64(tetrad.dyads[0].harmonies[1].tones[1].frequency))]))
         //            }
         //
         //                //            var right_channel_samples: [Float32] { return (0..<frame_count).map { Float32($0) } }
@@ -150,9 +150,9 @@ var duration:     Int32   = Int32.zero
         //                //                    dyadFrequencies[1] = (640.0, 880.0)
         //                //                }
         //                //
-        //                //                let t: Double  = Double(n) / (Double(buffer_length) - 1.0)
-        //                //                let left: Double  = sin(sin(tau * dyadFrequencies[0].0 * t) + sin(tau * dyadFrequencies[0].1 * t))
-        //                //                let right: Double = sin(sin(tau * dyadFrequencies[1].0 * t) + sin(tau * dyadFrequencies[1].1 * t))
+        //                //                let t: Float64  = Float64(n) / (Float64(buffer_length) - 1.0)
+        //                //                let left: Float64  = sin(sin(tau * dyadFrequencies[0].0 * t) + sin(tau * dyadFrequencies[0].1 * t))
+        //                //                let right: Float64 = sin(sin(tau * dyadFrequencies[1].0 * t) + sin(tau * dyadFrequencies[1].1 * t))
         //                //                left_channel_samples[i]          = Float32(left)
         //                //                right_channel_samples[i]         = Float32(right)
         //                //                combined_frequency_samples[0][i] = left_channel_samples[i]
@@ -176,17 +176,17 @@ var duration:     Int32   = Int32.zero
 //        func generateFrequencies(frame_count: Int) -> [[Float32]] {
 //            
 //            
-//            var harmonyFrequencies: [[Double]] = [
+//            var harmonyFrequencies: [[Float64]] = [
 //                [tetrad.dyads[0].harmonies[0].tones[0].frequency, tetrad.dyads[0].harmonies[0].tones[1].frequency],
 //                [tetrad.dyads[1].harmonies[0].tones[0].frequency, tetrad.dyads[1].harmonies[0].tones[1].frequency]
 //            ]
 ////            var harmonyDurations: [(Int32, Int32)] = [
-////                (Int32((tetrad.dyads[0].durations.0 / 2.0) * Double(buffer_length)), Int32((tetrad.dyads[1].durations.0 / 2.0) * Double(buffer_length))),
-////                (Int32((tetrad.dyads[0].durations.1 / 2.0) * Double(buffer_length)), Int32((tetrad.dyads[1].durations.1 / 2.0) * Double(buffer_length)))
+////                (Int32((tetrad.dyads[0].durations.0 / 2.0) * Float64(buffer_length)), Int32((tetrad.dyads[1].durations.0 / 2.0) * Float64(buffer_length))),
+////                (Int32((tetrad.dyads[0].durations.1 / 2.0) * Float64(buffer_length)), Int32((tetrad.dyads[1].durations.1 / 2.0) * Float64(buffer_length)))
 ////            ]
 //            
 //            var harmonyDurations: [(Int32, Int32)] = [
-//                (Int32(0.5 * Double(buffer_length)), Int32(0.25 * Double(buffer_length)))
+//                (Int32(0.5 * Float64(buffer_length)), Int32(0.25 * Float64(buffer_length)))
 //            ]
 //            
 //            let audio_buffer: [[Float32]] =  ({ (operation: (Int) -> (() -> [[Float32]])) in
@@ -196,19 +196,19 @@ var duration:     Int32   = Int32.zero
 //                
 //                for i in 0..<number {
 //                    n = frameIterator.next()!
-//                    let t: Double = Double(Double(n) / (Double(buffer_length) - 1.0))
+//                    let t: Float64 = Float64(Float64(n) / (Float64(buffer_length) - 1.0))
 //                    if n == 0 {
-//                        print("frame\t\(i)\tindex\t\(n)\t\ttime\t\(t)\t\(frame_count)")
+//                        //print("frame\t\(i)\tindex\t\(n)\t\ttime\t\(t)\t\(frame_count)")
 //                    } else if n == harmonyDurations[0].0 {
-//                        print("frame\t\(i)\tindex\t\(n)\ttime\t\(t)\t\(frame_count)")
+//                        //print("frame\t\(i)\tindex\t\(n)\ttime\t\(t)\t\(frame_count)")
 ////                        harmonyFrequencies[0] = [tetrad.dyads[0].harmonies[1].tones[0].frequency, tetrad.dyads[0].harmonies[1].tones[1].frequency]
 //                        harmonyFrequencies[0] = [440.0, 640.0]
 //                    } else if n == harmonyDurations[0].1 {
-//                        print("frame\t\(i)\tindex\t\(n)\ttime\t\(t)\t\(frame_count)")
+//                        //print("frame\t\(i)\tindex\t\(n)\ttime\t\(t)\t\(frame_count)")
 ////                        harmonyFrequencies[1] = [tetrad.dyads[1].harmonies[1].tones[0].frequency, tetrad.dyads[1].harmonies[1].tones[1].frequency]
 //                        harmonyFrequencies[1] = [220.0, 420.0]
 //                    } else if n == (buffer_length - 1) {
-//                        print("frame\t\(i)\tindex\t\(n)\ttime\t\(t)\t\(frame_count)\nEND")
+//                        //print("frame\t\(i)\tindex\t\(n)\ttime\t\(t)\t\(frame_count)\nEND")
 ////
 ////                        tetrad = TetradBuffer.Tetrad.init(bufferLength: Int(buffer_length))
 ////                        harmonyFrequencies = [
@@ -222,12 +222,12 @@ var duration:     Int32   = Int32.zero
 //                        ]
 //                        
 ////                        harmonyDurations = [
-////                            (Int32(Double(tetrad.dyads[0].harmonies[0].duration / 2.0) * Double(buffer_length)), Int32(Double(tetrad.dyads[0].harmonies[1].duration / 2.0) * Double(buffer_length))),
-////                            (Int32(Double(tetrad.dyads[1].harmonies[0].duration / 2.0) * Double(buffer_length)), Int32(Double(tetrad.dyads[1].harmonies[1].duration / 2.0) * Double(buffer_length)))
+////                            (Int32(Float64(tetrad.dyads[0].harmonies[0].duration / 2.0) * Float64(buffer_length)), Int32(Float64(tetrad.dyads[0].harmonies[1].duration / 2.0) * Float64(buffer_length))),
+////                            (Int32(Float64(tetrad.dyads[1].harmonies[0].duration / 2.0) * Float64(buffer_length)), Int32(Float64(tetrad.dyads[1].harmonies[1].duration / 2.0) * Float64(buffer_length)))
 ////                        ]
 //                        
 //                        harmonyDurations = [
-//                            (Int32(0.5 * Double(buffer_length)), Int32(0.25 * Double(buffer_length)))
+//                            (Int32(0.5 * Float64(buffer_length)), Int32(0.25 * Float64(buffer_length)))
 //                        ]
 //                    }
 //
@@ -244,7 +244,7 @@ var duration:     Int32   = Int32.zero
         
         //            var combined_frequency_samples: [[Float32]] = (0..<frame_count).map { i in
         //                let n: Int32 = frameIterator.next()!
-        //                let t: Double = Double(n) / (Double(buffer_length) - 1.0)
+        //                let t: Float64 = Float64(n) / (Float64(buffer_length) - 1.0)
         //                switch n {
         //                case 0:
         //                    harmonyFrequencies[0] = dyadFrequencies[0][0]
@@ -258,8 +258,8 @@ var duration:     Int32   = Int32.zero
         //                }
         //
         //                // Convert each frequency pair to its respective sinusoidal waveforms and wrap them in Float32
-        //                let channel_sample: [Double]  = [Double(sin(tau * harmonyFrequencies[0].0 * t) + sin(tau * harmonyFrequencies[0].1 * t)),
-        //                                                 Double(sin(tau * harmonyFrequencies[1].0 * t) + sin(tau * harmonyFrequencies[1].1 * t))]
+        //                let channel_sample: [Float64]  = [Float64(sin(tau * harmonyFrequencies[0].0 * t) + sin(tau * harmonyFrequencies[0].1 * t)),
+        //                                                 Float64(sin(tau * harmonyFrequencies[1].0 * t) + sin(tau * harmonyFrequencies[1].1 * t))]
         ////                channel_signal[0][i] = channel_sample[0]
         ////                channel_signal[1][i] = channel_sample[1]
         //

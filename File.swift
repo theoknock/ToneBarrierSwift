@@ -11,12 +11,12 @@ import Combine
 import Observation
 
 @Observable class Durations {
-    var durationLength:     Double = 2.0000
-    var durationLowerBound: Double = 0.3125
-    var durationUpperBound: Double = 1.6875
-    var durationTolerance:  Double = 0.3125
+    var durationLength:     Float64 = 2.0000
+    var durationLowerBound: Float64 = 0.3125
+    var durationUpperBound: Float64 = 1.6875
+    var durationTolerance:  Float64 = 0.3125
 
-    init(length: Double?, lowerBound: Double?, upperBound: Double?, tolerance: Double?) {
+    init(length: Float64?, lowerBound: Float64?, upperBound: Float64?, tolerance: Float64?) {
         self.durationLength     = length     ?? durationLength
         self.durationLowerBound = lowerBound ?? durationLowerBound
         self.durationUpperBound = upperBound ?? durationUpperBound
@@ -33,13 +33,13 @@ import Observation
 
     let serialQueue = DispatchQueue(label: "com.example.serialQueue")
 
-    public func randomizeDurationSplits(completion: @escaping ([[Double]]) -> Void) {
+    public func randomizeDurationSplits(completion: @escaping ([[Float64]]) -> Void) {
         serialQueue.async { [self] in
-            let dyad0harmony0: Double = Double.random(in: durationLowerBound...durationUpperBound)
-            var dyad1harmony0: Double = dyad0harmony0
+            let dyad0harmony0: Float64 = Float64.random(in: durationLowerBound...durationUpperBound)
+            var dyad1harmony0: Float64 = dyad0harmony0
 
             repeat {
-                dyad1harmony0 = Double.random(in: durationLowerBound...durationUpperBound)
+                dyad1harmony0 = Float64.random(in: durationLowerBound...durationUpperBound)
             } while (abs(dyad0harmony0 - dyad1harmony0) < durationTolerance)
 
             let dyad0harmony1 = durationLength - dyad0harmony0
@@ -56,7 +56,7 @@ import Observation
 
 struct ContentView: View {
     private var durations: Durations = Durations(length: nil, lowerBound: nil, upperBound: nil, tolerance: nil)
-    @State private var results: [[[Double]]] = []
+    @State private var results: [[[Float64]]] = []
 
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .center, vertical: .center), content: {
@@ -94,7 +94,7 @@ struct ContentView: View {
 
             Button("Randomize Duration Splits") {
                 durations.randomizeDurationSplits { result in
-                    print(result)
+                    //print(result)
                     results.append(result)
                 }
             }

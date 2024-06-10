@@ -102,6 +102,26 @@ class TetradBuffer: NSObject {
         valueStore.store(value: transformedValue)
     }
     
+    func scaled_random_generator_sinc(mid: Double, lower: Double, upper: Double) -> Double {
+        var r: Double = Double.random(in: (Double.leastNonzeroMagnitude...1.0))
+        var x: Double = pow(r, 1.0 / mid)
+        var s: Double = Double(scale(oldMin: Double(lower), oldMax: Double(upper), value: Double(x), newMin: -1.0, newMax: 1.0))
+        
+        var t: Double = Double.pi * s
+        var d: Double = sin(t) / t
+        
+        print("\(x)\t--->\t\(s)\t--->\t\(d)")
+        
+        return d
+    }
+    
+    public func pianoNoteFrequency() -> Double {
+        let c: Double = scaled_random_generator_sinc(mid: 4.0, lower: Double.zero, upper: 1.0)
+        let f: Double = 440.0 * pow(2.0, (floor(c * 88.0) - 49.0) / 12.0)
+        
+        return f
+    }
+    
     public func generateSignalSamplesIterator() -> (Array<Float32>.Iterator, Array<Float32>.Iterator) {
         return tetrad.samplesIterator
     }
@@ -127,12 +147,21 @@ class TetradBuffer: NSObject {
                 struct Tone {
                     
                     var frequencies: [Double] {
-                        let root: Double = {
-                            let c: Double = Double.random(in: (0.5...1.0))
-                            let f: Double = 440.0 * pow(2.0, (floor(c * 88.0) - 49.0) / 12.0)
+                        var c: Double {
+                            var r: Double = Double.random(in: (Double.leastNonzeroMagnitude...1.0))
+                            var x: Double = pow(r, 1.0 / 4.0)
+                            var s: Double = Double(scale(oldMin: Double(Double.zero), oldMax: Double(1.0), value: Double(x), newMin: -1.0, newMax: 1.0))
                             
-                            return f
-                        }()
+                            var t: Double = Double.pi * s
+                            var d: Double = sin(t) / t
+                            
+//                            print("\(x)\t--->\t\(s)\t--->\t\(d)")
+                            
+                            return d
+                        }
+//                        scaled_random_generator_sinc(mid: 4.0, lower: Double.zero, upper: 1.0)
+                        let root: Double = 440.0 * pow(2.0, (floor(c * 88.0) - 49.0) / 12.0)
+                        
                         let harmonic = root * (5.0 / 4.0)
                         
                         return [root, harmonic]
@@ -176,11 +205,11 @@ class TetradBuffer: NSObject {
             
             dyads = [
                 Dyad.init(durations: {
-                    var circularDistributor: CircularLatticeDistribution = CircularLatticeDistribution(boundLower: 0.0625, boundUpper: 0.9375, threshholdLeft: 0.0625, threshholdRight: 0.0625)
+                    var circularDistributor: CircularLatticeDistribution = CircularLatticeDistribution(boundLower: 0.25, boundUpper: 0.875, threshholdLeft: 0.0625, threshholdRight: 0.0625)
                     return [Int(circularDistributor.randoms[0] * Float64(bufferLength)), Int(circularDistributor.randoms[1] * Float64(bufferLength))]
                 }()),
                 Dyad.init(durations: {
-                    var circularDistributor: CircularLatticeDistribution = CircularLatticeDistribution(boundLower: 0.0625, boundUpper: 0.9375, threshholdLeft: 0.0625, threshholdRight: 0.0625)
+                    var circularDistributor: CircularLatticeDistribution = CircularLatticeDistribution(boundLower: 0.25, boundUpper: 0.875, threshholdLeft: 0.0625, threshholdRight: 0.0625)
                     return [Int(circularDistributor.randoms[0] * Float64(bufferLength)), Int(circularDistributor.randoms[1] * Float64(bufferLength))]
                 }())
             ]
@@ -214,7 +243,7 @@ class TetradBuffer: NSObject {
         
         var togglerInstance: Toggler = Toggler()
         var samplesIterator: (Array<Float32>.Iterator, Array<Float32>.Iterator) {
-            print(togglerInstance.miscellaneousFunction())
+//            print(togglerInstance.miscellaneousFunction())
             //            let n = vDSP_Length(88200)
             //            let stride = vDSP_Stride(1)
             //
@@ -231,7 +260,7 @@ class TetradBuffer: NSObject {
             //                      stride,
             //                      n)
             //            let tau: simd_double1 = simd_double1(simd_double1.pi * 2.0)
-            var channel_signals: [[Float32]] = Array(repeating: Array(repeating: Float32.zero, count: 88200), count: 2)
+//            var channel_signals: [[Float32]] = Array(repeating: Array(repeating: Float32.zero, count: bufferLength), count: 2)
 // [Array(repeating: Float32.zero, count: Int(bufferLength)), Array(repeating: Float32.zero, count: bufferLength)]
             let audio_buffer: [[Float32]] =  ({ (operation: (Int) -> (() -> [[Float32]])) in
                 operation(bufferLength)()
@@ -298,7 +327,7 @@ class TetradBuffer: NSObject {
                     static var q: Double = Double.zero
                 }
                 
-                channel_signals = Array(repeating: (Int.zero...duration).map { n -> Float32 in
+                var channel_signals: [[Float32]] = Array(repeating: (Int.zero...duration).map { n -> Float32 in
                     SomeStructure.t = Double(n) / Double(duration)
                     let p: Double = Double(sin(tau * SomeStructure.t * frequencies[4]))
                     SomeStructure.q = Double(sin(SomeStructure.t * tau))
@@ -313,8 +342,8 @@ class TetradBuffer: NSObject {
                 }, count: 2)
                 
                 
-                print(duration)
-                print(bufferLength - duration)
+//                print(duration)
+//                print(bufferLength - duration)
                 //                channel_signals[1] = (Int.zero...44099).map { n -> Float32 in
                 //                    let t: Double = scale(oldMin: Double.zero, oldMax: Double(bufferLength), value: Double(n), newMin: Double.zero, newMax: 1.0)
                 //                    let f: Double = Double(0.125) * (sin(tau * frequencies[4] * t))let f2: Double = Double(0.125) * (sin(tau * frequencies[4] * t))
