@@ -147,12 +147,11 @@ class TetradBuffer: NSObject {
                 struct Tone {
                     
                     var frequencies: [Double] {
-                        var r: Double = Double.random(in: (0.5...1.0))
-                        let root: Double = 440.0 * pow(2.0, floor(((r * 88.0) - 49.0) / 12.0))
+                        var r: Double = Double.random(in: (440.0...2500.0))
+                        //                        let root: Double = 440.0 * pow(2.0, floor(((r * 88.0) - 49.0) / 12.0))
                         
-                        let harmonic = root * (5.0 / 4.0)
-                        
-                        return [root, harmonic]
+                        let harmonic: Double = r * (5.0 / 4.0)
+                        return [r, harmonic]
                     }
                     
                     init() {
@@ -182,10 +181,10 @@ class TetradBuffer: NSObject {
         var bufferLength: Int = 88200
         var cycleFrames: CycledSequence<Array<Int>>
         var frameIterator: CycledSequence<Array<Int>>.Iterator
-//        var randoms: [Int]  {
-//            var circularDistributor: CircularLatticeDistribution = CircularLatticeDistribution(boundLower: 0.0625, boundUpper: 0.9375, threshholdLeft: 0.0625, threshholdRight: 0.0625)
-//            return [Int(circularDistributor.randoms[0] * Float64(bufferLength)), Int(circularDistributor.randoms[1] * Float64(bufferLength))]
-//        }
+        //        var randoms: [Int]  {
+        //            var circularDistributor: CircularLatticeDistribution = CircularLatticeDistribution(boundLower: 0.0625, boundUpper: 0.9375, threshholdLeft: 0.0625, threshholdRight: 0.0625)
+        //            return [Int(circularDistributor.randoms[0] * Float64(bufferLength)), Int(circularDistributor.randoms[1] * Float64(bufferLength))]
+        //        }
         
         
         init(bufferLength: Int) {
@@ -231,7 +230,7 @@ class TetradBuffer: NSObject {
         
         var togglerInstance: Toggler = Toggler()
         var samplesIterator: (Array<Float32>.Iterator, Array<Float32>.Iterator) {
-//            print(togglerInstance.miscellaneousFunction())
+            //            print(togglerInstance.miscellaneousFunction())
             //            let n = vDSP_Length(88200)
             //            let stride = vDSP_Stride(1)
             //
@@ -249,7 +248,17 @@ class TetradBuffer: NSObject {
             //                      n)
             //            let tau: simd_double1 = simd_double1(simd_double1.pi * 2.0)
 //            var channel_signals: [[Float32]] = Array(repeating: Array(repeating: Float32.zero, count: bufferLength), count: 2)
-// [Array(repeating: Float32.zero, count: Int(bufferLength)), Array(repeating: Float32.zero, count: bufferLength)]
+            // [Array(repeating: Float32.zero, count: Int(bufferLength)), Array(repeating: Float32.zero, count: bufferLength)]
+            
+            var channel_signals: [[Float32]] = [
+                [Float32](unsafeUninitializedCapacity: bufferLength) { buffer, initializedCount in
+                    initializedCount = bufferLength
+                },
+                [Float32](unsafeUninitializedCapacity: bufferLength) { buffer, initializedCount in
+                    initializedCount = bufferLength
+                }
+            ]
+            
             let audio_buffer: [[Float32]] =  ({ (operation: (Int) -> (() -> [[Float32]])) in
                 operation(bufferLength)()
             })( { frames in
@@ -257,6 +266,10 @@ class TetradBuffer: NSObject {
                                              Double(dyads[0].harmonies[0].tones[1].frequencies[0]), Double(dyads[0].harmonies[0].tones[1].frequencies[1]),
                                              Double(dyads[0].harmonies[1].tones[0].frequencies[0]), Double(dyads[0].harmonies[1].tones[0].frequencies[1]),
                                              Double(dyads[0].harmonies[1].tones[1].frequencies[0]), Double(dyads[0].harmonies[1].tones[1].frequencies[1])]
+                
+               
+                
+                
                 
                 //                channel_signals = (Int.zero...44099).map { n -> Float32 in
                 //                    let t: Double = scale(oldMin: Double.zero, oldMax: Double(bufferLength), value: Double(n), newMin: Double.zero, newMax: 1.0)
@@ -271,67 +284,109 @@ class TetradBuffer: NSObject {
                 //                    return [Float32(f), Float32(f2)]
                 //                }
                 
-//                let duration: Int = (dyads[0].harmonies[0].duration)
-//                for n in 0..<duration {
-//                    let t: Double = Double(n) / Double(duration)
-//                    let d: Double = Double(sin(t * tau))
-//                    
-//                    let p: Double = Double(sin(tau * t * frequencies[4]))
-//                    let r: Double = Double(sin(tau * t * (frequencies[4] * (5.0 / 4.0))))
-//                    let pr: Double = Double(((p + r) * d) + ((p + r) * abs(-d)))
-//                    
-//                    let u: Double = Double(sin(tau * t * (frequencies[4] + 220.0)))
-//                    let v: Double = Double(sin(tau * t * (frequencies[4] + 330.0)))
-//                    let uv: Double = Double(((u) * d) + ((u) * abs(-d)))
-//                    
-//                   
-//                    channel_signals[0][n] = Float32(d * pr)
-//                    channel_signals[1][n] = Float32(d * pr)
-//                }
+                //                let duration: Int = (dyads[0].harmonies[0].duration)
+                //                for n in 0..<duration {
+                //                    let t: Double = Double(n) / Double(duration)
+                //                    let d: Double = Double(sin(t * tau))
+                //
+                //                    let p: Double = Double(sin(tau * t * frequencies[4]))
+                //                    let r: Double = Double(sin(tau * t * (frequencies[4] * (5.0 / 4.0))))
+                //                    let pr: Double = Double(((p + r) * d) + ((p + r) * abs(-d)))
+                //
+                //                    let u: Double = Double(sin(tau * t * (frequencies[4] + 220.0)))
+                //                    let v: Double = Double(sin(tau * t * (frequencies[4] + 330.0)))
+                //                    let uv: Double = Double(((u) * d) + ((u) * abs(-d)))
+                //
+                //
+                //                    channel_signals[0][n] = Float32(d * pr)
+                //                    channel_signals[1][n] = Float32(d * pr)
+                //                }
                 
                 let duration: Int = (dyads[0].harmonies[0].duration)
                 
-//                channel_signals = (Int.zero...bufferLength).map { n -> [Float32] in
-//                    let t: Double = Double(n) / Double(bufferLength)
-//                    let p: Double = Double(sin(tau * t * frequencies[4]))
-//                    let q: Double = Double(pow(sin(t * tau), 2.0)) // modify 2.0 to split tone pairs per duration
-//                    let f: Double = Double((p * q) + (p * abs(-q)))
-//                    return [Float32(f), Float32(f)]
-//                }
+                //                channel_signals = (Int.zero...bufferLength).map { n -> [Float32] in
+                //                    let t: Double = Double(n) / Double(bufferLength)
+                //                    let p: Double = Double(sin(tau * t * frequencies[4]))
+                //                    let q: Double = Double(pow(sin(t * tau), 2.0)) // modify 2.0 to split tone pairs per duration
+                //                    let f: Double = Double((p * q) + (p * abs(-q)))
+                //                    return [Float32(f), Float32(f)]
+                //                }
+                //
+                /*
+                 
+                 Destructive interference:
+                 If the phase difference is an odd multiple of π: φ = …, -3π, -π, π, 3π, 5π, … then cos(φ/2) = 0,
+                 so the sum of the two waves is zero: W₁ + W₂ = 0
+                 */
+                
+                //                for n in 0..<bufferLength {
+                //                    let t: Double = Double(n) / Double(bufferLength)
+                //                    let p: Double = Double(sin(tau * t * frequencies[4]))
+                //                    let q: Double = Double(pow(sin(t * tau), 2.0)) // modify 2.0 to split tone pairs per duration
+                //                    let f: Double = Double((p * q) + (p * abs(-q)))
+                //                    channel_signals[0][n] = Float32(f)
+                //                    channel_signals[1][n] = Float32(f)
+                //                }
+                
+                                for n in 0..<bufferLength {
+                                    let t: Double = scale(oldMin: Double.zero, oldMax: Double(bufferLength), value: Double(n), newMin: 0.0, newMax: 1.0)
+//                                    let phaseShift: Double = -Double.pi + (2 * Double.pi * t) // scales phase from -pi to pi
+                                    
+                                    let phaseShift: Double = scale(oldMin: 0.0, oldMax: 1.0, value: t, newMin: -Double.pi, newMax: Double.pi)
+
+                                    let a: Double = -cos(Double.pi * (t / 2))
+                                    let p: Double = a * sin(tau * t * frequencies[0])
+                                    let q: Double = a * sin(tau * t * frequencies[0] - phaseShift)
+                
+                                    
+                                    
+                                    let f: Double = (p + q) // This will vary the interference pattern over time
+                                    channel_signals[0][n] = Float32(f)
+                                    channel_signals[1][n] = Float32(f)
+                                }
+//                print(frequencies[4])
 //                
 //                for n in 0..<bufferLength {
-//                    let t: Double = Double(n) / Double(bufferLength)
-//                    let p: Double = Double(sin(tau * t * frequencies[4]))
-//                    let q: Double = Double(pow(sin(t * tau), 2.0)) // modify 2.0 to split tone pairs per duration
-//                    let f: Double = Double((p * q) + (p * abs(-q)))
+//                    let t: Double = scale(oldMin: Double.zero, oldMax: Double(bufferLength), value: Double(n), newMin: 0.0, newMax: 1.0)
+//                    //                    let t: Double = Double(n) / Double(bufferLength)
+//                    let tau = Double.pi * 2
+//                    
+//                    // Apply Hann window
+//                    let hannWindow: Double = 0.5 * (1 - cos(tau * t))
+//                    let phaseShift: Double = (-Double.pi + (2 * Double.pi * t)) * hannWindow
+//                    
+//                    let p: Double = sin(tau * t * frequencies[4])
+//                    let q: Double = sin(tau * t * frequencies[4] + phaseShift)
+//                    
+//                    let f: Double = p + q // This will vary the interference pattern over time
 //                    channel_signals[0][n] = Float32(f)
 //                    channel_signals[1][n] = Float32(f)
 //                }
-
-//                channel_signals = Array(repeating: (0..<88200).map { _ in Float32.random(in: 0..<1) }, count: 2)
-
-                struct SomeStructure {
-                    static var t: Double = Double.zero
-                    static var q: Double = Double.zero
-                }
                 
-                var channel_signals: [[Float32]] = Array(repeating: (Int.zero...duration).map { n -> Float32 in
-                    SomeStructure.t = Double(n) / Double(duration)
-                    let p: Double = Double(sin(tau * SomeStructure.t * frequencies[4]))
-                    SomeStructure.q = Double(sin(SomeStructure.t * tau))
-                    let f: Double = Double((p * SomeStructure.q) + (p * abs(-SomeStructure.q)))
-                    return Float32(f)
-                }, count: 2) + Array(repeating: (duration...bufferLength).map { n -> Float32 in
-                    SomeStructure.t = Double(n + duration) / Double((bufferLength)) //
-                    let p: Double = Double(sin(tau * SomeStructure.t * frequencies[2]))
-                    SomeStructure.q = Double(sin(SomeStructure.t * tau))
-                    let f: Double = Double((p * SomeStructure.q) + (p * abs(-SomeStructure.q)))
-                    return Float32(f)
-                }, count: 2)
+                //                channel_signals = Array(repeating: (0..<88200).map { _ in Float32.random(in: 0..<1) }, count: 2)
+                
+                //                struct SomeStructure {
+                //                    static var t: Double = Double.zero
+                //                    static var q: Double = Double.zero
+                //                }
+                
+                //                var channel_signals: [[Float32]] = Array(repeating: (Int.zero...duration).map { n -> Float32 in
+                //                    let t = Double(n) / Double(bufferLength)
+                //                    let p: Double = Double(sin(tau * t * frequencies[4]))
+                //                    let q = Double(sin(t * tau))
+                //                    let f: Double = Double((p * q) + (p * abs(-q)))
+                //                    return Float32(f)
+                //                }, count: 2) + Array(repeating: (duration...bufferLength).map { n -> Float32 in
+                //                    let t = Double(n) / Double((bufferLength)) //
+                //                    let p: Double = Double(sin(tau * t * frequencies[2]))
+                //                    let q = Double(sin(t * tau))
+                //                    let f: Double = Double((p * q) + (p * abs(-q)))
+                //                    return Float32(f)
+                //                }, count: 2)
                 
                 
-//                print(duration)
-//                print(bufferLength - duration)
+                //                print(duration)
+                //                print(bufferLength - duration)
                 //                channel_signals[1] = (Int.zero...44099).map { n -> Float32 in
                 //                    let t: Double = scale(oldMin: Double.zero, oldMax: Double(bufferLength), value: Double(n), newMin: Double.zero, newMax: 1.0)
                 //                    let f: Double = Double(0.125) * (sin(tau * frequencies[4] * t))let f2: Double = Double(0.125) * (sin(tau * frequencies[4] * t))

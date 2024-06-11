@@ -298,6 +298,9 @@ var duration:     Int32   = Int32.zero
         var tetradBuffer = TetradBuffer(bufferLength: Int(buffer_length))
         var s = tetradBuffer.generateSignalSamplesIterator()
 
+        let serialQueue = DispatchQueue(label: "com.example.serialQueue")
+
+
         func numbers(count: Int) -> [[Float32]] {
             let allNumbers: [[Float32]] = ({ (operation: (Int) -> (() -> [[Float32]])) in
                 operation(count)()
@@ -309,10 +312,12 @@ var duration:     Int32   = Int32.zero
                         channels[0][i] = leftSample
                         channels[1][i] = rightSample
                     } else {
-                        tetradBuffer.resetIterator()
-                        s = tetradBuffer.generateSignalSamplesIterator()
-                        channels[0][i] = Float32(s.0.next()!)
-                        channels[1][i] = Float32(s.1.next()!)
+                        DispatchQueue.main.sync {
+//                            tetradBuffer.resetIterator()
+                            s = tetradBuffer.generateSignalSamplesIterator()
+                            channels[0][i] = Float32(s.0.next()!)
+                            channels[1][i] = Float32(s.1.next()!)
+                        }
                     }
                 }
        
@@ -324,20 +329,20 @@ var duration:     Int32   = Int32.zero
         }
          
         let audio_source_node: AVAudioSourceNode = AVAudioSourceNode(format: audio_format, renderBlock: { _, _, frameCount, audioBufferList in
-            let signalSamples    = numbers(count: Int(frameCount))
-            let ablPointer       = UnsafeMutableAudioBufferListPointer(audioBufferList)
-            let leftChannelData  = ablPointer[0]
-            let rightChannelData = ablPointer[1]
-            let leftBuffer: UnsafeMutableBufferPointer<Float32> = UnsafeMutableBufferPointer(leftChannelData)
-            let rightBuffer: UnsafeMutableBufferPointer<Float32> = UnsafeMutableBufferPointer(rightChannelData)
-            signalSamples.withUnsafeBufferPointer { sourceBuffer in
-                ([Float32]([Float32](sourceBuffer[0]))).withUnsafeBufferPointer { leftSourceBuffer in
-                    leftBuffer.baseAddress!.initialize(from: leftSourceBuffer.baseAddress!, count: Int(frameCount))
+            var signalSamples: [[Float32]] = numbers(count: Int(frameCount))
+                let ablPointer       = UnsafeMutableAudioBufferListPointer(audioBufferList)
+                let leftChannelData  = ablPointer[0]
+                let rightChannelData = ablPointer[1]
+                let leftBuffer: UnsafeMutableBufferPointer<Float32> = UnsafeMutableBufferPointer(leftChannelData)
+                let rightBuffer: UnsafeMutableBufferPointer<Float32> = UnsafeMutableBufferPointer(rightChannelData)
+                signalSamples.withUnsafeBufferPointer { sourceBuffer in
+                    ([Float32]([Float32](sourceBuffer[0]))).withUnsafeBufferPointer { leftSourceBuffer in
+                        leftBuffer.baseAddress!.initialize(from: leftSourceBuffer.baseAddress!, count: Int(frameCount))
+                    }
+                    ([Float32]([Float32](sourceBuffer[1]))).withUnsafeBufferPointer { rightSourceBuffer in
+                        rightBuffer.baseAddress!.initialize(from: rightSourceBuffer.baseAddress!, count: Int(frameCount))
+                    }
                 }
-                ([Float32]([Float32](sourceBuffer[1]))).withUnsafeBufferPointer { rightSourceBuffer in
-                    rightBuffer.baseAddress!.initialize(from: rightSourceBuffer.baseAddress!, count: Int(frameCount))
-                }
-            }
             
             return noErr
         })
