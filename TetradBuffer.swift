@@ -116,14 +116,14 @@ class TetradBuffer: NSObject {
         struct Dyad {
             
             // Example usage
-//            var combinationTones: [Double] { CombinationTones(root: 1.0)
-//                randomGenerator(randomDistributor: randomDistributor,
-//                                distributionRange: 0.0...1.0,
-//                                valueTransformer: valueTransformer,
-//                                valueStore: &combinationTones)
-//
-//                print(combinationTones.retrieve() as [Double])
-//            }
+            //            var combinationTones: [Double] { CombinationTones(root: 1.0)
+            //                randomGenerator(randomDistributor: randomDistributor,
+            //                                distributionRange: 0.0...1.0,
+            //                                valueTransformer: valueTransformer,
+            //                                valueStore: &combinationTones)
+            //
+            //                print(combinationTones.retrieve() as [Double])
+            //            }
             
             
             struct Harmony {
@@ -180,17 +180,17 @@ class TetradBuffer: NSObject {
             
             
             
-           
-//            for value in sineWave {
-//                print(value)
-//            }
-
+            
+            //            for value in sineWave {
+            //                print(value)
+            //            }
+            
             cycleFrames = Array(0..<bufferLength).cycled()
             frameIterator = cycleFrames.makeIterator()
         }
         
         
-            
+        
         public func synthesizeSignal(frequencyAmplitudePairs: [(f: Float32, a: Float32)],
                                      count: Int) -> [Float] {
             
@@ -206,23 +206,23 @@ class TetradBuffer: NSObject {
         }
         
         var samplesIterator: (Array<Float32>.Iterator, Array<Float32>.Iterator) {
-//            let n = vDSP_Length(88200)
-//            let stride = vDSP_Stride(1)
-//
-//
-//            var a: Float32 = 0.0
-//            var b: Float32 = 1.0
-//
-//             var c = [Float32](repeating: 0,
-//                               count: Int(vDSP_Length(88200)))
-//
-//            vDSP_vgen(&a,
-//                      &b,
-//                      &c,
-//                      stride,
-//                      n)
-//            let tau: simd_double1 = simd_double1(simd_double1.pi * 2.0)
-//            var channel_signals: [[Float32]] = [Array(repeating: Float32.zero, count: Int(bufferLength)), Array(repeating: Float32.zero, count: bufferLength)]
+            //            let n = vDSP_Length(88200)
+            //            let stride = vDSP_Stride(1)
+            //
+            //
+            //            var a: Float32 = 0.0
+            //            var b: Float32 = 1.0
+            //
+            //             var c = [Float32](repeating: 0,
+            //                               count: Int(vDSP_Length(88200)))
+            //
+            //            vDSP_vgen(&a,
+            //                      &b,
+            //                      &c,
+            //                      stride,
+            //                      n)
+            //            let tau: simd_double1 = simd_double1(simd_double1.pi * 2.0)
+            //            var channel_signals: [[Float32]] = [Array(repeating: Float32.zero, count: Int(bufferLength)), Array(repeating: Float32.zero, count: bufferLength)]
             let audio_buffer: [[Float32]] =  ({ (operation: (Int) -> (() -> [[Float32]])) in
                 operation(bufferLength)()
             })( { frames in
@@ -231,41 +231,41 @@ class TetradBuffer: NSObject {
                                              Double(dyads[0].harmonies[0].tones[0].frequencies[0]), Double(dyads[0].harmonies[0].tones[0].frequencies[0]),
                                              Double(dyads[0].harmonies[0].tones[0].frequencies[0]), Double(dyads[0].harmonies[0].tones[0].frequencies[0])]
                 
-//                channel_signals[0] = (Int.zero...44099).map { n -> Float32 in
-//                    let t: Double = scale(oldMin: Double.zero, oldMax: 44099, value: Double(n), newMin: Double.zero, newMax: 1.0)
-//                    let f: Double = Double(0.125) * (2.0 * sin((sin(tau * frequencies[0] * t)) + (sin(tau * frequencies[1] * t))) * cos((sin(tau * frequencies[0] * t)) - (sin(tau * frequencies[1] * t)))) / 2.0
-//                    return Float32(f)
-//                } + (44100..<bufferLength).map { n -> Float32 in
-//                    let t: Double = scale(oldMin: Double.zero, oldMax: 44099, value: Double(n), newMin: Double.zero, newMax: 1.0)
-//                    let f: Double = Double(0.125) * (2.0 * sin((sin(tau * frequencies[2] * t)) + (sin(tau * frequencies[3] * t))) * cos((sin(tau * frequencies[2] * t)) - (sin(tau * frequencies[3] * t)))) / 2.0
-//                    return Float32(f)
-//                }
-//
-//                channel_signals[1] = (Int.zero...44099).map { n -> Float32 in
-//                    let t: Double = scale(oldMin: Double.zero, oldMax: 44099, value: Double(n), newMin: Double.zero, newMax: 1.0)
-//                    let f: Double = Double(0.125) * (2.0 * sin((sin(tau * frequencies[4] * t)) + (sin(tau * frequencies[5] * t))) * cos((sin(tau * frequencies[4] * t)) - (sin(tau * frequencies[5] * t)))) / 2.0
-//                    return Float32(f)
-//                } + (44100..<bufferLength).map { n -> Float32 in
-//                    let t: Double = scale(oldMin: Double.zero, oldMax: 44099, value: Double(n), newMin: Double.zero, newMax: 1.0)
-//                    let f: Double = Double(0.125) * (2.0 * sin((sin(tau * frequencies[6] * t)) + (sin(tau * frequencies[7] * t))) * cos((sin(tau * frequencies[6] * t)) - (sin(tau * frequencies[7] * t)))) / 2.0
-//                    return Float32(f)
-//                }
+                //                channel_signals[0] = (Int.zero...44099).map { n -> Float32 in
+                //                    let t: Double = scale(oldMin: Double.zero, oldMax: 44099, value: Double(n), newMin: Double.zero, newMax: 1.0)
+                //                    let f: Double = Double(0.125) * (2.0 * sin((sin(tau * frequencies[0] * t)) + (sin(tau * frequencies[1] * t))) * cos((sin(tau * frequencies[0] * t)) - (sin(tau * frequencies[1] * t)))) / 2.0
+                //                    return Float32(f)
+                //                } + (44100..<bufferLength).map { n -> Float32 in
+                //                    let t: Double = scale(oldMin: Double.zero, oldMax: 44099, value: Double(n), newMin: Double.zero, newMax: 1.0)
+                //                    let f: Double = Double(0.125) * (2.0 * sin((sin(tau * frequencies[2] * t)) + (sin(tau * frequencies[3] * t))) * cos((sin(tau * frequencies[2] * t)) - (sin(tau * frequencies[3] * t)))) / 2.0
+                //                    return Float32(f)
+                //                }
+                //
+                //                channel_signals[1] = (Int.zero...44099).map { n -> Float32 in
+                //                    let t: Double = scale(oldMin: Double.zero, oldMax: 44099, value: Double(n), newMin: Double.zero, newMax: 1.0)
+                //                    let f: Double = Double(0.125) * (2.0 * sin((sin(tau * frequencies[4] * t)) + (sin(tau * frequencies[5] * t))) * cos((sin(tau * frequencies[4] * t)) - (sin(tau * frequencies[5] * t)))) / 2.0
+                //                    return Float32(f)
+                //                } + (44100..<bufferLength).map { n -> Float32 in
+                //                    let t: Double = scale(oldMin: Double.zero, oldMax: 44099, value: Double(n), newMin: Double.zero, newMax: 1.0)
+                //                    let f: Double = Double(0.125) * (2.0 * sin((sin(tau * frequencies[6] * t)) + (sin(tau * frequencies[7] * t))) * cos((sin(tau * frequencies[6] * t)) - (sin(tau * frequencies[7] * t)))) / 2.0
+                //                    return Float32(f)
+                //                }
                 
                 
                 
-//                let frequency: Float32 = (Float32(frequencies[4]) * (2.0 * Float32.pi))
-//
-//                var sineWave = [Float32](repeating: 0, count: Int(n))
-//
-//                // Calculate sin(2pi * time * frequency)
-//                vDSP_vsmul(c, stride, [frequency], &sineWave, stride, n)
-//                vvsinf(&sineWave, sineWave, [Int32(n)])
+                //                let frequency: Float32 = (Float32(frequencies[4]) * (2.0 * Float32.pi))
+                //
+                //                var sineWave = [Float32](repeating: 0, count: Int(n))
+                //
+                //                // Calculate sin(2pi * time * frequency)
+                //                vDSP_vsmul(c, stride, [frequency], &sineWave, stride, n)
+                //                vvsinf(&sineWave, sineWave, [Int32(n)])
                 
                 var signal1 = synthesizeSignal(frequencyAmplitudePairs: [(f: Float32(frequencies[4]), a: (0.25 * Float32.pi))], count: bufferLength / 2)  //, [Float32](repeating: 0, count: bufferLength)]
                 var signal = synthesizeSignal(frequencyAmplitudePairs: [(f: Float32(frequencies[4]), a: (0.25 * Float32.pi))], count: bufferLength / 2)
                 
                 return {
-//                    channel_signals
+                    //                    channel_signals
                     [signal, signal]
                 }
             })
@@ -273,51 +273,51 @@ class TetradBuffer: NSObject {
             return (audio_buffer[0].makeIterator(), audio_buffer[1].makeIterator())
         }
         
-                func createAudioBuffer() -> [[Float32]] {
-        //            var channel_signals: [[Float32]] = [Array(repeating: Float32.zero, count: Int(bufferLength)), Array(repeating: Float32.zero, count: bufferLength)]
-        
-
-                    var thetas: simd_double2x2 = matrix_identity_double2x2
-                    var theta_increments: simd_double2x2
-                    var samples: simd_double2x2
-                    var frequencies: simd_double2x2 = simd_double2x2()
-        
-                    var phase_angular_unit: simd_double1 = simd_double1((simd_double1.pi * 2.0) / simd_double1(bufferLength))
-                    theta_increments = matrix_scale(phase_angular_unit, frequencies)
-                    var split_frame: simd_double1 = simd_double1(Double.random(in: 0.125...0.875))
-                    var durations: simd_double2x2 = simd_matrix_from_rows(simd_make_double2(split_frame, 1.0 - split_frame),
-                                                                          simd_make_double2(1.0 - split_frame, split_frame))
-                    for frame in 0..<bufferLength {
-                        samples = simd_matrix_from_rows(_simd_sin_d2(simd_make_double2(simd_double2(thetas.columns.0))),
-                                                        _simd_sin_d2(simd_make_double2(simd_double2(thetas.columns.1))))
-        
-                        var a: simd_double2 =
-                        simd_make_double2(
-                            simd_double2(samples.columns.0) * simd_double2(durations.columns.0))
-        
-                        var b: simd_double2 =
-                        simd_make_double2(
-                            simd_double2(samples.columns.1) * simd_double2(durations.columns.1))
-        
-                        var ab_sum: simd_double2 = _simd_sin_d2(a + b)
-                        var ab_sub: simd_double2 = _simd_cos_d2(a - b)
-                        var ab_mul: simd_double2 = ab_sum * ab_sub
-        
-                        samples = simd_matrix_from_rows(
-                            simd_make_double2(simd_double2((2.0 * ab_mul) / 2.0) * simd_double2(durations.columns.1)),
-                            simd_make_double2(simd_double2((2.0 * ab_mul) / 2.0) * simd_double2(durations.columns.0)))
-        
-                        thetas = simd_add(thetas, theta_increments) // Variable 'thetas' used before being initialized
-        
-        //                for channel in 0..<2 {
-        
-        //                channel_signals[1].append(contentsOf: (samples.columns.
-        //                    !(thetas.columns[channel ^ 1][channel] > (simd_double1.pi * 2.0)) && (thetas.columns[channel ^ 1][channel] -= (simd_double1.pi * 2.0)); //0 = 1 0 //1 = 0 1
-        //                    !(thetas.columns[channel][channel ^ 1] > (simd_double1.pi * 2.0)) && (thetas.columns[channel][channel ^ 1] -= (simd_double1.pi * 2.0)); //0 = 0 1 //1 = 1 0
-        //                }
-                    }
-        
-                    return []
-                }
+        func createAudioBuffer() -> [[Float32]] {
+            //            var channel_signals: [[Float32]] = [Array(repeating: Float32.zero, count: Int(bufferLength)), Array(repeating: Float32.zero, count: bufferLength)]
+            
+            
+            var thetas: simd_double2x2 = matrix_identity_double2x2
+            var theta_increments: simd_double2x2
+            var samples: simd_double2x2
+            var frequencies: simd_double2x2 = simd_double2x2()
+            
+            var phase_angular_unit: simd_double1 = simd_double1((simd_double1.pi * 2.0) / simd_double1(bufferLength))
+            theta_increments = matrix_scale(phase_angular_unit, frequencies)
+            var split_frame: simd_double1 = simd_double1(Double.random(in: 0.125...0.875))
+            var durations: simd_double2x2 = simd_matrix_from_rows(simd_make_double2(split_frame, 1.0 - split_frame),
+                                                                  simd_make_double2(1.0 - split_frame, split_frame))
+            for frame in 0..<bufferLength {
+                samples = simd_matrix_from_rows(_simd_sin_d2(simd_make_double2(simd_double2(thetas.columns.0))),
+                                                _simd_sin_d2(simd_make_double2(simd_double2(thetas.columns.1))))
+                
+                var a: simd_double2 =
+                simd_make_double2(
+                    simd_double2(samples.columns.0) * simd_double2(durations.columns.0))
+                
+                var b: simd_double2 =
+                simd_make_double2(
+                    simd_double2(samples.columns.1) * simd_double2(durations.columns.1))
+                
+                var ab_sum: simd_double2 = _simd_sin_d2(a + b)
+                var ab_sub: simd_double2 = _simd_cos_d2(a - b)
+                var ab_mul: simd_double2 = ab_sum * ab_sub
+                
+                samples = simd_matrix_from_rows(
+                    simd_make_double2(simd_double2((2.0 * ab_mul) / 2.0) * simd_double2(durations.columns.1)),
+                    simd_make_double2(simd_double2((2.0 * ab_mul) / 2.0) * simd_double2(durations.columns.0)))
+                
+                thetas = simd_add(thetas, theta_increments) // Variable 'thetas' used before being initialized
+                
+                //                for channel in 0..<2 {
+                
+                //                channel_signals[1].append(contentsOf: (samples.columns.
+                //                    !(thetas.columns[channel ^ 1][channel] > (simd_double1.pi * 2.0)) && (thetas.columns[channel ^ 1][channel] -= (simd_double1.pi * 2.0)); //0 = 1 0 //1 = 0 1
+                //                    !(thetas.columns[channel][channel ^ 1] > (simd_double1.pi * 2.0)) && (thetas.columns[channel][channel ^ 1] -= (simd_double1.pi * 2.0)); //0 = 0 1 //1 = 1 0
+                //                }
+            }
+            
+            return []
+        }
     }
 }

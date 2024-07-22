@@ -77,7 +77,7 @@ struct ContentView: View {
                         .fontWeight(Font.Weight?.some(Font.Weight.thin))
                         .foregroundStyle(toneBarrierSapphire)
                         .shadow(color: .white.opacity(0.28125), radius: 10)
-                        .offset(x: isPlaying ? -1 : 13, y: isPlaying ? 15 : 15)
+                        .offset(x: isPlaying ? -1 : 15, y: isPlaying ? 15 : 15)
                         .onAppear {
                             isPortrait = proxy.size.height > proxy.size.width
                         }
