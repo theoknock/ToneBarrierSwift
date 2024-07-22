@@ -20,6 +20,9 @@
 		B96AD39129FD7C3F00A61F7B /* ToggleToneBarrierIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96AD39029FD7C3F00A61F7B /* ToggleToneBarrierIntentHandler.swift */; };
 		B97713D32A0B1D1A003C1389 /* PauseToneBarrierIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97713D22A0B1D1A003C1389 /* PauseToneBarrierIntentHandler.swift */; };
 		B979461429FDEECC00CE3139 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B979461329FDEECC00CE3139 /* AVKit.framework */; };
+		B9A2CF442C4E01A900E212B9 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A2CF432C4E01A900E212B9 /* AppState.swift */; };
+		B9A2CF462C4E01CD00E212B9 /* ToneBarrierApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A2CF452C4E01CD00E212B9 /* ToneBarrierApp.swift */; };
+		B9A2CF4A2C4E045F00E212B9 /* MediaPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A2CF492C4E045F00E212B9 /* MediaPlayerManager.swift */; };
 		B9A2E7152AC78B970051AB01 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9A2E7142AC78B970051AB01 /* Media.xcassets */; };
 		B9B564AA2B657474005E1B05 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9B60A042B04E58400F564FD /* CoreAudio.framework */; };
 		B9B609FA2B04E54000F564FD /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9B609F62B04E54000F564FD /* AudioToolbox.framework */; };
@@ -50,6 +53,9 @@
 		B97713D22A0B1D1A003C1389 /* PauseToneBarrierIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PauseToneBarrierIntentHandler.swift; sourceTree = "<group>"; };
 		B979461129FDEE8D00CE3139 /* AVRouting.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVRouting.framework; path = System/Library/Frameworks/AVRouting.framework; sourceTree = SDKROOT; };
 		B979461329FDEECC00CE3139 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
+		B9A2CF432C4E01A900E212B9 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		B9A2CF452C4E01CD00E212B9 /* ToneBarrierApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToneBarrierApp.swift; sourceTree = "<group>"; };
+		B9A2CF492C4E045F00E212B9 /* MediaPlayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPlayerManager.swift; sourceTree = "<group>"; };
 		B9A2E7142AC78B970051AB01 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		B9B609F52B04E54000F564FD /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		B9B609F62B04E54000F564FD /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -87,6 +93,9 @@
 			children = (
 				B9346FE92BF1C48400FA1D4F /* TetradBuffer.swift */,
 				B9EEEA232C03ACC200CCE653 /* ContentView.swift */,
+				B9A2CF432C4E01A900E212B9 /* AppState.swift */,
+				B9A2CF492C4E045F00E212B9 /* MediaPlayerManager.swift */,
+				B9A2CF452C4E01CD00E212B9 /* ToneBarrierApp.swift */,
 				B914671B2C02E2C7005E2E7B /* AngularRandomDistributor.swift */,
 				B914668F2BFB6A2A005E2E7B /* TetradBufferRevamp.swift */,
 				B90381492BF69BBB001049F9 /* File.swift */,
@@ -222,6 +231,8 @@
 				B97713D32A0B1D1A003C1389 /* PauseToneBarrierIntentHandler.swift in Sources */,
 				B9EEEA242C03ACC200CCE653 /* ContentView.swift in Sources */,
 				B96AD37D29FD763700A61F7B /* ViewController.swift in Sources */,
+				B9A2CF442C4E01A900E212B9 /* AppState.swift in Sources */,
+				B9A2CF462C4E01CD00E212B9 /* ToneBarrierApp.swift in Sources */,
 				B9346FEA2BF1C48400FA1D4F /* TetradBuffer.swift in Sources */,
 				B96AD39129FD7C3F00A61F7B /* ToggleToneBarrierIntentHandler.swift in Sources */,
 				B96AD37929FD763700A61F7B /* AppDelegate.swift in Sources */,
@@ -229,6 +240,7 @@
 				B96AD37B29FD763700A61F7B /* SceneDelegate.swift in Sources */,
 				B914671C2C02E2C7005E2E7B /* AngularRandomDistributor.swift in Sources */,
 				B9D7B5D629FDEB5E00954817 /* AVAudioSignal.swift in Sources */,
+				B9A2CF4A2C4E045F00E212B9 /* MediaPlayerManager.swift in Sources */,
 				B96AD38F29FD799B00A61F7B /* ToneBarrierIntentDefinition.intentdefinition in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

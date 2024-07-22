@@ -10,7 +10,7 @@ import AVFoundation
 import AVFAudio
 
 struct ContentView: View {
-    
+    @EnvironmentObject var appState: AppState
     let toneBarrierSapphire: Color = Color.init(hue: 206 / 360, saturation: 1, brightness: 1)
     @State private var isPlaying: Bool = false
     @State private var isPortrait: Bool = true
