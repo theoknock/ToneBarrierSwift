@@ -1,24 +1,18 @@
-//
-//  PauseToneBarrierIntentHandler.swift
-//  ToneBarrier
-//
-//  Created by Xcode Developer on 5/9/23.
-//
-
-import UIKit
+import SwiftUI
 import Intents
 
 class PauseToneBarrierIntentHandler: NSObject, PauseToneBarrierIntentHandling {
-        
-    var appDelegate: AppDelegate?
-    var window: UIWindow?
-    var viewController: ViewController?
+    
+    @ObservedObject var appState = AppState.shared
     
     func handle(intent: PauseToneBarrierIntent, completion: @escaping (PauseToneBarrierIntentResponse) -> Void) {
-        appDelegate = (UIApplication.shared.delegate! as! AppDelegate)
-        window = appDelegate?.window
-        viewController = (window!.rootViewController as! ViewController)
-        viewController?.togglePlaybackControl.isHighlighted = !(viewController?.togglePlaybackControl.isHighlighted)!
+        // Pause playback state in appState
+        if appState.isPlaying {
+            appState.isPlaying = false
+        }
+        
+        // Provide a response based on the new state
+        let response = PauseToneBarrierIntentResponse(code: .success, userActivity: nil)
+        completion(response)
     }
-    
 }

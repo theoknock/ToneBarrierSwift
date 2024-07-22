@@ -11,11 +11,7 @@
 		B914671C2C02E2C7005E2E7B /* AngularRandomDistributor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B914671B2C02E2C7005E2E7B /* AngularRandomDistributor.swift */; };
 		B9245AB92B2BE41D000A0388 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = B9245AB82B2BE41D000A0388 /* Algorithms */; };
 		B9346FEA2BF1C48400FA1D4F /* TetradBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9346FE92BF1C48400FA1D4F /* TetradBuffer.swift */; };
-		B96AD37929FD763700A61F7B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96AD37829FD763700A61F7B /* AppDelegate.swift */; };
-		B96AD37B29FD763700A61F7B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96AD37A29FD763700A61F7B /* SceneDelegate.swift */; };
 		B96AD37D29FD763700A61F7B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96AD37C29FD763700A61F7B /* ViewController.swift */; };
-		B96AD38029FD763700A61F7B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B96AD37E29FD763700A61F7B /* Main.storyboard */; };
-		B96AD38529FD763800A61F7B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B96AD38329FD763800A61F7B /* LaunchScreen.storyboard */; };
 		B96AD38F29FD799B00A61F7B /* ToneBarrierIntentDefinition.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = B96AD38E29FD799B00A61F7B /* ToneBarrierIntentDefinition.intentdefinition */; };
 		B96AD39129FD7C3F00A61F7B /* ToggleToneBarrierIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96AD39029FD7C3F00A61F7B /* ToggleToneBarrierIntentHandler.swift */; };
 		B97713D32A0B1D1A003C1389 /* PauseToneBarrierIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97713D22A0B1D1A003C1389 /* PauseToneBarrierIntentHandler.swift */; };
@@ -23,6 +19,8 @@
 		B9A2CF442C4E01A900E212B9 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A2CF432C4E01A900E212B9 /* AppState.swift */; };
 		B9A2CF462C4E01CD00E212B9 /* ToneBarrierApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A2CF452C4E01CD00E212B9 /* ToneBarrierApp.swift */; };
 		B9A2CF4A2C4E045F00E212B9 /* MediaPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A2CF492C4E045F00E212B9 /* MediaPlayerManager.swift */; };
+		B9A2CF4C2C4E0B6800E212B9 /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A2CF4B2C4E0B6800E212B9 /* IntentHandler.swift */; };
+		B9A2CF4E2C4E0C8000E212B9 /* SiriButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A2CF4D2C4E0C8000E212B9 /* SiriButtonView.swift */; };
 		B9A2E7152AC78B970051AB01 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9A2E7142AC78B970051AB01 /* Media.xcassets */; };
 		B9B564AA2B657474005E1B05 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9B60A042B04E58400F564FD /* CoreAudio.framework */; };
 		B9B609FA2B04E54000F564FD /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9B609F62B04E54000F564FD /* AudioToolbox.framework */; };
@@ -42,11 +40,7 @@
 		B9346FE92BF1C48400FA1D4F /* TetradBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TetradBuffer.swift; sourceTree = "<group>"; };
 		B960CD352AC6F11300DD56C3 /* CodeSnippetsStandby.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CodeSnippetsStandby.md; sourceTree = "<group>"; };
 		B96AD37529FD763700A61F7B /* ToneBarrier.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToneBarrier.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		B96AD37829FD763700A61F7B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		B96AD37A29FD763700A61F7B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		B96AD37C29FD763700A61F7B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; wrapsLines = 0; };
-		B96AD37F29FD763700A61F7B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		B96AD38429FD763800A61F7B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B96AD38629FD763800A61F7B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B96AD38E29FD799B00A61F7B /* ToneBarrierIntentDefinition.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = ToneBarrierIntentDefinition.intentdefinition; sourceTree = "<group>"; };
 		B96AD39029FD7C3F00A61F7B /* ToggleToneBarrierIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleToneBarrierIntentHandler.swift; sourceTree = "<group>"; };
@@ -56,6 +50,8 @@
 		B9A2CF432C4E01A900E212B9 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		B9A2CF452C4E01CD00E212B9 /* ToneBarrierApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToneBarrierApp.swift; sourceTree = "<group>"; };
 		B9A2CF492C4E045F00E212B9 /* MediaPlayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPlayerManager.swift; sourceTree = "<group>"; };
+		B9A2CF4B2C4E0B6800E212B9 /* IntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentHandler.swift; sourceTree = "<group>"; };
+		B9A2CF4D2C4E0C8000E212B9 /* SiriButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiriButtonView.swift; sourceTree = "<group>"; };
 		B9A2E7142AC78B970051AB01 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		B9B609F52B04E54000F564FD /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		B9B609F62B04E54000F564FD /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -94,6 +90,7 @@
 				B9346FE92BF1C48400FA1D4F /* TetradBuffer.swift */,
 				B9EEEA232C03ACC200CCE653 /* ContentView.swift */,
 				B9A2CF432C4E01A900E212B9 /* AppState.swift */,
+				B9A2CF4D2C4E0C8000E212B9 /* SiriButtonView.swift */,
 				B9A2CF492C4E045F00E212B9 /* MediaPlayerManager.swift */,
 				B9A2CF452C4E01CD00E212B9 /* ToneBarrierApp.swift */,
 				B914671B2C02E2C7005E2E7B /* AngularRandomDistributor.swift */,
@@ -118,17 +115,14 @@
 			children = (
 				B9C2EE7B2B673BB600631C57 /* ToneBarrier.entitlements */,
 				B96AD38629FD763800A61F7B /* Info.plist */,
-				B96AD37829FD763700A61F7B /* AppDelegate.swift */,
-				B96AD37A29FD763700A61F7B /* SceneDelegate.swift */,
 				B96AD37C29FD763700A61F7B /* ViewController.swift */,
 				B9A2E7142AC78B970051AB01 /* Media.xcassets */,
 				B9D7B5D529FDEB5E00954817 /* AVAudioSignal.swift */,
 				B960CD352AC6F11300DD56C3 /* CodeSnippetsStandby.md */,
-				B96AD38329FD763800A61F7B /* LaunchScreen.storyboard */,
-				B96AD37E29FD763700A61F7B /* Main.storyboard */,
 				B96AD38E29FD799B00A61F7B /* ToneBarrierIntentDefinition.intentdefinition */,
 				B96AD39029FD7C3F00A61F7B /* ToggleToneBarrierIntentHandler.swift */,
 				B97713D22A0B1D1A003C1389 /* PauseToneBarrierIntentHandler.swift */,
+				B9A2CF4B2C4E0B6800E212B9 /* IntentHandler.swift */,
 			);
 			path = ToneBarrier;
 			sourceTree = "<group>";
@@ -215,9 +209,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B96AD38529FD763800A61F7B /* LaunchScreen.storyboard in Resources */,
 				B9A2E7152AC78B970051AB01 /* Media.xcassets in Resources */,
-				B96AD38029FD763700A61F7B /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -234,10 +226,10 @@
 				B9A2CF442C4E01A900E212B9 /* AppState.swift in Sources */,
 				B9A2CF462C4E01CD00E212B9 /* ToneBarrierApp.swift in Sources */,
 				B9346FEA2BF1C48400FA1D4F /* TetradBuffer.swift in Sources */,
+				B9A2CF4C2C4E0B6800E212B9 /* IntentHandler.swift in Sources */,
+				B9A2CF4E2C4E0C8000E212B9 /* SiriButtonView.swift in Sources */,
 				B96AD39129FD7C3F00A61F7B /* ToggleToneBarrierIntentHandler.swift in Sources */,
-				B96AD37929FD763700A61F7B /* AppDelegate.swift in Sources */,
 				B91466902BFB6A2A005E2E7B /* TetradBufferRevamp.swift in Sources */,
-				B96AD37B29FD763700A61F7B /* SceneDelegate.swift in Sources */,
 				B914671C2C02E2C7005E2E7B /* AngularRandomDistributor.swift in Sources */,
 				B9D7B5D629FDEB5E00954817 /* AVAudioSignal.swift in Sources */,
 				B9A2CF4A2C4E045F00E212B9 /* MediaPlayerManager.swift in Sources */,
@@ -246,25 +238,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		B96AD37E29FD763700A61F7B /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				B96AD37F29FD763700A61F7B /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		B96AD38329FD763800A61F7B /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				B96AD38429FD763800A61F7B /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		B96AD38729FD763800A61F7B /* Debug */ = {
@@ -406,8 +379,6 @@
 				INFOPLIST_FILE = ToneBarrier/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ToneBarrier;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
@@ -450,8 +421,6 @@
 				INFOPLIST_FILE = ToneBarrier/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ToneBarrier;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";

@@ -32,7 +32,7 @@ class MediaPlayerManager: ObservableObject {
         }
     }
 
-    func setupRemoteCommandCenter() {
+    private func setupRemoteCommandCenter() {
         remoteCommandCenter.playCommand.addTarget { [weak self] event in
             self?.isPlaying = true
             return .success
@@ -49,12 +49,12 @@ class MediaPlayerManager: ObservableObject {
 
     private func startPlaying() {
         updateNowPlayingInfo(isPlaying: true)
-        // Start your audio playback here
+        // Add your audio playback start logic here
     }
 
     private func pausePlaying() {
         updateNowPlayingInfo(isPlaying: false)
-        // Pause your audio playback here
+        // Add your audio playback pause logic here
     }
 
     private func updateNowPlayingInfo(isPlaying: Bool) {

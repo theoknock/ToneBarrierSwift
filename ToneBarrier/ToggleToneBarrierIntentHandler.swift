@@ -1,24 +1,16 @@
-//
-//  PlayToneBarrierIntentHandler.swift
-//  ToneBarrier
-//
-//  Created by James Alan Bush on 4/29/23.
-//
-
-import UIKit
+import SwiftUI
 import Intents
 
 class ToggleToneBarrierIntentHandler: NSObject, ToggleToneBarrierIntentHandling {
-        
-    var appDelegate: AppDelegate?
-    var window: UIWindow?
-    var viewController: ViewController?
+    
+    @ObservedObject var appState = AppState.shared
     
     func handle(intent: ToggleToneBarrierIntent, completion: @escaping (ToggleToneBarrierIntentResponse) -> Void) {
-        appDelegate = (UIApplication.shared.delegate! as! AppDelegate)
-        window = appDelegate?.window
-        viewController = (window!.rootViewController as! ViewController)
-        viewController?.togglePlaybackControl.isHighlighted = !(viewController?.togglePlaybackControl.isHighlighted)!
+        // Toggle playback state in appState
+        appState.isPlaying.toggle()
+        
+        // Provide a response based on the new state
+        let response = ToggleToneBarrierIntentResponse(code: .success, userActivity: nil)
+        completion(response)
     }
-    
 }

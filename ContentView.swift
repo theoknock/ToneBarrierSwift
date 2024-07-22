@@ -1,17 +1,11 @@
-//
-//  ContentView.swift
-//  ToneBarrier
-//
-//  Created by Xcode Developer on 5/26/24.
-//
-
 import SwiftUI
 import AVFoundation
 import AVFAudio
+import IntentsUI
 
 struct ContentView: View {
     @EnvironmentObject var appState: AppState
-    let toneBarrierSapphire: Color = Color.init(hue: 206 / 360, saturation: 1, brightness: 1)
+    let toneBarrierSapphire: Color = Color(hue: 206 / 360, saturation: 1, brightness: 1)
     @State private var isPlaying: Bool = false
     @State private var isPortrait: Bool = true
     
@@ -32,39 +26,42 @@ struct ContentView: View {
     }
     
     var body: some View {
+        
         GeometryReader { proxy in
-            ZStack(alignment: Alignment(horizontal: .center, vertical: .center), content: {
+            ZStack(alignment: .center) {
                 Color.black
                     .mask {
                         MeshGradient(width: 3, height: 3, points: [
-                            .init(0, 0),   .init(0.5, 0),   .init(1, 0),
+                            .init(0, 0), .init(0.5, 0), .init(1, 0),
                             .init(0, 0.3125), .init(0.5, 0.3125), .init(1, 0.3125),
-                            .init(0, 1),   .init(0.5, 1),   .init(1, 1)
+                            .init(0, 1), .init(0.5, 1), .init(1, 1)
                         ], colors: [
                             .black.opacity(0.9), .black.opacity(0.9), .black.opacity(0.9),
                             .black.opacity(0.9125), .black.opacity(0.9125), .black.opacity(0.9125),
                             .black, .black, .black
                         ])
                     }
+                
                 Image(systemName: "waveform.path")
                     .resizable()
                     .scaledToFit()
                     .aspectRatio(1.0, contentMode: .fit)
                     .frame(width: proxy.size.width)
                     .clipShape(Rectangle())
-                    .fontWeight(Font.Weight?.some(Font.Weight.regular))
+                    .fontWeight(.regular)
                     .foregroundStyle(toneBarrierSapphire)
                     .mask {
                         MeshGradient(width: 3, height: 3, points: [
-                            .init(0, 0),   .init(0.5, 0),   .init(1, 0),
+                            .init(0, 0), .init(0.5, 0), .init(1, 0),
                             .init(0, 0.5), .init(0.5, 0.5), .init(1, 0.5),
-                            .init(0, 1),   .init(0.5, 1),   .init(1, 1)
+                            .init(0, 1), .init(0.5, 1), .init(1, 1)
                         ], colors: [
-                            .black.opacity(0.1), .black.opacity(0.1),     .black.opacity(0.1),
+                            .black.opacity(0.1), .black.opacity(0.1), .black.opacity(0.1),
                             .black.opacity(0.1), .white.opacity(0.28125), .black.opacity(0.1),
-                            .black.opacity(0.1), .black.opacity(0.1),     .black.opacity(0.1)
+                            .black.opacity(0.1), .black.opacity(0.1), .black.opacity(0.1)
                         ])
                     }
+                
                 Button(action: {
                     audio()
                 }) {
@@ -74,7 +71,7 @@ struct ContentView: View {
                         .aspectRatio(1.0, contentMode: .fit)
                         .frame(width: isPortrait ? proxy.size.width * 0.35 : proxy.size.height * 0.35)
                         .clipShape(Rectangle())
-                        .fontWeight(Font.Weight?.some(Font.Weight.thin))
+                        .fontWeight(.thin)
                         .foregroundStyle(toneBarrierSapphire)
                         .shadow(color: .white.opacity(0.28125), radius: 10)
                         .offset(x: isPlaying ? -1 : 13, y: isPlaying ? 15 : 15)
@@ -95,12 +92,12 @@ struct ContentView: View {
                         print("Failed to set audio session category.")
                     }
                 }
-            })
+//                SiriButtonView()
+//                    .frame(width: 200, height: 50)
+//                    .padding(.top, 20)
+//                    .position(x: proxy.size.width / 2, y: proxy.size.height - 45.0)
+            }
             .ignoresSafeArea()
         }
     }
-}
-
-#Preview {
-    ContentView()
 }
