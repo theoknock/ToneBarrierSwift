@@ -77,13 +77,15 @@ struct ContentView: View {
                         .fontWeight(Font.Weight?.some(Font.Weight.thin))
                         .foregroundStyle(toneBarrierSapphire)
                         .shadow(color: .white.opacity(0.28125), radius: 10)
-                        .offset(x: isPlaying ? 0 : 13, y: isPlaying ? 0 : 13)
+                        .offset(x: isPlaying ? -1 : 13, y: isPlaying ? 13 : 13)
                         .onAppear {
                             isPortrait = proxy.size.height > proxy.size.width
                         }
                         .onChange(of: proxy.size) { newSize in
                             isPortrait = newSize.height > newSize.width
                         }
+                        .transition(.asymmetric(insertion: .scale(scale: 1.1).combined(with: .opacity), removal: .scale(scale: 0.9).combined(with: .opacity)))
+                        .animation(.easeInOut(duration: 0.0), value: isPlaying)
                 }
                 .onAppear {
                     do {
