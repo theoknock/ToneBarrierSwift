@@ -174,8 +174,8 @@ var duration:     Int32   = Int32.zero
 //        }
         
 //        func generateFrequencies(frame_count: Int) -> [[Float32]] {
-//            
-//            
+//
+//
 //            var harmonyFrequencies: [[Double]] = [
 //                [tetrad.dyads[0].harmonies[0].tones[0].frequency, tetrad.dyads[0].harmonies[0].tones[1].frequency],
 //                [tetrad.dyads[1].harmonies[0].tones[0].frequency, tetrad.dyads[1].harmonies[0].tones[1].frequency]
@@ -184,16 +184,16 @@ var duration:     Int32   = Int32.zero
 ////                (Int32((tetrad.dyads[0].durations.0 / 2.0) * Double(buffer_length)), Int32((tetrad.dyads[1].durations.0 / 2.0) * Double(buffer_length))),
 ////                (Int32((tetrad.dyads[0].durations.1 / 2.0) * Double(buffer_length)), Int32((tetrad.dyads[1].durations.1 / 2.0) * Double(buffer_length)))
 ////            ]
-//            
+//
 //            var harmonyDurations: [(Int32, Int32)] = [
 //                (Int32(0.5 * Double(buffer_length)), Int32(0.25 * Double(buffer_length)))
 //            ]
-//            
+//
 //            let audio_buffer: [[Float32]] =  ({ (operation: (Int) -> (() -> [[Float32]])) in
 //                operation(frame_count)()
 //            })( { number in
 //                var channel_signals: [[Float32]] = [Array(repeating: Float32.zero, count: Int(number)), Array(repeating: Float32.zero, count: number)]
-//                
+//
 //                for i in 0..<number {
 //                    n = frameIterator.next()!
 //                    let t: Double = Double(Double(n) / (Double(buffer_length) - 1.0))
@@ -215,17 +215,17 @@ var duration:     Int32   = Int32.zero
 ////                            [tetrad.dyads[0].harmonies[0].tones[0].frequency, tetrad.dyads[0].harmonies[0].tones[1].frequency],
 ////                            [tetrad.dyads[1].harmonies[0].tones[0].frequency, tetrad.dyads[1].harmonies[0].tones[1].frequency]
 ////                        ]
-//                        
+//
 //                        harmonyFrequencies = [
 //                            [330.0, 530.0],
 //                            [710.0, 910.0]
 //                        ]
-//                        
+//
 ////                        harmonyDurations = [
 ////                            (Int32(Double(tetrad.dyads[0].harmonies[0].duration / 2.0) * Double(buffer_length)), Int32(Double(tetrad.dyads[0].harmonies[1].duration / 2.0) * Double(buffer_length))),
 ////                            (Int32(Double(tetrad.dyads[1].harmonies[0].duration / 2.0) * Double(buffer_length)), Int32(Double(tetrad.dyads[1].harmonies[1].duration / 2.0) * Double(buffer_length)))
 ////                        ]
-//                        
+//
 //                        harmonyDurations = [
 //                            (Int32(0.5 * Double(buffer_length)), Int32(0.25 * Double(buffer_length)))
 //                        ]
@@ -238,7 +238,7 @@ var duration:     Int32   = Int32.zero
 //                    channel_signals
 //                }
 //            })
-//            
+//
 //            return audio_buffer
 //        }
         
@@ -322,13 +322,13 @@ var duration:     Int32   = Int32.zero
                 operation(count)()
             })( { number in
                 var channels: [[Float32]] = [Array(repeating: Float32.zero, count: count), Array(repeating: Float32.zero, count: count)]
-                
+                //print(#function)
                 for i in 0..<number {
                     if let leftSample = s.0.next(), let rightSample = s.1.next() {
                         channels[0][i] = leftSample
                         channels[1][i] = rightSample
                     } else {
-                        tetradBuffer.resetIterator()
+//                        tetradBuffer.resetIterator()
                         s = tetradBuffer.generateSignalSamplesIterator()
                         channels[0][i] = Float32(s.0.next()!)
                         channels[1][i] = Float32(s.1.next()!)
@@ -338,23 +338,23 @@ var duration:     Int32   = Int32.zero
 
 //                        let n = vDSP_Length(88200)
 //                        let stride = vDSP_Stride(1)
-//                        
+//
 //                        var a: Float = 0.0
 //                        var b: Float = 1.0
-//                        
+//
 //                        var timeArray = [Float](repeating: 0, count: Int(n))
-//                        
+//
 //                        vDSP_vgen(&a, &b, &timeArray, stride, n)
-//                        
+//
 //                        let frequency: Float = 440.0
 //                        let twoPi: Float = 2.0 * .pi
-//                        
+//
 //                        var sineWave = [Float](repeating: 0, count: Int(n))
-//                        
+//
 //                        // Calculate sin(2pi * time * frequency)
 //                        vDSP_vsmul(timeArray, stride, [twoPi * frequency], &sineWave, stride, n)
 //                        vvsinf(&sineWave, sineWave, [Int32(n)])
-//                        
+//
 //                        print(sineWave)
         
                 
@@ -365,11 +365,8 @@ var duration:     Int32   = Int32.zero
             return allNumbers
         }
         
-        
-        
-
-        
         let audio_source_node: AVAudioSourceNode = AVAudioSourceNode(format: audio_format, renderBlock: { _, _, frameCount, audioBufferList in
+            //print(#function)
             let signalSamples    = numbers(count: Int(frameCount))
             let ablPointer       = UnsafeMutableAudioBufferListPointer(audioBufferList)
             let leftChannelData  = ablPointer[0]

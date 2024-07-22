@@ -1,5 +1,5 @@
 
-//public func generateSignalSamplesIterator(bufferLength: Int) -> (Array<Float32>.Iterator, Array<Float32>.Iterator) {
+//public func generateSignalSamplesIterator(bufferLength: Int) -> (Array<Double>.Iterator, Array<Double>.Iterator) {
 //    var tetrad: TetradBuffer.Tetrad = TetradBuffer.Tetrad.init(bufferLength: Int(bufferLength))
 //    return tetrad.samplesIterator
 //}
@@ -156,10 +156,10 @@
 ////    var cycleFrames: CycledSequence<Array<Int>>
 ////    var frameIterator: CycledSequence<Array<Int>>.Iterator
 ////    
-////    var samplesIterator: (Array<Float32>.Iterator, Array<Float32>.Iterator) {
+////    var samplesIterator: (Array<Double>.Iterator, Array<Double>.Iterator) {
 ////        let tau: Double =  Double(Double.pi * 2.0)
-////        var channel_signals: [[Float32]] = [Array(repeating: Float32.zero, count: Int(bufferLength)), Array(repeating: Float32.zero, count: bufferLength)]
-////        let audio_buffer: [[Float32]] =  ({ (operation: (Int) -> (() -> [[Float32]])) in
+////        var channel_signals: [[Double]] = [Array(repeating: Double.zero, count: Int(bufferLength)), Array(repeating: Double.zero, count: bufferLength)]
+////        let audio_buffer: [[Double]] =  ({ (operation: (Int) -> (() -> [[Double]])) in
 ////            operation(bufferLength)()
 ////        })( { frames in
 ////            let frequencies: [Double] = [Double(dyads[0].harmonies[0].tones[0].frequencies[0]), Double(dyads[0].harmonies[0].tones[0].frequencies[0]),
@@ -167,35 +167,35 @@
 ////                                         Double(dyads[0].harmonies[0].tones[0].frequencies[0]), Double(dyads[0].harmonies[0].tones[0].frequencies[0]),
 ////                                         Double(dyads[0].harmonies[0].tones[0].frequencies[0]), Double(dyads[0].harmonies[0].tones[0].frequencies[0])]
 ////            let pi = Double.pi
-////            channel_signals[0] = (0..<44100).map { n -> Float32 in
+////            channel_signals[0] = (0..<44100).map { n -> Double in
 ////                let s: Double = scale(oldMin: 0.0, oldMax: (Double(frames) / Double(bufferLength)), value: (Double(n) / Double(frames)), newMin: 0.0, newMax: 1.0)
 ////                let t: Double = scale(oldMin: 0.0, oldMax: 44099, value: Double(n), newMin: 0.0, newMax: 1.0)
 ////                let a: Double = sin(pi * t) * sin(tau * frequencies[0] * t)
 ////                let b: Double = sin(pi * t) * sin(tau * frequencies[1] * t)
 ////                let f: Double = (2.0 * sin(a + b) * cos(a - b)) / 2.0
-////                return Float32(f)
-////            } + (44100..<frames).map { n -> Float32 in
+////                return Double(f)
+////            } + (44100..<frames).map { n -> Double in
 ////                let s: Double = scale(oldMin: 0.0, oldMax: (Double(frames) / Double(bufferLength)), value: (Double(n) / Double(frames)), newMin: 0.0, newMax: 1.0)
 ////                let t: Double = scale(oldMin: 0.0, oldMax: Double(frames) - 44100, value: Double(n), newMin: 0.0, newMax: 1.0)
 ////                let a: Double = sin(pi * t) * sin(tau * frequencies[2] * t)
 ////                let b: Double = sin(pi * t) * sin(tau * frequencies[3] * t)
 ////                let f: Double = (2.0 * sin(a + b) * cos(a - b)) / 2.0
-////                return Float32(f)
+////                return Double(f)
 ////            }
-////            channel_signals[1] = (0..<44100).map { n -> Float32 in
+////            channel_signals[1] = (0..<44100).map { n -> Double in
 ////                let s: Double = scale(oldMin: 0.0, oldMax: (Double(frames) / Double(bufferLength)), value: (Double(n) / Double(frames)), newMin: 0.0, newMax: 1.0)
 ////                let t: Double = scale(oldMin: 0.0, oldMax: 44099, value: Double(n), newMin: 0.0, newMax: 1.0)
 ////                let a: Double = sin(pi * t) * sin(tau * frequencies[4] * t)
 ////                let b: Double = sin(pi * t) * sin(tau * frequencies[5] * t)
 ////                let f: Double = (2.0 * sin(a + b) * cos(a - b)) / 2.0
-////                return Float32(f)
-////            } + (44100..<frames).map { n -> Float32 in
+////                return Double(f)
+////            } + (44100..<frames).map { n -> Double in
 ////                let s: Double = scale(oldMin: 0.0, oldMax: (Double(frames) / Double(bufferLength)), value: (Double(n) / Double(frames)), newMin: 0.0, newMax: 1.0)
 ////                let t: Double = scale(oldMin: 0.0, oldMax: Double(frames) - 44100, value: Double(n), newMin: 0.0, newMax: 1.0)
 ////                let a: Double = sin(pi * t) * sin(tau * frequencies[6] * t)
 ////                let b: Double = sin(pi * t) * sin(tau * frequencies[7] * t)
 ////                let f: Double = (2.0 * sin(a + b) * cos(a - b)) / 2.0
-////                return Float32(f)
+////                return Double(f)
 ////            }
 ////            
 ////            return {
@@ -287,7 +287,7 @@
 ////        self.tetrad = Tetrad(bufferLength: bufferLength)
 ////    }
 ////    
-////    public func generateSignalSamplesIterator() -> (Array<Float32>.Iterator, Array<Float32>.Iterator) {
+////    public func generateSignalSamplesIterator() -> (Array<Double>.Iterator, Array<Double>.Iterator) {
 ////        return tetrad.samplesIterator
 ////    }
 ////    
@@ -302,7 +302,7 @@
 ////
 ////}
 ////
-////public func generateSignalSamplesIterator(bufferLength: Int) -> (Array<Float32>.Iterator, Array<Float32>.Iterator) {
+////public func generateSignalSamplesIterator(bufferLength: Int) -> (Array<Double>.Iterator, Array<Double>.Iterator) {
 ////    var tetrad: TetradBuffer.Tetrad = TetradBuffer.Tetrad.init(bufferLength: Int(bufferLength))
 ////    return tetrad.samplesIterator
 ////}
@@ -380,3 +380,13 @@
 //// Trill: Trill is an instruction to sustain rapid alternation between two different pitches.
 //// Vibrato ; Vibrato is an effect where the pitch of a note is subtly moved up and down to create a vibrating effec
 //
+
+//
+//var frequencies: [[(f: Float32, a: Float32)]] {
+//    let frequencyLowerBound = 400.0
+//    let frequencyUpperBound = 3000.0
+//    let threshold = 2000.0
+//    let probabilityThreshold = 1600.0 / 3600.0
+//    
+//    
+//}

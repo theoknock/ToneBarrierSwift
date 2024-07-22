@@ -13,6 +13,7 @@ struct ContentView: View {
     
     let toneBarrierSapphire: Color = Color.init(hue: 206 / 360, saturation: 1, brightness: 1)
     @State private var isPlaying: Bool = false
+    @State private var isPortrait: Bool = true
     
     var audioSession: AVAudioSession = AVAudioSession.sharedInstance()
     var audioSignal: AVAudioSignal = AVAudioSignal()
@@ -30,30 +31,59 @@ struct ContentView: View {
         isPlaying = audioSignal.audio_engine.isRunning
     }
     
-    
     var body: some View {
         GeometryReader { proxy in
             ZStack(alignment: Alignment(horizontal: .center, vertical: .center), content: {
                 Color.black
+                    .mask {
+                        MeshGradient(width: 3, height: 3, points: [
+                            .init(0, 0),   .init(0.5, 0),   .init(1, 0),
+                            .init(0, 0.3125), .init(0.5, 0.3125), .init(1, 0.3125),
+                            .init(0, 1),   .init(0.5, 1),   .init(1, 1)
+                        ], colors: [
+                            .black.opacity(0.9), .black.opacity(0.9), .black.opacity(0.9),
+                            .black.opacity(0.9125), .black.opacity(0.9125), .black.opacity(0.9125),
+                            .black, .black, .black
+                        ])
+                    }
                 Image(systemName: "waveform.path")
                     .resizable()
                     .scaledToFit()
                     .aspectRatio(1.0, contentMode: .fit)
                     .frame(width: proxy.size.width)
                     .clipShape(Rectangle())
-                    .foregroundStyle(toneBarrierSapphire.opacity(0.15))
+                    .fontWeight(Font.Weight?.some(Font.Weight.regular))
+                    .foregroundStyle(toneBarrierSapphire)
+                    .mask {
+                        MeshGradient(width: 3, height: 3, points: [
+                            .init(0, 0),   .init(0.5, 0),   .init(1, 0),
+                            .init(0, 0.5), .init(0.5, 0.5), .init(1, 0.5),
+                            .init(0, 1),   .init(0.5, 1),   .init(1, 1)
+                        ], colors: [
+                            .black.opacity(0.1), .black.opacity(0.1),     .black.opacity(0.1),
+                            .black.opacity(0.1), .white.opacity(0.28125), .black.opacity(0.1),
+                            .black.opacity(0.1), .black.opacity(0.1),     .black.opacity(0.1)
+                        ])
+                    }
                 Button(action: {
                     audio()
                 }) {
                     Image(systemName: isPlaying ? "stop" : "play")
                         .resizable()
                         .scaledToFit()
-                        .aspectRatio(0.35, contentMode: .fit)
-                        .frame(width: proxy.size.width * 0.35)
+                        .aspectRatio(1.0, contentMode: .fit)
+                        .frame(width: isPortrait ? proxy.size.width * 0.35 : proxy.size.height * 0.35)
                         .clipShape(Rectangle())
                         .fontWeight(Font.Weight?.some(Font.Weight.thin))
                         .foregroundStyle(toneBarrierSapphire)
-                        .shadow(color: toneBarrierSapphire.opacity(0.15), radius: 10)
+                        .shadow(color: .white.opacity(0.28125), radius: 10)
+                        .offset(x: isPlaying ? 0 : 13, y: isPlaying ? 0 : 13)
+                        .onAppear {
+                            isPortrait = proxy.size.height > proxy.size.width
+                        }
+                        .onChange(of: proxy.size) { newSize in
+                            isPortrait = newSize.height > newSize.width
+                        }
                 }
                 .onAppear {
                     do {

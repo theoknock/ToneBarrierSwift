@@ -106,30 +106,30 @@ func generateSignalSamples(frequency: Float, sampleRate: Float, duration: Float)
 # Crappy, non-working randomizes and distributors
 
         let distribution = GKGaussianDistribution(lowestValue: 1, highestValue: 8)
-                func redistributeValueUsingGaussianCurve(value: Float32, mean: Float32, standardDeviation: Float32) -> Float32 {
+                func redistributeValueUsingGaussianCurve(value: Double, mean: Double, standardDeviation: Double) -> Double {
                     // Calculate the z-score of the value.
                     let zScore = (value - mean) / standardDeviation
         
                     // Calculate the probability of the value under the Gaussian curve.
-                    let probability = 1 / sqrt(2 * Float32.pi * standardDeviation * standardDeviation) * exp(-zScore * zScore / 2)
+                    let probability = 1 / sqrt(2 * Double.pi * standardDeviation * standardDeviation) * exp(-zScore * zScore / 2)
         
                     // Return the redistributed value.
                     return probability * standardDeviation + mean
                 }
         
         
-        let gaussianDistribution: (Float32, Float32, Float32) -> Float32 = { t, m, v in
-            let standardDeviation = Float32(sqrt(v))
-            let normalizationFactor = 1 / (standardDeviation * sqrt(2 * Float32.pi))
+        let gaussianDistribution: (Double, Double, Double) -> Double = { t, m, v in
+            let standardDeviation = Double(sqrt(v))
+            let normalizationFactor = 1 / (standardDeviation * sqrt(2 * Double.pi))
             let exponentNumerator = -pow(t - m, 2)
             let exponentDenominator = 2 * v
             let exponent = exponentNumerator / exponentDenominator
-            let gaussianValue = normalizationFactor * Float32(exp(exponent))
+            let gaussianValue = normalizationFactor * Double(exp(exponent))
             
             return gaussianValue
         }
         
-        let gaussianDistribution_: (Float32, Float32, Float32) -> Float32 = { x, mean, variance in
+        let gaussianDistribution_: (Double, Double, Double) -> Double = { x, mean, variance in
             let numerator = pow(x - mean, 2)
             let denominator = 2 * pow(variance, 2)
             let exponent = -numerator / denominator
@@ -139,7 +139,7 @@ func generateSignalSamples(frequency: Float, sampleRate: Float, duration: Float)
         }
         
         
-        func scale(min_new: Float32, max_new: Float32, val_old: Float32, min_old: Float32, max_old: Float32) -> Float32 {
+        func scale(min_new: Double, max_new: Double, val_old: Double, min_old: Double, max_old: Double) -> Double {
             let val_new = min_new + ((((val_old - min_old) * (max_new - min_new))) / (max_old - min_old));
             return val_new;
         }
@@ -156,22 +156,22 @@ func generateSignalSamples(frequency: Float, sampleRate: Float, duration: Float)
         }
         
         
-                static Float32 (^(^generate_normalized_random)(void))(void) = ^{
+                static Double (^(^generate_normalized_random)(void))(void) = ^{
                     srand48((unsigned int)time(0));
-                    static Float32 random;
-                    return ^ (Float32 * random_t) {
-                        return ^ Float32 {
+                    static Double random;
+                    return ^ (Double * random_t) {
+                        return ^ Double {
                             return (*random_t = (drand48()));
                         };
                     }(&random);
                 };
         
-                typedef typeof(Float32(^)(void)) random_generator;
-                typedef typeof(Float32(^(* restrict))(void)) random_n_t;
-                static Float32 (^(^(^(^generate_random)(Float32(^)(void)))(Float32(^)(Float32)))(Float32(^)(Float32)))(void) = ^ (Float32(^randomize)(void)) {
-                    return ^ (Float32(^distribute)(Float32)) {
-                        return ^ (Float32(^scale)(Float32)) {
-                                return ^ Float32 {
+                typedef typeof(Double(^)(void)) random_generator;
+                typedef typeof(Double(^(* restrict))(void)) random_n_t;
+                static Double (^(^(^(^generate_random)(Double(^)(void)))(Double(^)(Double)))(Double(^)(Double)))(void) = ^ (Double(^randomize)(void)) {
+                    return ^ (Double(^distribute)(Double)) {
+                        return ^ (Double(^scale)(Double)) {
+                                return ^ Double {
                                     return scale(distribute(randomize()));
                                 };
                         };
@@ -222,25 +222,25 @@ func generateSignalSamples(frequency: Float, sampleRate: Float, duration: Float)
         
         
         
-        func RandomNumberGenerator() -> () -> Float32 {
+        func RandomNumberGenerator() -> () -> Double {
             var descriptor = BNNSNDArrayDescriptor.allocateUninitialized(
-                scalarType: Float32.self,
+                scalarType: Double.self,
                 shape: .vector(1, stride: Int.Stride()))
             
             let randomNumberGenerator = BNNSCreateRandomGenerator(
                 BNNSRandomGeneratorMethodAES_CTR,
                 nil)
             
-            func generateRandomNumber() -> Float32 {
+            func generateRandomNumber() -> Double {
                 
                 BNNSRandomFillNormalFloat(randomNumberGenerator,
                                           &descriptor,
                                           0.5,
                                           1.0)
                 
-                let bytesPointer = UnsafeMutableRawPointer.allocate(byteCount: Int(Float32.Stride()), alignment: 1)
-                bytesPointer.storeBytes(of: (descriptor.data?.load(fromByteOffset: 0, as: Float32.self))! , as: Float32.self)
-                let x = bytesPointer.load(as: Float32.self)
+                let bytesPointer = UnsafeMutableRawPointer.allocate(byteCount: Int(Double.Stride()), alignment: 1)
+                bytesPointer.storeBytes(of: (descriptor.data?.load(fromByteOffset: 0, as: Double.self))! , as: Double.self)
+                let x = bytesPointer.load(as: Double.self)
                 print("\(x)\n")
                 
                 return x
@@ -253,8 +253,8 @@ func generateSignalSamples(frequency: Float, sampleRate: Float, duration: Float)
         
         
         func randomFloats(n: Int,
-                          mean: Float32,
-                          standardDeviation: Float32) -> [Float32] {
+                          mean: Double,
+                          standardDeviation: Double) -> [Double] {
             
             let result = [Float](unsafeUninitializedCapacity: n) {
                 
@@ -298,20 +298,20 @@ func generateSignalSamples(frequency: Float, sampleRate: Float, duration: Float)
                 //
                 //                    defer {
                 //                        //                    if currentPhase >= tau { currentPhase -= tau }
-                //                        //                    if currentPhase < Float32.zero { currentPhase += tau }
+                //                        //                    if currentPhase < Double.zero { currentPhase += tau }
                 //                    }
                 
-                return Float32.zero
+                return Double.zero
             }
-            return [Float32]
+            return [Double]
         }
     }
     
-    func generateFrequency(frame_count: Int) -> [Float32] {
-        //            var frequency_samples = Array(repeating: Array(repeating: Float32.zero, count: 2), count: 2)
-        var frequency_samples: [([Float32])] = [[Float32](repeating: Float32.zero, count: frame_count), [Float32](repeating: Float32.zero, count: frame_count)]
+    func generateFrequency(frame_count: Int) -> [Double] {
+        //            var frequency_samples = Array(repeating: Array(repeating: Double.zero, count: 2), count: 2)
+        var frequency_samples: [([Double])] = [[Double](repeating: Double.zero, count: frame_count), [Double](repeating: Double.zero, count: frame_count)]
         let frame_indicies = incrementer(frame_count)
-        let signal_samples: [([Float32])] = (Int.zero ..< frame_count).map { i in
+        let signal_samples: [([Double])] = (Int.zero ..< frame_count).map { i in
             // get value at i in frame_indicies and set phaseIncrement to a new value if frame_indicies[i] == 0
             if i == 0 {
                 signalFrequency = [randomPianoNoteFrequency(), randomPianoNoteFrequency()]
@@ -324,7 +324,7 @@ func generateSignalSamples(frequency: Float, sampleRate: Float, duration: Float)
             
             defer {
                 //                    if currentPhase >= tau { currentPhase -= tau }
-                //                    if currentPhase < Float32.zero { currentPhase += tau }
+                //                    if currentPhase < Double.zero { currentPhase += tau }
             }
             
             return frequency_samples
@@ -337,11 +337,11 @@ func generateSignalSamples(frequency: Float, sampleRate: Float, duration: Float)
 # Sample-buffer generator template
 
 
-        func sample_buffers(frame_count: Int) -> [([Float32])] {
-            var buffers: [([Float32])] = [[Float32](repeating: Float32.zero, count: frame_count), [Float32](repeating: Float32.zero, count: frame_count)]
+        func sample_buffers(frame_count: Int) -> [([Double])] {
+            var buffers: [([Double])] = [[Double](repeating: Double.zero, count: frame_count), [Double](repeating: Double.zero, count: frame_count)]
             return buffers.map { innerArray in
                 (Int.zero ..< frame_count).map {
-                    return Float32($0)
+                    return Double($0)
                 }
             }
         }

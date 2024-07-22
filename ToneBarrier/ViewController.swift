@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import SwiftUI
 import AVKit
 import AVFoundation
 import MediaPlayer
@@ -51,8 +52,32 @@ class ViewController: UIViewController, AVRoutePickerViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        gradient.frame = waveformSymbol.bounds
-        waveformSymbol.layer.mask = gradient
+        // Create the SwiftUI view
+        let swiftUIView = ContentView()
+        
+        // Create the hosting controller with the SwiftUI view
+        let hostingController = UIHostingController(rootView: swiftUIView)
+        
+        // Add the hosting controller as a child view controller
+        addChild(hostingController)
+        
+        // Add the hosting controller's view to the view hierarchy
+        view.addSubview(hostingController.view)
+        
+        // Set up constraints to fill the entire view
+        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            hostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
+            hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            hostingController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            hostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+        
+        // Notify the hosting controller that it has been moved to a parent view controller
+        hostingController.didMove(toParent: self)
+        
+//        gradient.frame = waveformSymbol.bounds
+//        waveformSymbol.layer.mask = gradient
         
         do {
             try audioSession.setCategory(.playback, mode: .default, policy: .longFormAudio)
