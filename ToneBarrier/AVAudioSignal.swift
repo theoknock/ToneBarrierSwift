@@ -294,11 +294,7 @@ var duration:     Int32   = Int32.zero
             let value = A * sin(2 * Float32.pi * t * f)
             return value
         }
-        
-//        var tetrad: TetradBuffer = TetradBuffer()
-//        var s = TetradBuffer().generateSignalSamplesIterator(bufferLength: Int(buffer_length))
-        
-        
+   
         var tetradBuffer = TetradBuffer(bufferLength: Int(buffer_length))
         var s = tetradBuffer.generateSignalSamplesIterator()
 
