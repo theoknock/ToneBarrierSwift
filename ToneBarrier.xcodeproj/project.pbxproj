@@ -31,7 +31,7 @@
 		B914668F2BFB6A2A005E2E7B /* TetradBufferRevamp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TetradBufferRevamp.swift; sourceTree = "<group>"; };
 		B914671B2C02E2C7005E2E7B /* AngularRandomDistributor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AngularRandomDistributor.swift; sourceTree = "<group>"; };
 		B9346FE42BF1171200FA1D4F /* libswiftCoreAudio.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswiftCoreAudio.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/usr/lib/swift/libswiftCoreAudio.tbd; sourceTree = DEVELOPER_DIR; };
-		B9346FE92BF1C48400FA1D4F /* TetradBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TetradBuffer.swift; sourceTree = "<group>"; };
+		B9346FE92BF1C48400FA1D4F /* TetradBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TetradBuffer.swift; sourceTree = "<group>"; wrapsLines = 0; };
 		B960CD352AC6F11300DD56C3 /* CodeSnippetsStandby.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CodeSnippetsStandby.md; sourceTree = "<group>"; };
 		B96AD37529FD763700A61F7B /* ToneBarrier.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToneBarrier.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B96AD38629FD763800A61F7B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };

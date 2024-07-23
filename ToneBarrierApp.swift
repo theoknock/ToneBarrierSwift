@@ -7,6 +7,7 @@
         var body: some Scene {
             WindowGroup {
                 ContentView()
+                    .preferredColorScheme(.dark)
                     .environmentObject(appState)
                     .onAppear {
                         appState.setup()

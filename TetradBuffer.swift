@@ -11,6 +11,16 @@ import AVFAudio
 import Algorithms
 import Accelerate
 
+func initializeGlobalTimeArray(count: Int, timeArray: inout [Float32]) {
+    timeArray = [Float32](repeating: 0, count: count)
+    for index in 0..<count {
+        timeArray[index] = Float32(index) / Float32(count - 1)
+    }
+}
+
+
+var globalTimeArray = [Float32]()
+
 protocol ValueStore {
     var selfPointer: UnsafeMutablePointer<Self>? { get set }
     mutating func store<T>(value: T) -> ()
@@ -108,6 +118,7 @@ class TetradBuffer: NSObject {
     init(bufferLength: Int) {
         self.bufferLength = bufferLength
         self.tetrad = Tetrad(bufferLength: bufferLength)
+        initializeGlobalTimeArray(count: bufferLength, timeArray: &globalTimeArray)
     }
     
     struct Tetrad {
@@ -178,28 +189,37 @@ class TetradBuffer: NSObject {
                 Dyad.init()
             ]
             
-            
-            
-            
-            //            for value in sineWave {
-            //                print(value)
-            //            }
-            
             cycleFrames = Array(0..<bufferLength).cycled()
             frameIterator = cycleFrames.makeIterator()
         }
         
+//        public func synthesizeSignal(frequencyAmplitudePairs: [(f: Float32, a: Float32)], count: Int) -> [Float] {
+//            let tau: Float32 = Float32.pi * 2
+//            let signal: [Float32] = (0 ..< count).map { index in
+//                frequencyAmplitudePairs.reduce(0) { accumulator, frequenciesAmplitudePair in
+//                    let normalizedIndex = Float32(index) / Float(count)
+//                    return accumulator + sin(normalizedIndex * frequenciesAmplitudePair.f * tau) * frequenciesAmplitudePair.a
+//                }
+//            }
+//            
+//            return signal
+//        }
         
+        // Create the global timeArray
         
-        public func synthesizeSignal(frequencyAmplitudePairs: [(f: Float32, a: Float32)],
-                                     count: Int) -> [Float] {
-            
+
+        public func synthesizeSignal(frequencyAmplitudePairs: [(f: Float32, a: Float32)], count: Int) -> [Float] {
             let tau: Float32 = Float32.pi * 2
-            let signal: [Float32] = (0 ..< count).map { index in
-                frequencyAmplitudePairs.reduce(0) { accumulator, frequenciesAmplitudePair in
-                    let normalizedIndex = Float32(index) / Float(count)
-                    return accumulator + sin(normalizedIndex * frequenciesAmplitudePair.f * tau) * frequenciesAmplitudePair.a
+            var signal: [Float32] = Array(repeating: 0, count: count)
+            
+            for index in 0 ..< count {
+                var accumulator: Float32 = 0
+                
+                for pair in frequencyAmplitudePairs {
+                    accumulator += sin(globalTimeArray[index] * pair.f * tau) * pair.a
                 }
+                
+                signal[index] = accumulator
             }
             
             return signal
