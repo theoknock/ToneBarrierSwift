@@ -34,18 +34,20 @@ struct ContentView: View {
     var body: some View {
         GeometryReader { proxy in
             ZStack(alignment: Alignment(horizontal: .center, vertical: .center), content: {
-                Color.black
-                    .mask {
+                Color.clear
+                    .background {
                         MeshGradient(width: 3, height: 3, points: [
                             .init(0, 0),   .init(0.5, 0),   .init(1, 0),
                             .init(0, 0.3125), .init(0.5, 0.3125), .init(1, 0.3125),
                             .init(0, 1),   .init(0.5, 1),   .init(1, 1)
                         ], colors: [
-                            .black.opacity(0.9), .black.opacity(0.9), .black.opacity(0.9),
-                            .black.opacity(0.9125), .black.opacity(0.9125), .black.opacity(0.9125),
+                            .white.opacity(0.2), .white.opacity(0.2), .white.opacity(0.2),
+                            .white.opacity(0.1), .white.opacity(0.1), .white.opacity(0.1),
                             .black, .black, .black
                         ])
                     }
+                    .ignoresSafeArea()
+                
                 Image(systemName: "waveform.path")
                     .resizable()
                     .scaledToFit()
@@ -61,7 +63,7 @@ struct ContentView: View {
                             .init(0, 1),   .init(0.5, 1),   .init(1, 1)
                         ], colors: [
                             .black.opacity(0.1), .black.opacity(0.1),     .black.opacity(0.1),
-                            .black.opacity(0.1), .white.opacity(0.28125), .black.opacity(0.1),
+                            .white.opacity(0.1), .white.opacity(0.28125), .white.opacity(0.1),
                             .black.opacity(0.1), .black.opacity(0.1),     .black.opacity(0.1)
                         ])
                     }
@@ -77,7 +79,7 @@ struct ContentView: View {
                         .fontWeight(Font.Weight?.some(Font.Weight.thin))
                         .foregroundStyle(toneBarrierSapphire)
                         .shadow(color: .white.opacity(0.28125), radius: 10)
-                        .offset(x: isPlaying ? -1 : 15, y: isPlaying ? 15 : 15)
+                        .offset(x: isPlaying ? -1 : 13, y: isPlaying ? 15 : 15)
                         .onAppear {
                             isPortrait = proxy.size.height > proxy.size.width
                         }
@@ -98,6 +100,7 @@ struct ContentView: View {
             })
             .ignoresSafeArea()
         }
+        
     }
 }
 
