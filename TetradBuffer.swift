@@ -358,7 +358,8 @@ class TetradBuffer: NSObject {
                 //                var signal = synthesizeSignal(frequencyAmplitudePairs: [(f: Float32(frequencies[4]), a: (0.25 * Float32.pi))], count: bufferLength / 2)
                 
                 return {
-                    [channel_signals[0][0], channel_signals[0][1]]
+                    [zip(channel_signals[0][0], channel_signals[1][0]).map { $0 + $1 },
+                     zip(channel_signals[0][1], channel_signals[1][1]).map { $0 + $1 }]
                     //                    [signal, signal]
                 }
             })
