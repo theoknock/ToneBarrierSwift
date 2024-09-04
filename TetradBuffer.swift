@@ -228,28 +228,28 @@ class TetradBuffer: NSObject {
         }
         
         func generateHeterodyneSignal(frequency1: Double, sampleRate: Double, duration: Double) -> [Float] {
-                let length = Int(sampleRate * duration)
-                var frequency1Sine = [Float](repeating: 0.0, count: length)
-                var frequency2Sine = [Float](repeating: 0.0, count: length)
-                var signal = [Float](repeating: 0.0, count: length)
-                
-                let frequency2Start: Double = 661
-                let frequency2End: Double = 668
-                let frequency2Increment = (frequency2End - frequency2Start) / duration
-                
-                for i in 0..<length {
-                    let t = Double(i) / sampleRate
-                    frequency1Sine[i] = Float(cos(2.0 * .pi * frequency1 * t))
-                    let currentFrequency2 = frequency2Start + frequency2Increment * t
-                    frequency2Sine[i] = Float(cos(2.0 * .pi * currentFrequency2 * t))
-                }
-                
-                for i in 0..<length {
-                    signal[i] = frequency1Sine[i] + frequency2Sine[i]
-                }
-                
-                return signal
+            let length = Int(sampleRate * duration)
+            var frequency1Sine = [Float](repeating: 0.0, count: length)
+            var frequency2Sine = [Float](repeating: 0.0, count: length)
+            var signal = [Float](repeating: 0.0, count: length)
+            
+            let frequency2Start: Double = 661
+            let frequency2End: Double = 668
+            let frequency2Increment = (frequency2End - frequency2Start) / duration
+            
+            for i in 0..<length {
+                let t = Double(i) / sampleRate
+                frequency1Sine[i] = Float(cos(2.0 * .pi * frequency1 * t))
+                let currentFrequency2 = frequency2Start + frequency2Increment * t
+                frequency2Sine[i] = Float(cos(2.0 * .pi * currentFrequency2 * t))
             }
+            
+            for i in 0..<length {
+                signal[i] = frequency1Sine[i] + frequency2Sine[i]
+            }
+            
+            return signal
+        }
         
         var samplesIterator: (Array<Float32>.Iterator, Array<Float32>.Iterator) {
             //            let n = vDSP_Length(88200)
@@ -268,7 +268,8 @@ class TetradBuffer: NSObject {
             //                      stride,
             //                      n)
             //            let tau: simd_double1 = simd_double1(simd_double1.pi * 2.0)
-            var channel_signals: [[Float32]] = [Array(repeating: Float32.zero, count: Int(bufferLength)), Array(repeating: Float32.zero, count: bufferLength)]
+            var channel_signals: [[[Float32]]] = [[Array(repeating: Float32.zero, count: Int(bufferLength)), Array(repeating: Float32.zero, count: bufferLength)],
+                                                  [Array(repeating: Float32.zero, count: Int(bufferLength)), Array(repeating: Float32.zero, count: bufferLength)]]
             let audio_buffer: [[Float32]] =  ({ (operation: (Int) -> (() -> [[Float32]])) in
                 operation(bufferLength)()
             })( { frames in
@@ -279,17 +280,19 @@ class TetradBuffer: NSObject {
                 
                 print(frequencies)
                 
-                // TODO: Use phase modulation
-
+                // TODO: LFO channel_signals and tremolo
+                
                 let angl: Double = 1.0 / Double(bufferLength)
                 let incr: [Double] = [(frequencies[0] * tau) * angl,          (frequencies[1] * tau) * angl,
-                                      ((frequencies[0] + 7.0) * tau) * angl, ((frequencies[1] + 7.0) * tau) * angl]
+                                      ((frequencies[0] + 7.0) * tau) * angl, ((frequencies[1] + 7.0) * tau) * angl,
+                                      (frequencies[2] * tau) * angl,          (frequencies[3] * tau) * angl,
+                                      ((frequencies[2] + 7.0) * tau) * angl, ((frequencies[3] + 7.0) * tau) * angl]
                 var pha: [Double] = [Double.zero, Double.zero,
                                      Double.zero, Double.zero]
                 randoms.distributeRandoms()
                 let split: [Int] = [Int(randoms.randoms[0] * Float64(bufferLength)), Int(randoms.randoms[1] * Float64(bufferLength))]
                 
-                channel_signals[0] = (Int.zero..<split[0]).map { n -> Float32 in
+                channel_signals[0][0] = (Int.zero..<split[0]).map { n -> Float32 in
                     let f: Double = sin(pha[0])
                     pha[0] += incr[0]
                     return Float32(f)
@@ -299,25 +302,47 @@ class TetradBuffer: NSObject {
                     return Float32(f)
                 }
                 
-                channel_signals[1] = (Int.zero..<split[0]).map { n -> Float32 in
-                let f: Double = sin(pha[0])
-                pha[0] += incr[2]
-                return Float32(f)
-            } + (split[0]..<bufferLength).map { n -> Float32 in
-                let f: Double = sin(pha[1])
-                pha[1] += incr[3]
-                return Float32(f)
-            }
+                channel_signals[0][1] = (Int.zero..<split[0]).map { n -> Float32 in
+                    let f: Double = sin(pha[0])
+                    pha[0] += incr[2]
+                    return Float32(f)
+                } + (split[0]..<bufferLength).map { n -> Float32 in
+                    let f: Double = sin(pha[1])
+                    pha[1] += incr[3]
+                    return Float32(f)
+                }
                 
-//                channel_signals[1] = (Int.zero..<44099).map { n -> Float32 in
-//                    let f: Double = sin(pha[2])
-//                    pha[2] += incr[2]
-//                    return Float32(f)
-//                } + (44100..<bufferLength).map { n -> Float32 in
-//                    let f: Double = sin(pha[3])
-//                    pha[3] += incr[3]
-//                    return Float32(f)
-//                }
+                // -------------------------------
+                
+                channel_signals[1][0] = (Int.zero..<split[1]).map { n -> Float32 in
+                    let f: Double = sin(pha[2])
+                    pha[2] += incr[4]
+                    return Float32(f)
+                } + (split[01]..<bufferLength).map { n -> Float32 in
+                    let f: Double = sin(pha[3])
+                    pha[3] += incr[5]
+                    return Float32(f)
+                }
+                
+                channel_signals[1][1] = (Int.zero..<split[1]).map { n -> Float32 in
+                    let f: Double = sin(pha[2])
+                    pha[2] += incr[6]
+                    return Float32(f)
+                } + (split[1]..<bufferLength).map { n -> Float32 in
+                    let f: Double = sin(pha[3])
+                    pha[3] += incr[7]
+                    return Float32(f)
+                }
+                
+                //                channel_signals[1] = (Int.zero..<44099).map { n -> Float32 in
+                //                    let f: Double = sin(pha[2])
+                //                    pha[2] += incr[2]
+                //                    return Float32(f)
+                //                } + (44100..<bufferLength).map { n -> Float32 in
+                //                    let f: Double = sin(pha[3])
+                //                    pha[3] += incr[3]
+                //                    return Float32(f)
+                //                }
                 
                 
                 
@@ -333,7 +358,7 @@ class TetradBuffer: NSObject {
                 //                var signal = synthesizeSignal(frequencyAmplitudePairs: [(f: Float32(frequencies[4]), a: (0.25 * Float32.pi))], count: bufferLength / 2)
                 
                 return {
-                    channel_signals
+                    [channel_signals[0][0], channel_signals[0][1]]
                     //                    [signal, signal]
                 }
             })
