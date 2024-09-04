@@ -283,7 +283,7 @@ class TetradBuffer: NSObject {
 
                 let angl: Double = 1.0 / Double(bufferLength)
                 let incr: [Double] = [(frequencies[0] * tau) * angl,          (frequencies[1] * tau) * angl,
-                                      ((frequencies[0] + 7.0) * tau) * angl, ((frequencies[1] + 12.0) * tau) * angl]
+                                      ((frequencies[0] + 7.0) * tau) * angl, ((frequencies[1] + 7.0) * tau) * angl]
                 var pha: [Double] = [Double.zero, Double.zero,
                                      Double.zero, Double.zero]
                 randoms.distributeRandoms()
@@ -300,12 +300,12 @@ class TetradBuffer: NSObject {
                 }
                 
                 channel_signals[1] = (Int.zero..<split[0]).map { n -> Float32 in
-                let f: Double = sin(pha[2])
-                pha[2] += incr[2]
+                let f: Double = sin(pha[0])
+                pha[0] += incr[2]
                 return Float32(f)
             } + (split[0]..<bufferLength).map { n -> Float32 in
-                let f: Double = sin(pha[3])
-                pha[3] += incr[3]
+                let f: Double = sin(pha[1])
+                pha[1] += incr[3]
                 return Float32(f)
             }
                 

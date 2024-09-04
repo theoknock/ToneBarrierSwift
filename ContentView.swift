@@ -32,59 +32,61 @@ struct ContentView: View {
     }
     
     var body: some View {
-        ZStack {
-            Color.black.ignoresSafeArea()
-            Image(systemName: "waveform.path")
-                .resizable()
-                .scaledToFit()
-                .aspectRatio(1.0, contentMode: .fit)
-                .frame(width: UIScreen.main.bounds.size.width)
-                .clipShape(Rectangle())
-                .fontWeight(Font.Weight?.some(Font.Weight.regular))
-                .foregroundStyle(toneBarrierSapphire)
-                .mask {
-                    MeshGradient(width: 3, height: 3, points: [
-                        .init(0, 0),   .init(0.5, 0),   .init(1, 0),
-                        .init(0, 0.5), .init(0.5, 0.5), .init(1, 0.5),
-                        .init(0, 1),   .init(0.5, 1),   .init(1, 1)
-                    ], colors: [
-                        .black.opacity(0.1), .black.opacity(0.1),     .black.opacity(0.1),
-                        .white.opacity(0.1), .white.opacity(0.28125), .white.opacity(0.1),
-                        .black.opacity(0.1), .black.opacity(0.1),     .black.opacity(0.1)
-                    ])
-                }
-            Button(action: {
-                audio()
-            }) {
-                Image(systemName: isPlaying ? "stop" : "play")
+        GeometryReader { geometry in
+            ZStack {
+                Color.black.ignoresSafeArea()
+                Image(systemName: "waveform.path")
                     .resizable()
                     .scaledToFit()
                     .aspectRatio(1.0, contentMode: .fit)
-                    .frame(width: isPortrait ? UIScreen.main.bounds.size.width * 0.35 : UIScreen.main.bounds.size.height * 0.35)
+                    .frame(width: geometry.size.width)
                     .clipShape(Rectangle())
-                    .fontWeight(Font.Weight?.some(Font.Weight.thin))
+                    .fontWeight(Font.Weight?.some(Font.Weight.regular))
                     .foregroundStyle(toneBarrierSapphire)
-                    .shadow(color: .white.opacity(0.28125), radius: 10)
-                    .offset(x: isPlaying ? -1 : 13, y: isPlaying ? 15 : 15)
-                    .onAppear {
-                        isPortrait = UIScreen.main.bounds.size.height > UIScreen.main.bounds.size.width
+                    .mask {
+                        MeshGradient(width: 3, height: 3, points: [
+                            .init(0, 0),   .init(0.5, 0),   .init(1, 0),
+                            .init(0, 0.5), .init(0.5, 0.5), .init(1, 0.5),
+                            .init(0, 1),   .init(0.5, 1),   .init(1, 1)
+                        ], colors: [
+                            .black.opacity(0.1), .black.opacity(0.1),     .black.opacity(0.1),
+                            .white.opacity(0.1), .white.opacity(0.28125), .white.opacity(0.1),
+                            .black.opacity(0.1), .black.opacity(0.1),     .black.opacity(0.1)
+                        ])
                     }
-                    .onChange(of: UIScreen.main.bounds.size, {
-                        isPortrait = UIScreen.main.bounds.size.height > UIScreen.main.bounds.size.width
-                    })
-                    .transition(.asymmetric(insertion: .scale(scale: 1.1).combined(with: .opacity), removal: .scale(scale: 0.9).combined(with: .opacity)))
-                    .animation(.easeInOut(duration: 0.0), value: isPlaying)
-            }
-            .onAppear {
-                do {
-                    try audioSession.setCategory(.playback, mode: .default, policy: .longFormAudio)
-                    try audioSession.setActive(true)
-                } catch {
-                    print("Failed to set audio session category.")
+                Button(action: {
+                    audio()
+                }) {
+                    Image(systemName: isPlaying ? "stop" : "play")
+                        .resizable()
+                        .scaledToFit()
+                        .aspectRatio(1.0, contentMode: .fit)
+                        .frame(width: isPortrait ? geometry.size.width * 0.35 : geometry.size.height * 0.35)
+                        .clipShape(Rectangle())
+                        .fontWeight(Font.Weight?.some(Font.Weight.thin))
+                        .foregroundStyle(toneBarrierSapphire)
+                        .shadow(color: .white.opacity(0.28125), radius: 10)
+                        .offset(x: isPlaying ? -1 : 13, y: isPlaying ? 15 : 15)
+                        .onAppear {
+                            isPortrait = geometry.size.height > geometry.size.width
+                        }
+                        .onChange(of: UIScreen.main.bounds.size, {
+                            isPortrait = geometry.size.height > geometry.size.width
+                        })
+                        .transition(.asymmetric(insertion: .scale(scale: 1.1).combined(with: .opacity), removal: .scale(scale: 0.9).combined(with: .opacity)))
+                        .animation(.easeInOut(duration: 0.0), value: isPlaying)
+                }
+                .onAppear {
+                    do {
+                        try audioSession.setCategory(.playback, mode: .default, policy: .longFormAudio)
+                        try audioSession.setActive(true)
+                    } catch {
+                        print("Failed to set audio session category.")
+                    }
                 }
             }
+            .ignoresSafeArea()
         }
-        .ignoresSafeArea()
     }
 }
 
